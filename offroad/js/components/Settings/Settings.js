@@ -218,7 +218,7 @@ class Settings extends Component {
             {
                 icon: Icons.eon,
                 title: '장치',
-                context: `${ parseInt(freeSpace) + '%' } 여유`,
+                context: `${ parseInt(freeSpace) + '%' } Free`,
                 route: SettingsRoutes.DEVICE,
             },
             {
@@ -370,7 +370,7 @@ class Settings extends Component {
                                 title='오픈파일럿 사용'
                                 value={ !!parseInt(openpilotEnabled) }
                                 iconSource={ Icons.openpilot }
-                                description='오픈파일럿 기능을 사용하여 핸들자동조향을 사용해보세요. 이 기능을 사용하려면 항상 주의를 기울여야 합니다.'
+                                description='오픈파일럿 기능을 사용하여 핸들자동조향은 지원받으세요. 이 기능을 사용하려면 항상 주의를 기울여야 합니다. 이 설정을 변경하면 차량 재시동후 적용됩니다'
                                 isExpanded={ expandedCell == 'openpilot_enabled' }
                                 handleExpanded={ () => this.handleExpanded('openpilot_enabled') }
                                 handleChanged={ this.props.setOpenpilotEnabled } />
@@ -378,10 +378,10 @@ class Settings extends Component {
                         { !parseInt(isPassive) ? (
                             <X.TableCell
                                 type='switch'
-                                title='차선변경 사용'
+                                title='자동차선변경 사용'
                                 value={ !!parseInt(laneChangeEnabled) }
                                 iconSource={ Icons.road }
-                                description='60km 이상의 속도로 주행시 방향지시등을 켜고 핸들을 원하는 차선 쪽으로 부드럽게 돌려주면 오픈파일럿이 차선변경을 수행합니다. 후측방 감지기가 없는 차량은 차선이 안전한지 확인할 수 없으니 주의하세요'
+                                description='주변 환경을 확인후 방향 지시등을 활성화하고 핸들을 원하는 차선 쪽으로 부드럽게 밀어서 오픈 파일럿으로 자동차선변경을 수행하십시오. 오픈 파일럿은 차선이 안전한지 확인할 수 없습니다. 이 기능을 사용하려면 주변 환경을 지속적으로 관찰해야 합니다'
                                 isExpanded={ expandedCell == 'lanechange_enabled' }
                                 handleExpanded={ () => this.handleExpanded('lanechange_enabled') }
                                 handleChanged={ this.props.setLaneChangeEnabled } />
@@ -409,7 +409,7 @@ class Settings extends Component {
                             title='우측 핸들 사용'
                             value={ !!parseInt(isRHD) }
                             iconSource={ Icons.openpilot_mirrored }
-                            description='오픈파일럿이 좌측 교통 규칙을 준수하도록 허용하고 우측 운전석에서 운전자 모니터링을 수행합니다'
+                            description='오픈 파일럿이 좌측 교통 규칙을 준수하도록 허용하고 우측 운전석에서 운전자 모니터링을 수행합니다'
                             isExpanded={ expandedCell == 'is_rhd' }
                             handleExpanded={ () => this.handleExpanded('is_rhd') }
                             handleChanged={ this.props.setIsRHD } />
@@ -508,7 +508,7 @@ class Settings extends Component {
                                 <X.Text
                                     color='white'
                                     size='tiny'>
-                                    comma connect앱에서 페어링을 해제할수 있습니다
+                                    comma connect앱에서 장치 페어링을 해제할수 있습니다
                                 </X.Text>
                             ) : null }
                             <X.Line color='light' />
@@ -643,7 +643,7 @@ class Settings extends Component {
                             title='시리얼 번호'
                             value={ serialNumber } />
                         <X.TableCell
-                            title='여유 공간'
+                            title='남은 용량'
                             value={ parseInt(freeSpace) + '%' }
                         />
                         <X.TableCell
@@ -742,13 +742,13 @@ class Settings extends Component {
                     <X.Table color='darkBlue'>
                         <X.TableCell
                             type='switch'
-                            title='커뮤니티기능 사용'
+                            title='커뮤니티기능 설정'
                             value={ !!parseInt(communityFeatures) }
                             iconSource={ Icons.developer }
                             descriptionExtra={
-                                <X.Text color='white' size='tiny'>
-                                    이 기능은 comma에서 공식 지원하지않으며 표준 안전모델 충족기준이 확인되지않은 커뮤니티의 고유 기능입니다.{'\n'}
-                                </X.Text>
+                              <X.Text color='white' size='tiny'>
+                                  이 기능은 comma에서 공식 지원하지않으며 표준 안전모델 충족기준이 확인되지않은 커뮤니티의 고유 기능입니다 :{'\n'}
+                              </X.Text>
                             }
                             isExpanded={ expandedCell == 'communityFeatures' }
                             handleExpanded={ () => this.handleExpanded('communityFeatures') }
@@ -890,18 +890,18 @@ class Settings extends Component {
                         <X.Text color='white' size='small' style={ Styles.githubUsernameInputSave }>저장</X.Text>
                     </X.Button>
                     { authKeysUpdateState !== null &&
-                    <View style={ Styles.githubUsernameInputStatus }>
-                        { authKeysUpdateState === 'inflight' &&
-                        <ActivityIndicator
-                            color='white'
-                            refreshing={ true }
-                            size={ 37 }
-                            style={ Styles.connectingIndicator } />
-                        }
-                        { authKeysUpdateState === 'failed' &&
-                        <X.Text color='white' size='tiny'>저장 실패. 사용자 이름이 올바르고 인터넷에 연결되어 있는지 확인하세요</X.Text>
-                        }
-                    </View>
+                        <View style={ Styles.githubUsernameInputStatus }>
+                            { authKeysUpdateState === 'inflight' &&
+                                <ActivityIndicator
+                                    color='white'
+                                    refreshing={ true }
+                                    size={ 37 }
+                                    style={ Styles.connectingIndicator } />
+                            }
+                            { authKeysUpdateState === 'failed' &&
+                                <X.Text color='white' size='tiny'>저장 실패. 사용자 이름이 올바르고 인터넷에 연결되어 있는지 확인하세요</X.Text>
+                            }
+                        </View>
                     }
                     <View style={ Styles.githubSshKeyClearContainer }>
                         <X.Button
@@ -1070,12 +1070,12 @@ const mapDispatchToProps = dispatch => ({
         dispatch(updateParam(Params.KEY_SPEED_LIMIT_OFFSET, (speedLimitOffset).toString()));
     },
     setCommunityFeatures: (communityFeatures) => {
-        if (communityFeatures == 1) {
+        if (communityFeatures == 1) { 
             Alert.alert('커뮤니티 기능 사용', '커뮤니티 고유 기능은 comma에서 공식 지원하지않으며 표준 안전모델 충족기준이 확인되지않았으니 사용시 각별히 주의하세요', [
                 { text: '취소', onPress: () => {}, style: 'cancel' },
                 { text: '사용', onPress: () => {
-                        dispatch(updateParam(Params.KEY_COMMUNITY_FEATURES, (communityFeatures | 0).toString()));
-                    } },
+                    dispatch(updateParam(Params.KEY_COMMUNITY_FEATURES, (communityFeatures | 0).toString()));
+                } },
             ]);
         } else {
             dispatch(updateParam(Params.KEY_COMMUNITY_FEATURES, (communityFeatures | 0).toString()));
