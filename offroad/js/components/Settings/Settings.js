@@ -459,7 +459,7 @@ class Settings extends Component {
     }
 
     calib_description(params){
-      var text = 'openpilot requires the device to be mounted within 4° left or right and within 5° up or down. openpilot is continuously calibrating, resetting is rarely required.';
+      var text = '오픈 파일럿은 장치를 왼쪽 또는 오른쪽 4° 이내에 장착하고 위 또는 아래로 5° 이내에 장착해야 합니다. 오픈 파일럿이 계속 보정 중이므로 재설정이 필요한 경우는 거의 없습니다.';
       if ((params == null) || (params == undefined)) {
         var calib_json = null
       } else {
@@ -471,16 +471,16 @@ class Settings extends Component {
         var pitch = parseFloat(calibArr[1]) * (180/pi)
         var yaw = parseFloat(calibArr[2]) * (180/pi)
         if (pitch > 0) {
-          var pitch_str = Math.abs(pitch).toFixed(1).concat('° up')
+          var pitch_str = Math.abs(pitch).toFixed(1).concat('° 위')
         } else {
-          var pitch_str = Math.abs(pitch).toFixed(1).concat('° down')
+          var pitch_str = Math.abs(pitch).toFixed(1).concat('° 아래')
         }
         if (yaw > 0) {
-          var yaw_str = Math.abs(yaw).toFixed(1).concat('° right')
+          var yaw_str = Math.abs(yaw).toFixed(1).concat('° 오른쪽')
         } else {
-          var yaw_str = Math.abs(yaw).toFixed(1).concat('° left')
+          var yaw_str = Math.abs(yaw).toFixed(1).concat('° 왼쪽')
         }
-        text = text.concat('\n\nYour device is pointed ', pitch_str, ' and ', yaw_str, '. ')
+        text = text.concat('\n\n현재 장치가 위치한곳은 ', pitch_str, ' 그리고 ', yaw_str, ' 입니다. ')
       }
       return text;
     }
