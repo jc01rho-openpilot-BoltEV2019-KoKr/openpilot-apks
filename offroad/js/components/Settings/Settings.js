@@ -1,17 +1,30 @@
-import React, {Component} from 'react';
-import {ActivityIndicator, Alert, ScrollView, TextInput, View,} from 'react-native';
-import {NavigationActions} from 'react-navigation';
-import {connect} from 'react-redux';
+import React, { Component } from 'react';
+import {
+    ActivityIndicator,
+    Alert,
+    ScrollView,
+    TextInput,
+    View,
+} from 'react-native';
+import { NavigationActions } from 'react-navigation';
+import { connect } from 'react-redux';
 
 import ChffrPlus from '../../native/ChffrPlus';
 import Layout from '../../native/Layout';
 import UploadProgressTimer from '../../timers/UploadProgressTimer';
-import {mpsToKph, mpsToMph} from '../../utils/conversions';
-import {Params} from '../../config';
-import {resetToLaunch} from '../../store/nav/actions';
+import { formatSize } from '../../utils/bytes';
+import { mpsToKph, mpsToMph, kphToMps, mphToMps } from '../../utils/conversions';
+import { Params } from '../../config';
+import { resetToLaunch } from '../../store/nav/actions';
 
-import {updateSshEnabled,} from '../../store/host/actions';
-import {deleteParam, refreshParams, updateParam,} from '../../store/params/actions';
+import {
+    updateSshEnabled,
+} from '../../store/host/actions';
+import {
+    deleteParam,
+    updateParam,
+    refreshParams,
+} from '../../store/params/actions';
 
 import X from '../../themes';
 import Styles from './SettingsStyles';
@@ -61,7 +74,6 @@ class Settings extends Component {
             speedLimitOffsetInt: '0',
             githubUsername: '',
             authKeysUpdateState: null,
-            gitPullOnProgress : false,
         }
 
         this.writeSshKeys = this.writeSshKeys.bind(this);
@@ -112,43 +124,10 @@ class Settings extends Component {
         this.props.refreshParams();
     }
 
-    handleGitPullButtonClick() {
-
-        this.setState({gitPullOnProgress:true});
-        // this.renderPrimarySettings();
-
-        Alert.alert('git pull', 'commit하지 않은 모든 수정사항이 사라집니다\n클릭후 종료메시지를 기다리세요.', [
-            { text: '취소', onPress: () => {this.setState({gitPullOnProgress:false}); }, style: 'cancel' },
-            { text: 'git pull', onPress: () => {this.setState({gitPullOnProgress:true}); ChffrPlus.processGitPull(); this.setState({gitPullOnProgress:false})} },
-            { text: 'git pull & 재부팅', onPress: () => {this.setState({gitPullOnProgress:true}); ChffrPlus.processGitPullandReboot();} },
-        ],
-        { cancelable: false },
-        );
-
-
-    }
-
-
     handlePressedResetCalibration = async () => {
-        ChffrPlus.displayToast("다음 재부팅시점에 캘리브레이셩 수행이 진행됩니다.")
         this.props.deleteParam(Params.KEY_CALIBRATION_PARAMS);
         this.props.deleteParam(Params.KEY_LIVE_PARAMETERS);
-
     }
-    handlePressedMakePrebuilt() {
-        // this.props.deleteParam(Params.KEY_CALIBRATION_PARAMS);
-        this.props.setPrebuiltOn(1)
-        ChffrPlus.makePrebuilt()
-
-    }
-    handlePressedDeletePrebuilt() {
-        // this.props.deleteParam(Params.KEY_CALIBRATION_PARAMS);
-        this.props.setPrebuiltOn(0)
-        ChffrPlus.deletePrebuilt()
-    }
-
-
-
 
     // handleChangedSpeedLimitOffset(operator) {
     //     const { speedLimitOffset, isMetric } = this.props;
@@ -236,8 +215,8 @@ class Settings extends Component {
         ];
         return settingsMenuItems.map((item, idx) => {
             const cellButtonStyle = [
-                Styles.settingsMenuItem,
-                idx == 3 ? Styles.settingsMenuItemBorderless : null,
+              Styles.settingsMenuItem,
+              idx == 3 ? Styles.settingsMenuItemBorderless : null,
             ]
             return (
                 <View key={ idx } style={ cellButtonStyle }>
@@ -282,17 +261,9 @@ class Settings extends Component {
                 Passive: isPassive,
                 IsLdwEnabled: isLaneDepartureWarningEnabled,
                 LaneChangeEnabled: laneChangeEnabled,
-                IsPrebuiltOn : isPrebuiltOn,
             },
         } = this.props;
-
-
-
-
-
-
-        const { expandedCell, speedLimitOffsetInt,gitPullOnProgress } = this.state;
-
+        const { expandedCell, speedLimitOffsetInt } = this.state;
         return (
             <View style={ Styles.settings }>
                 <View style={ Styles.settingsHeader }>
@@ -310,60 +281,6 @@ class Settings extends Component {
                         { this.renderSettingsMenu() }
                     </X.Table>
                     <X.Table color='darkBlue'>
-                        { gitPullOnProgress === true ? (
-                            <X.Button
-                                size='small'
-                                color='settingsDefault'
-                                onPress={ () => {} }>
-                                git pull 진행중..
-                            </X.Button>
-                        ): (
-
-
-                            <X.Button
-                                size='small'
-                                color='settingsDefault'
-                                onPress={ () => this.handleGitPullButtonClick() }>
-                                git pull 수행
-                            </X.Button>
-
-                        )}
-
-                        <X.TableCell
-                            type='custom'
-                            title='prebuilt 설정'
-
-
-                            description={ this.prebuilt_description() }
-                            isExpanded={ expandedCell == 'prebuilt' }
-                            handleExpanded={ () => this.handleExpanded('prebuilt') }>
-
-                            {!parseInt(isPrebuiltOn) ? (
-                                <X.Button
-                                size='tiny'
-                                color='settingsDefault'
-                                onPress={ () => this.handlePressedMakePrebuilt()  }
-                                style={ { minWidth: '100%' } }>
-                                생성
-                                </X.Button>
-                            ) : (
-                                <X.Button
-                                size='tiny'
-                                color='settingsDefault'
-                                onPress={ () => this.handlePressedDeletePrebuilt()  }
-                                style={ { minWidth: '100%' } }>
-                                삭제
-                            </X.Button>
-                            )
-                            }
-
-
-
-                        </X.TableCell>
-
-
-
-
                         { !parseInt(isPassive) ? (
                             <X.TableCell
                                 type='switch'
@@ -422,8 +339,8 @@ class Settings extends Component {
                             isExpanded={ expandedCell == 'metric' }
                             handleExpanded={ () => this.handleExpanded('metric') }
                             handleChanged={ this.props.setMetric } />
-                    </X.Table>
-                    {/*
+                      </X.Table>
+                      {/*
                       <X.Table color='darkBlue'>
                         <X.TableCell
                             type='custom'
@@ -534,36 +451,31 @@ class Settings extends Component {
         )
     }
 
-    prebuilt_description() {
-        return 'prebuilt 파일을 만들어 다음 부팅부터 빌드를 건너뜁니다. c,h.hpp,c++ 파일 수정시에는 꼭 prebuilt를 삭제하셔야 변경점이 반영됩니다.'
-
-    }
-
     calib_description(params){
-        var text = '오픈파일럿은 장치를 4°이내 (왼쪽 또는 오른쪽)에 장착하고 5°이내 (위 또는 아래)에 장착해야 합니다. 오픈파일럿이 계속 보정 중이므로 재설정이 필요한 경우는 처음 셋팅 이외에는 거의 없습니다.';
-        if ((params == null) || (params == undefined)) {
-            var calib_json = null
+      var text = '오픈 파일럿은 장치를 왼쪽 또는 오른쪽 4° 이내에 장착하고 위 또는 아래로 5° 이내에 장착해야 합니다. 오픈 파일럿이 계속 보정 중이므로 재설정이 필요한 경우는 거의 없습니다.';
+      if ((params == null) || (params == undefined)) {
+        var calib_json = null
+      } else {
+        var calib_json = JSON.parse(params);
+      }
+      if ((calib_json != null) && (calib_json.hasOwnProperty('calib_radians'))) {
+        var calibArr = (calib_json.calib_radians).toString().split(',');
+        var pi = Math.PI;
+        var pitch = parseFloat(calibArr[1]) * (180/pi)
+        var yaw = parseFloat(calibArr[2]) * (180/pi)
+        if (pitch > 0) {
+          var pitch_str = Math.abs(pitch).toFixed(1).concat('° 위')
         } else {
-            var calib_json = JSON.parse(params);
+          var pitch_str = Math.abs(pitch).toFixed(1).concat('° 아래')
         }
-        if ((calib_json != null) && (calib_json.hasOwnProperty('calib_radians'))) {
-            var calibArr = (calib_json.calib_radians).toString().split(',');
-            var pi = Math.PI;
-            var pitch = parseFloat(calibArr[1]) * (180/pi)
-            var yaw = parseFloat(calibArr[2]) * (180/pi)
-            if (pitch > 0) {
-                var pitch_str = Math.abs(pitch).toFixed(1).concat('° 위')
-            } else {
-                var pitch_str = Math.abs(pitch).toFixed(1).concat('° 아래')
-            }
-            if (yaw > 0) {
-                var yaw_str = Math.abs(yaw).toFixed(1).concat('° 오른쪽')
-            } else {
-                var yaw_str = Math.abs(yaw).toFixed(1).concat('° 왼쪽')
-            }
-            text = text.concat('\n\n현재 장치가 위치한곳은 ', pitch_str, ' 그리고 ', yaw_str, ' 입니다. ')
+        if (yaw > 0) {
+          var yaw_str = Math.abs(yaw).toFixed(1).concat('° 오른쪽')
+        } else {
+          var yaw_str = Math.abs(yaw).toFixed(1).concat('° 왼쪽')
         }
-        return text;
+        text = text.concat('\n\n현재 장치가 위치한곳은 ', pitch_str, ' 그리고 ', yaw_str, ' 입니다. ')
+      }
+      return text;
     }
 
     renderDeviceSettings() {
@@ -645,11 +557,11 @@ class Settings extends Component {
                         <X.TableCell
                             title='남은 용량'
                             value={ parseInt(freeSpace) + '%' }
-                        />
+                             />
                         <X.TableCell
                             title='업로드 속도'
                             value={ txSpeedKbps + ' kbps' }
-                        />
+                             />
                     </X.Table>
                     <X.Table color='darkBlue'>
                         <X.Button
@@ -718,10 +630,6 @@ class Settings extends Component {
                 PandaFirmwareHex: pandaFirmwareHex,
                 PandaDongleId: pandaDongleId,
                 CommunityFeaturesToggle: communityFeatures,
-                LaneChangeEnabled: laneChangeEnabled,
-                LongControlEnabled: longControlEnabled,
-                MadModeEnabled: madModeEnabled,
-                AutoLaneChangeEnabled: autoLaneChangeEnabled,
             },
         } = this.props;
         const { expandedCell } = this.state;
@@ -753,39 +661,6 @@ class Settings extends Component {
                             isExpanded={ expandedCell == 'communityFeatures' }
                             handleExpanded={ () => this.handleExpanded('communityFeatures') }
                             handleChanged={ this.props.setCommunityFeatures } />
-                        {/*{ !parseInt(isPassive) && !!parseInt(communityFeatures) ? (*/}
-                        {/*    <X.TableCell*/}
-                        {/*        type='switch'*/}
-                        {/*        title='Long Control 사용'*/}
-                        {/*        value={ !!parseInt(longControlEnabled) }*/}
-                        {/*        iconSource={ Icons.openpilot }*/}
-                        {/*        description='경고 : 이 기능은 베타기능이며 오픈파일럿이 속도를 컨트롤하기때문에 주의가 필요합니다.'*/}
-                        {/*        isExpanded={ expandedCell == 'longcontrol_enabled' }*/}
-                        {/*        handleExpanded={ () => this.handleExpanded('longcontrol_enabled') }*/}
-                        {/*        handleChanged={ this.props.setLongControlEnabled } />*/}
-                        {/*) : null }*/}
-                        {/*{ !parseInt(isPassive) && !!parseInt(communityFeatures) && !parseInt(longControlEnabled) ? (*/}
-                        {/*    <X.TableCell*/}
-                        {/*        type='switch'*/}
-                        {/*        title='MAD 모드 사용'*/}
-                        {/*        value={ !!parseInt(madModeEnabled) }*/}
-                        {/*        iconSource={ Icons.openpilot }*/}
-                        {/*        description='Long Control 미사용 차량에 한하여 사용가능하며 크루즈버튼으로 오픈파일럿이 활성화됩니다.'*/}
-                        {/*        isExpanded={ expandedCell == 'madMode_enabled' }*/}
-                        {/*        handleExpanded={ () => this.handleExpanded('madMode_enabled') }*/}
-                        {/*        handleChanged={ this.props.setMadModeEnabled } />*/}
-                        {/*) : null }*/}
-                        {/*{ !parseInt(isPassive) && !!parseInt(communityFeatures) && !!parseInt(laneChangeEnabled) ? (*/}
-                        {/*    <X.TableCell*/}
-                        {/*        type='switch'*/}
-                        {/*        title='자동차선변경 사용'*/}
-                        {/*        value={ !!parseInt(autoLaneChangeEnabled) }*/}
-                        {/*        iconSource={ Icons.openpilot }*/}
-                        {/*        description='경고 : 이 기능은 베타기능이며 안전을위해 후측방감지기능이 있는 차량만사용하세요.'*/}
-                        {/*        isExpanded={ expandedCell == 'autoLaneChange_enabled' }*/}
-                        {/*        handleExpanded={ () => this.handleExpanded('autoLaneChange_enabled') }*/}
-                        {/*        handleChanged={ this.props.setAutoLaneChangeEnabled } />*/}
-                        {/*) : null }*/}
                         <X.TableCell
                             type='switch'
                             title='SSH 사용'
@@ -1008,7 +883,6 @@ const mapDispatchToProps = dispatch => ({
             { text: '재부팅', onPress: () => ChffrPlus.reboot() },
         ]);
     },
-
     shutdown: () => {
         Alert.alert('종료', '종료하시겠습니까?', [
             { text: '취소', onPress: () => {}, style: 'cancel' },
@@ -1030,15 +904,6 @@ const mapDispatchToProps = dispatch => ({
             ]
         }))
     },
-    openCustomSettings: () => {
-        dispatch(NavigationActions.reset({
-            index: 0,
-            key: null,
-            actions: [
-                NavigationActions.navigate({ routeName: 'CustomSettings' })
-            ]
-        }))
-    },
     setOpenpilotEnabled: (openpilotEnabled) => {
         dispatch(updateParam(Params.KEY_OPENPILOT_ENABLED, (openpilotEnabled | 0).toString()));
     },
@@ -1050,9 +915,6 @@ const mapDispatchToProps = dispatch => ({
     },
     setIsRHD: (isRHD) => {
         dispatch(updateParam(Params.KEY_IS_RHD, (isRHD | 0).toString()));
-    },
-    setPrebuiltOn: (isPrebuilt) => {
-        dispatch(updateParam(Params.KEY_PUT_PREBUILT, (isPrebuilt | 0).toString()));
     },
     setIsDriverViewEnabled: (isDriverViewEnabled) => {
         dispatch(updateParam(Params.KEY_IS_DRIVER_VIEW_ENABLED, (isDriverViewEnabled | 1).toString()));
@@ -1086,18 +948,6 @@ const mapDispatchToProps = dispatch => ({
     },
     setLaneChangeEnabled: (laneChangeEnabled) => {
         dispatch(updateParam(Params.KEY_LANE_CHANGE_ENABLED, (laneChangeEnabled | 0).toString()));
-    },
-    setLongControlEnabled: (longControlEnabled) => {
-        dispatch(updateParam(Params.KEY_LONG_CONTROL_ENABLED, (longControlEnabled | 0).toString()));
-        if (longControlEnabled == 1) {
-            dispatch(updateParam(Params.KEY_MAD_MODE_ENABLED, (0).toString()));
-        }
-    },
-    setMadModeEnabled: (madModeEnabled) => {
-        dispatch(updateParam(Params.KEY_MAD_MODE_ENABLED, (madModeEnabled | 0).toString()));
-    },
-    setAutoLaneChangeEnabled: (autoLaneChangeEnabled) => {
-        dispatch(updateParam(Params.KEY_AUTO_LANE_CHANGE_ENABLED, (autoLaneChangeEnabled | 0).toString()));
     },
     deleteParam: (param) => {
         dispatch(deleteParam(param));
