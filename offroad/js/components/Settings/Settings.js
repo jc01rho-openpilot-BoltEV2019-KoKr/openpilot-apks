@@ -452,7 +452,7 @@ class Settings extends Component {
     }
 
     calib_description(params){
-      var text = '오픈 파일럿은 장치를 왼쪽 또는 오른쪽 4° 이내에 장착하고 위 또는 아래로 5° 이내에 장착해야 합니다. 오픈 파일럿이 계속 보정 중이므로 재설정이 필요한 경우는 거의 없습니다.';
+      var text = '오픈 파일럿은 장치를 4°이내 (왼쪽 또는 오른쪽)에 장착하고 5°이내 (위 또는 아래)에 장착해야 합니다. 오픈 파일럿이 계속 보정 중이므로 재설정이 필요한 경우는 처음 셋팅 이외에는 거의 없습니다.';
       if ((params == null) || (params == undefined)) {
         var calib_json = null
       } else {
@@ -667,7 +667,7 @@ class Settings extends Component {
                             { !parseInt(isPassive) && !!parseInt(communityFeatures) ? (
                                 <X.TableCell
                                     type='switch'
-                                    title='Enable HKG Long Control'
+                                    title='HKG Long Control 활성화'
                                     value={ !!parseInt(longControlEnabled) }
                                     iconSource={ Icons.openpilot }
                                     description='Description to be added!! @xx979xx'
@@ -678,7 +678,7 @@ class Settings extends Component {
                             { !parseInt(isPassive) && !!parseInt(communityFeatures) && !parseInt(longControlEnabled) ? (
                                 <X.TableCell
                                     type='switch'
-                                    title='Enable HKG MAD mode'
+                                    title='HKG MAD 모드 활성화'
                                     value={ !!parseInt(madModeEnabled) }
                                     iconSource={ Icons.openpilot }
                                     description='Description to be added!! @xx979xx'
@@ -689,7 +689,7 @@ class Settings extends Component {
                             { !parseInt(isPassive) && !!parseInt(communityFeatures) && !!parseInt(laneChangeEnabled) ? (
                                 <X.TableCell
                                     type='switch'
-                                    title='Enable Auto Lane Change Assist'
+                                    title='자동차선변경 활성화'
                                     value={ !!parseInt(autoLaneChangeEnabled) }
                                     iconSource={ Icons.openpilot }
                                     description='Description to be added!! @xx979xx'
