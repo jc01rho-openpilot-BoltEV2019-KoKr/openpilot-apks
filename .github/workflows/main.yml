@@ -7,7 +7,6 @@ env:
     docker pull $(grep -ioP '(?<=^from)\s+\S+' Dockerfile) || true
     docker pull docker.io/commaai/openpilot-apks:latest || true
     docker build --cache-from docker.io/commaai/openpilot-apks:latest -t apks -f Dockerfile .
-
 jobs:
   docker_push:
     name: docker push
@@ -22,7 +21,6 @@ jobs:
           docker login -u wmelching -p ${{ secrets.COMMA_DOCKERHUB_TOKEN }}
           docker tag apks docker.io/commaai/openpilot-apks:latest
           docker push docker.io/commaai/openpilot-apks:latest
-
   offroad:
     name: offroad
     runs-on: ubuntu-16.04
