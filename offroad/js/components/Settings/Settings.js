@@ -668,7 +668,7 @@ class Settings extends Component {
                             { !parseInt(isPassive) && !!parseInt(communityFeatures) ? (
                                 <X.TableCell
                                     type='switch'
-                                    title='HKG Long Control 활성화'
+                                    title='Long Control 활성화'
                                     value={ !!parseInt(longControlEnabled) }
                                     iconSource={ Icons.openpilot }
                                     description='경고 : 이 기능은 베타기능이며 오픈파일럿이 속도를 컨트롤하기때문에 주의가 필요합니다.'
@@ -679,7 +679,7 @@ class Settings extends Component {
                             { !parseInt(isPassive) && !!parseInt(communityFeatures) && !parseInt(longControlEnabled) ? (
                                 <X.TableCell
                                     type='switch'
-                                    title='HKG MAD 모드 활성화'
+                                    title='MAD 모드 활성화'
                                     value={ !!parseInt(madModeEnabled) }
                                     iconSource={ Icons.openpilot }
                                     description='Long Control 미사용 차량에 한하여 사용가능하며 크루즈버튼으로 오픈파일럿이 활성화됩니다.'
