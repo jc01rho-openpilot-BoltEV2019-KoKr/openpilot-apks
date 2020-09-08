@@ -630,6 +630,7 @@ class Settings extends Component {
                 PandaFirmwareHex: pandaFirmwareHex,
                 PandaDongleId: pandaDongleId,
                 CommunityFeaturesToggle: communityFeatures,
+                LaneChangeEnabled: laneChangeEnabled,
                 LongControlEnabled: longControlEnabled,
                 MadModeEnabled: madModeEnabled,
                 AutoLaneChangeEnabled: autoLaneChangeEnabled,
@@ -670,7 +671,7 @@ class Settings extends Component {
                                     title='HKG Long Control 활성화'
                                     value={ !!parseInt(longControlEnabled) }
                                     iconSource={ Icons.openpilot }
-                                    description='Description to be added!! @xx979xx'
+                                    description='warrings: it is beta, be carful!! Openpilot will control the speed of your car'
                                     isExpanded={ expandedCell == 'longcontrol_enabled' }
                                     handleExpanded={ () => this.handleExpanded('longcontrol_enabled') }
                                     handleChanged={ this.props.setLongControlEnabled } />
@@ -681,7 +682,7 @@ class Settings extends Component {
                                     title='HKG MAD 모드 활성화'
                                     value={ !!parseInt(madModeEnabled) }
                                     iconSource={ Icons.openpilot }
-                                    description='Description to be added!! @xx979xx'
+                                    description='Only for Car without long control, Openpilot will engage when turn cruise control on'
                                     isExpanded={ expandedCell == 'madMode_enabled' }
                                     handleExpanded={ () => this.handleExpanded('madMode_enabled') }
                                     handleChanged={ this.props.setMadModeEnabled } />
@@ -692,7 +693,7 @@ class Settings extends Component {
                                     title='자동차선변경 활성화'
                                     value={ !!parseInt(autoLaneChangeEnabled) }
                                     iconSource={ Icons.openpilot }
-                                    description='Description to be added!! @xx979xx'
+                                    description='warrings: it is beta, be carful!!'
                                     isExpanded={ expandedCell == 'autoLaneChange_enabled' }
                                     handleExpanded={ () => this.handleExpanded('autoLaneChange_enabled') }
                                     handleChanged={ this.props.setAutoLaneChangeEnabled } />
@@ -987,6 +988,9 @@ const mapDispatchToProps = dispatch => ({
     },
     setLongControlEnabled: (longControlEnabled) => {
         dispatch(updateParam(Params.KEY_LONG_CONTROL_ENABLED, (longControlEnabled | 0).toString()));
+        if (longControlEnabled == 1) {
+          dispatch(updateParam(Params.KEY_MAD_MODE_ENABLED, (0).toString()));
+        }
     },
     setMadModeEnabled: (madModeEnabled) => {
         dispatch(updateParam(Params.KEY_MAD_MODE_ENABLED, (madModeEnabled | 0).toString()));
