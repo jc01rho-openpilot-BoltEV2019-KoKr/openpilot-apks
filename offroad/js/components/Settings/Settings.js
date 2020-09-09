@@ -197,7 +197,7 @@ class Settings extends Component {
             {
                 icon: Icons.eon,
                 title: '장치',
-                context: `${ parseInt(freeSpace) + '%' } Free`,
+                context: `${ parseInt(freeSpace) + '%' } 여유`,
                 route: SettingsRoutes.DEVICE,
             },
             {
@@ -425,7 +425,7 @@ class Settings extends Component {
                                 <X.Text
                                     color='white'
                                     size='tiny'>
-                                    comma connect앱에서 장치 페어링을 해제할수 있습니다
+                                    comma connect앱에서 페어링을 해제할수 있습니다
                                 </X.Text>
                             ) : null }
                             <X.Line color='light' />
@@ -555,7 +555,7 @@ class Settings extends Component {
                             title='시리얼 번호'
                             value={ serialNumber } />
                         <X.TableCell
-                            title='남은 용량'
+                            title='여유 공간'
                             value={ parseInt(freeSpace) + '%' }
                              />
                         <X.TableCell
@@ -654,7 +654,7 @@ class Settings extends Component {
                     <X.Table color='darkBlue'>
                         <X.TableCell
                             type='switch'
-                            title='커뮤니티기능 설정'
+                            title='커뮤니티기능 사용'
                             value={ !!parseInt(communityFeatures) }
                             iconSource={ Icons.developer }
                             descriptionExtra={
