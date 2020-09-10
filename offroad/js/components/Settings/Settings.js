@@ -295,10 +295,10 @@ class Settings extends Component {
                         { !parseInt(isPassive) ? (
                             <X.TableCell
                                 type='switch'
-                                title='자동차선변경 사용'
+                                title='차선변경 사용'
                                 value={ !!parseInt(laneChangeEnabled) }
                                 iconSource={ Icons.road }
-                                description='주변 환경을 확인후 방향 지시등을 활성화하고 핸들을 원하는 차선 쪽으로 부드럽게 밀어서 오픈 파일럿으로 자동차선변경을 수행하십시오. 오픈 파일럿은 차선이 안전한지 확인할 수 없습니다. 이 기능을 사용하려면 주변 환경을 지속적으로 관찰해야 합니다'
+                                description='60km 이상의 속도로 주행시 방향지시등을 켜고 핸들을 원하는 차선 쪽으로 부드럽게 돌려주면 오픈파일럿이 차선변경을 수행합니다. 후측방 감지기가 없는 차량은 차선이 안전한지 확인할 수 없으니 주의하세요.
                                 isExpanded={ expandedCell == 'lanechange_enabled' }
                                 handleExpanded={ () => this.handleExpanded('lanechange_enabled') }
                                 handleChanged={ this.props.setLaneChangeEnabled } />
@@ -326,7 +326,7 @@ class Settings extends Component {
                             title='우측 핸들 사용'
                             value={ !!parseInt(isRHD) }
                             iconSource={ Icons.openpilot_mirrored }
-                            description='오픈 파일럿이 좌측 교통 규칙을 준수하도록 허용하고 우측 운전석에서 운전자 모니터링을 수행합니다'
+                            description='오픈파일럿이 좌측 교통 규칙을 준수하도록 허용하고 우측 운전석에서 운전자 모니터링을 수행합니다'
                             isExpanded={ expandedCell == 'is_rhd' }
                             handleExpanded={ () => this.handleExpanded('is_rhd') }
                             handleChanged={ this.props.setIsRHD } />
@@ -452,7 +452,7 @@ class Settings extends Component {
     }
 
     calib_description(params){
-      var text = '오픈 파일럿은 장치를 4°이내 (왼쪽 또는 오른쪽)에 장착하고 5°이내 (위 또는 아래)에 장착해야 합니다. 오픈 파일럿이 계속 보정 중이므로 재설정이 필요한 경우는 처음 셋팅 이외에는 거의 없습니다.';
+      var text = '오픈파일럿은 장치를 4°이내 (왼쪽 또는 오른쪽)에 장착하고 5°이내 (위 또는 아래)에 장착해야 합니다. 오픈파일럿이 계속 보정 중이므로 재설정이 필요한 경우는 처음 셋팅 이외에는 거의 없습니다.';
       if ((params == null) || (params == undefined)) {
         var calib_json = null
       } else {
@@ -668,7 +668,7 @@ class Settings extends Component {
                             { !parseInt(isPassive) && !!parseInt(communityFeatures) ? (
                                 <X.TableCell
                                     type='switch'
-                                    title='Long Control 활성화'
+                                    title='Long Control 사용'
                                     value={ !!parseInt(longControlEnabled) }
                                     iconSource={ Icons.openpilot }
                                     description='경고 : 이 기능은 베타기능이며 오픈파일럿이 속도를 컨트롤하기때문에 주의가 필요합니다.'
@@ -679,7 +679,7 @@ class Settings extends Component {
                             { !parseInt(isPassive) && !!parseInt(communityFeatures) && !parseInt(longControlEnabled) ? (
                                 <X.TableCell
                                     type='switch'
-                                    title='MAD 모드 활성화'
+                                    title='MAD 모드 사용'
                                     value={ !!parseInt(madModeEnabled) }
                                     iconSource={ Icons.openpilot }
                                     description='Long Control 미사용 차량에 한하여 사용가능하며 크루즈버튼으로 오픈파일럿이 활성화됩니다.'
@@ -690,10 +690,10 @@ class Settings extends Component {
                             { !parseInt(isPassive) && !!parseInt(communityFeatures) && !!parseInt(laneChangeEnabled) ? (
                                 <X.TableCell
                                     type='switch'
-                                    title='자동차선변경 활성화'
+                                    title='자동차선변경 사용'
                                     value={ !!parseInt(autoLaneChangeEnabled) }
                                     iconSource={ Icons.openpilot }
-                                    description='경고 : 이 기능은 베타기능이며 안전을위해 측후방감지기능이 있는 차량만사용하세요.'
+                                    description='경고 : 이 기능은 베타기능이며 안전을위해 후측방감지기능이 있는 차량만사용하세요.'
                                     isExpanded={ expandedCell == 'autoLaneChange_enabled' }
                                     handleExpanded={ () => this.handleExpanded('autoLaneChange_enabled') }
                                     handleChanged={ this.props.setAutoLaneChangeEnabled } />
