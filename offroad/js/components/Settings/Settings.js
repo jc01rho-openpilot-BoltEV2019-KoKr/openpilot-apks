@@ -287,7 +287,7 @@ class Settings extends Component {
                                 title='오픈파일럿 사용'
                                 value={ !!parseInt(openpilotEnabled) }
                                 iconSource={ Icons.openpilot }
-                                description='오픈파일럿 기능을 사용하여 핸들자동조향은 지원받으세요. 이 기능을 사용하려면 항상 주의를 기울여야 합니다. 이 설정을 변경하면 차량 재시동후 적용됩니다'
+                                description='오픈파일럿 기능을 사용하여 핸들자동조향을 사용해보세요. 이 기능을 사용하려면 항상 주의를 기울여야 합니다.'
                                 isExpanded={ expandedCell == 'openpilot_enabled' }
                                 handleExpanded={ () => this.handleExpanded('openpilot_enabled') }
                                 handleChanged={ this.props.setOpenpilotEnabled } />
@@ -298,7 +298,7 @@ class Settings extends Component {
                                 title='차선변경 사용'
                                 value={ !!parseInt(laneChangeEnabled) }
                                 iconSource={ Icons.road }
-                                description='60km 이상의 속도로 주행시 방향지시등을 켜고 핸들을 원하는 차선 쪽으로 부드럽게 돌려주면 오픈파일럿이 차선변경을 수행합니다. 후측방 감지기가 없는 차량은 차선이 안전한지 확인할 수 없으니 주의하세요.
+                                description='60km 이상의 속도로 주행시 방향지시등을 켜고 핸들을 원하는 차선 쪽으로 부드럽게 돌려주면 오픈파일럿이 차선변경을 수행합니다. 후측방 감지기가 없는 차량은 차선이 안전한지 확인할 수 없으니 주의하세요'
                                 isExpanded={ expandedCell == 'lanechange_enabled' }
                                 handleExpanded={ () => this.handleExpanded('lanechange_enabled') }
                                 handleChanged={ this.props.setLaneChangeEnabled } />
