@@ -281,6 +281,13 @@ class Settings extends Component {
                         { this.renderSettingsMenu() }
                     </X.Table>
                     <X.Table color='darkBlue'>
+                        <X.Button
+                            color='settingsDefault'
+                            onPress={ () => this.props.openDragonpilotSettings() }>
+                            { i18n._(t`dragonpilot`) }
+                        </X.Button>
+                    </X.Table>
+                    <X.Table color='darkBlue'>
                         { !parseInt(isPassive) ? (
                             <X.TableCell
                                 type='switch'
@@ -901,6 +908,15 @@ const mapDispatchToProps = dispatch => ({
             key: null,
             actions: [
                 NavigationActions.navigate({ routeName: 'Onboarding' })
+            ]
+        }))
+    },
+    openCustomSettings: () => {
+        dispatch(NavigationActions.reset({
+            index: 0,
+            key: null,
+            actions: [
+                NavigationActions.navigate({ routeName: 'CustomSettings' })
             ]
         }))
     },
