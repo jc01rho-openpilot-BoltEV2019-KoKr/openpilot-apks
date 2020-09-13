@@ -191,7 +191,7 @@ class Settings extends Component {
             {
                 icon: Icons.user,
                 title: 'Account',
-                context: isPaired ? 'Paired' : 'Unpaired',
+                context: isPaired ? '연결됨' : '연결안됨',
                 route: SettingsRoutes.ACCOUNT,
             },
             {
