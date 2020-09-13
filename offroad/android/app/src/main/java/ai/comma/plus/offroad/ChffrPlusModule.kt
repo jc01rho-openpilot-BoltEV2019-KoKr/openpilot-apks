@@ -247,6 +247,27 @@ class ChffrPlusModule(val ctx: ReactApplicationContext) :
     }
 
     @ReactMethod
+    fun processGitPull() {
+        try {
+            Runtime.getRuntime().exec(arrayOf("/system/bin/su", "-c", "LD_LIBRARY_PATH=/data/phonelibs:/data/data/com.termux/files/usr/lib  data/data/com.termux/files/usr/bin/git -C /data/openpilot pull"))
+        } catch (e: IOException) {
+            CloudLog.exception("BaseUIReactModule.shutdown", e)
+        }
+    }
+
+
+    @ReactMethod
+    fun processGitPullandReboot() {
+        try {
+            processGitPull()
+            reboot()
+        } catch (e: IOException) {
+            CloudLog.exception("BaseUIReactModule.shutdown", e)
+        }
+    }
+
+
+    @ReactMethod
     fun getSimState(promise: Promise) {
         promise.resolve(getCellState())
     }

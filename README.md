@@ -1,5 +1,8 @@
 # openpilot-apks
 
+- git pull button added.
+- Korean text contributed by crwusiz(@crwusiz) (#1fc2b0bf1), thx for contribution.
+
 The source code for the APKs that run alongside openpilot.
 
 [![openpilot apk tests](https://github.com/commaai/openpilot-apks/workflows/openpilot%20apk%20tests/badge.svg)](https://github.com/commaai/openpilot-apks/actions)
