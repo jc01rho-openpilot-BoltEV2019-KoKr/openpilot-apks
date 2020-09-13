@@ -5,8 +5,6 @@ import {
     ScrollView,
     TextInput,
     View,
-    ToastAndroid,
-    Platform,    
 } from 'react-native';
 import { NavigationActions } from 'react-navigation';
 import { connect } from 'react-redux';
@@ -76,7 +74,6 @@ class Settings extends Component {
             speedLimitOffsetInt: '0',
             githubUsername: '',
             authKeysUpdateState: null,
-            gitPullOnProgress : false,            
         }
 
         this.writeSshKeys = this.writeSshKeys.bind(this);
@@ -125,21 +122,6 @@ class Settings extends Component {
         this.setState({ route: route })
         this.refs.settingsScrollView.scrollTo({ x: 0, y: 0, animated: false })
         this.props.refreshParams();
-    }
-
-    handleGitPullButtonClick() {
-
-        this.setState({gitPullOnProgress:true});
-        this.renderPrimarySettings();
-
-        Alert.alert('git pull', 'commit하지 않은 모든 수정사항이 사라집니다.', [
-            { text: '취소', onPress: () => {}, style: 'cancel' },
-            { text: 'git pull & 재부팅', onPress: () => {this.setState({gitPullOnProgress:true});this.renderPrimarySettings(); ChffrPlus.processGitPullandReboot();} },
-        ],
-        { cancelable: false },
-        );
-
-
     }
 
     handlePressedResetCalibration = async () => {
@@ -208,25 +190,25 @@ class Settings extends Component {
         const settingsMenuItems = [
             {
                 icon: Icons.user,
-                title: '계정',
-                context: isPaired ? '페어링됨' : '페어링안됨',
+                title: 'Account',
+                context: isPaired ? '연결됨' : '연결안됨',
                 route: SettingsRoutes.ACCOUNT,
             },
             {
                 icon: Icons.eon,
-                title: '장치',
-                context: `${ parseInt(freeSpace) + '%' } 여유`,
+                title: 'Device',
+                context: `${ parseInt(freeSpace) + '%' } Free`,
                 route: SettingsRoutes.DEVICE,
             },
             {
                 icon: Icons.network,
-                title: '네트워크',
+                title: 'WiFi',
                 context: connectivity,
                 route: SettingsRoutes.NETWORK,
             },
             {
                 icon: Icons.developer,
-                title: '개발자',
+                title: 'Developer',
                 context: `${ software } v${ version.split('-')[0] }`,
                 route: SettingsRoutes.DEVELOPER,
             },
@@ -289,7 +271,7 @@ class Settings extends Component {
                         color='ghost'
                         size='small'
                         onPress={ () => this.handlePressedBack() }>
-                        {'<  설정'}
+                        {'<  Settings'}
                     </X.Button>
                 </View>
                 <ScrollView
@@ -302,10 +284,10 @@ class Settings extends Component {
                         { !parseInt(isPassive) ? (
                             <X.TableCell
                                 type='switch'
-                                title='오픈파일럿 사용'
+                                title='Enable openpilot'
                                 value={ !!parseInt(openpilotEnabled) }
                                 iconSource={ Icons.openpilot }
-                                description='오픈파일럿 기능을 사용하여 핸들자동조향을 사용해보세요. 이 기능을 사용하려면 항상 주의를 기울여야 합니다.'
+                                description='Use the openpilot system for adaptive cruise control and lane keep driver assistance. Your attention is required at all times to use this feature. Changing this setting takes effect when the car is powered off.'
                                 isExpanded={ expandedCell == 'openpilot_enabled' }
                                 handleExpanded={ () => this.handleExpanded('openpilot_enabled') }
                                 handleChanged={ this.props.setOpenpilotEnabled } />
@@ -313,47 +295,47 @@ class Settings extends Component {
                         { !parseInt(isPassive) ? (
                             <X.TableCell
                                 type='switch'
-                                title='차선변경 사용'
+                                title='Enable Lane Change Assist'
                                 value={ !!parseInt(laneChangeEnabled) }
                                 iconSource={ Icons.road }
-                                description='60km 이상의 속도로 주행시 방향지시등을 켜고 핸들을 원하는 차선 쪽으로 부드럽게 돌려주면 오픈파일럿이 차선변경을 수행합니다. 후측방 감지기가 없는 차량은 차선이 안전한지 확인할 수 없으니 주의하세요'
+                                description='Perform assisted lane changes with openpilot by checking your surroundings for safety, activating the turn signal and gently nudging the steering wheel towards your desired lane. openpilot is not capable of checking if a lane change is safe. You must continuously observe your surroundings to use this feature.'
                                 isExpanded={ expandedCell == 'lanechange_enabled' }
                                 handleExpanded={ () => this.handleExpanded('lanechange_enabled') }
                                 handleChanged={ this.props.setLaneChangeEnabled } />
                         ) : null }
                         <X.TableCell
                             type='switch'
-                            title='차선이탈경보 사용'
+                            title='Enable Lane Departure Warnings'
                             value={ !!parseInt(isLaneDepartureWarningEnabled) }
                             iconSource={ Icons.warning }
-                            description='50km 이상의 속도로 주행하는동안 방향지시등 조작없이 차량이 차선을 이탈하면 차선이탈경보를 보냅니다'
+                            description='Receive alerts to steer back into the lane when your vehicle drifts over a detected lane line without a turn signal activated while driving over 31mph (50kph).'
                             isExpanded={ expandedCell == 'ldw' }
                             handleExpanded={ () => this.handleExpanded('ldw') }
                             handleChanged={ this.props.setLaneDepartureWarningEnabled } />
                         <X.TableCell
                             type='switch'
-                            title='운전자모니터링 기록 및 업로드 사용'
+                            title='Record and Upload Driver Camera'
                             value={ !!parseInt(recordFront) }
                             iconSource={ Icons.network }
-                            description='운전자 모니터링 카메라 데이터를 업로드하고 운전자 모니터링 알고리즘 개선에 참여하세요'
+                            description='Upload data from the driver facing camera and help improve the driver monitoring algorithm.'
                             isExpanded={ expandedCell == 'record_front' }
                             handleExpanded={ () => this.handleExpanded('record_front') }
                             handleChanged={ this.props.setRecordFront } />
                         <X.TableCell
                             type='switch'
-                            title='우측 핸들 사용'
+                            title='Enable Right-Hand Drive'
                             value={ !!parseInt(isRHD) }
                             iconSource={ Icons.openpilot_mirrored }
-                            description='오픈파일럿이 좌측 교통 규칙을 준수하도록 허용하고 우측 운전석에서 운전자 모니터링을 수행합니다'
+                            description='Allow openpilot to obey left-hand traffic conventions and perform driver monitoring on right driver seat.'
                             isExpanded={ expandedCell == 'is_rhd' }
                             handleExpanded={ () => this.handleExpanded('is_rhd') }
                             handleChanged={ this.props.setIsRHD } />
                         <X.TableCell
                             type='switch'
-                            title='미터법 사용'
+                            title='Use Metric System'
                             value={ !!parseInt(isMetric) }
                             iconSource={ Icons.metric }
-                            description='주행속도표시를 km/h로 변경합니다'
+                            description='Display speed in km/h instead of mp/h.'
                             isExpanded={ expandedCell == 'metric' }
                             handleExpanded={ () => this.handleExpanded('metric') }
                             handleChanged={ this.props.setMetric } />
@@ -410,7 +392,7 @@ class Settings extends Component {
                         <X.Button
                             color='settingsDefault'
                             onPress={ () => this.props.openTrainingGuide() }>
-                            트레이닝 가이드 다시보기
+                            Review Training Guide
                         </X.Button>
                     </X.Table>
                 </ScrollView>
@@ -428,7 +410,7 @@ class Settings extends Component {
                         color='ghost'
                         size='small'
                         onPress={ () => this.handlePressedBack() }>
-                        {'<  계정 설정'}
+                        {'<  Account Settings'}
                     </X.Button>
                 </View>
                 <ScrollView
@@ -437,20 +419,20 @@ class Settings extends Component {
                     <View>
                         <X.Table>
                             <X.TableCell
-                                title='장치 페어링 상태'
-                                value={ isPaired ? '페어링됨' : '페어링안됨' } />
+                                title='Device Paired'
+                                value={ isPaired ? 'Yes' : 'No' } />
                             { isPaired ? (
                                 <X.Text
                                     color='white'
                                     size='tiny'>
-                                    comma connect앱에서 페어링을 해제할수 있습니다
+                                    You may unpair your device in the comma connect app settings.
                                 </X.Text>
                             ) : null }
                             <X.Line color='light' />
                             <X.Text
                                 color='white'
                                 size='tiny'>
-                                서비스 이용 약관 : {'https://my.comma.ai/terms.html'}
+                                Terms of Service available at {'https://my.comma.ai/terms.html'}
                             </X.Text>
                         </X.Table>
                         { isPaired ? null : (
@@ -459,7 +441,7 @@ class Settings extends Component {
                                     color='settingsDefault'
                                     size='small'
                                     onPress={ this.props.openPairing }>
-                                    페어링설정
+                                    Pair Device
                                 </X.Button>
                             </X.Table>
                         ) }
@@ -470,7 +452,7 @@ class Settings extends Component {
     }
 
     calib_description(params){
-      var text = '오픈파일럿은 장치를 왼쪽,오른쪽은 4° 이내에 장착하고 위,아래는 5° 이내에 장착해야 합니다. 오픈파일럿이 계속 보정 중이므로 재설정이 필요한 경우는 처음 셋팅 이외에는 거의 없습니다.';
+      var text = 'openpilot requires the device to be mounted within 4° left or right and within 5° up or down. openpilot is continuously calibrating, resetting is rarely required.';
       if ((params == null) || (params == undefined)) {
         var calib_json = null
       } else {
@@ -482,16 +464,16 @@ class Settings extends Component {
         var pitch = parseFloat(calibArr[1]) * (180/pi)
         var yaw = parseFloat(calibArr[2]) * (180/pi)
         if (pitch > 0) {
-          var pitch_str = Math.abs(pitch).toFixed(1).concat('° 위')
+          var pitch_str = Math.abs(pitch).toFixed(1).concat('° up')
         } else {
-          var pitch_str = Math.abs(pitch).toFixed(1).concat('° 아래')
+          var pitch_str = Math.abs(pitch).toFixed(1).concat('° down')
         }
         if (yaw > 0) {
-          var yaw_str = Math.abs(yaw).toFixed(1).concat('° 오른쪽에')
+          var yaw_str = Math.abs(yaw).toFixed(1).concat('° right')
         } else {
-          var yaw_str = Math.abs(yaw).toFixed(1).concat('° 왼쪽에')
+          var yaw_str = Math.abs(yaw).toFixed(1).concat('° left')
         }
-        text = text.concat('\n\n장치가', pitch_str, ' 그리고 ', yaw_str, ' 위치해 있습니다. ')
+        text = text.concat('\n\nYour device is pointed ', pitch_str, ' and ', yaw_str, '. ')
       }
       return text;
     }
@@ -521,7 +503,7 @@ class Settings extends Component {
                         color='ghost'
                         size='small'
                         onPress={ () => this.handlePressedBack() }>
-                        {'<  장치 설정'}
+                        {'<  Device Settings'}
                     </X.Button>
                 </View>
                 <ScrollView
@@ -530,7 +512,7 @@ class Settings extends Component {
                     <X.Table color='darkBlue'>
                         <X.TableCell
                             type='custom'
-                            title='카메라 캘리브레이션'
+                            title='Camera Calibration'
                             iconSource={ Icons.calibration }
                             description={ this.calib_description(calibrationParams) }
                             isExpanded={ expandedCell == 'calibration' }
@@ -540,16 +522,16 @@ class Settings extends Component {
                                 color='settingsDefault'
                                 onPress={ this.handlePressedResetCalibration  }
                                 style={ { minWidth: '100%' } }>
-                                리셋
+                                Reset
                             </X.Button>
                         </X.TableCell>
                     </X.Table>
                     <X.Table color='darkBlue'>
                         <X.TableCell
                             type='custom'
-                            title='운전자 모니터링'
+                            title='Driver Camera View'
                             iconSource={ Icons.monitoring }
-                            description='최상의 운전자 모니터링 환경을 위해 운전자 모니터링 카메라를 미리보고 최적의 장착위치를 찾아보세요.'
+                            description='Preview the driver facing camera to help optimize device mounting position for best driver monitoring experience. (offroad use only)'
                             isExpanded={ expandedCell == 'driver_view_enabled' }
                             handleExpanded={ () => this.handleExpanded('driver_view_enabled') } >
                             <X.Button
@@ -558,38 +540,43 @@ class Settings extends Component {
                                 isDisabled={ !isOffroad }
                                 onPress={ this.props.setIsDriverViewEnabled  }
                                 style={ { minWidth: '100%' } }>
-                                미리보기
+                                Preview
                             </X.Button>
                         </X.TableCell>
+                    </X.Table>
+                    <X.Table>
+                        <X.TableCell
+                            title='Paired'
+                            value={ isPaired ? 'Yes' : 'No' } />
+                        <X.TableCell
+                            title='Dongle ID'
+                            value={ dongleId } />
+                        <X.TableCell
+                            title='Serial Number'
+                            value={ serialNumber } />
+                        <X.TableCell
+                            title='Free Storage'
+                            value={ parseInt(freeSpace) + '%' }
+                             />
+                        <X.TableCell
+                            title='Upload Speed'
+                            value={ txSpeedKbps + ' kbps' }
+                             />
                     </X.Table>
                     <X.Table color='darkBlue'>
                         <X.Button
                             size='small'
                             color='settingsDefault'
                             onPress={ () => this.props.reboot() }>
-                            재부팅
+                            Reboot
                         </X.Button>
                         <X.Line color='transparent' size='tiny' spacing='mini' />
                         <X.Button
                             size='small'
                             color='settingsDefault'
                             onPress={ () => this.props.shutdown() }>
-                            종료
+                            Power Off
                         </X.Button>
-                    </X.Table>
-                    <X.Table>
-                        <X.TableCell
-                            title='동글 ID'
-                            value={ dongleId } />
-                        <X.TableCell
-                            title='시리얼 번호'
-                            value={ serialNumber } />
-                        <X.TableCell
-                            title='여유 공간'
-                            value={ parseInt(freeSpace) + '%' } />
-                        <X.TableCell
-                            title='업로드 속도'
-                            value={ txSpeedKbps + ' kbps' } />
                     </X.Table>
                 </ScrollView>
             </View>
@@ -605,7 +592,7 @@ class Settings extends Component {
                         color='ghost'
                         size='small'
                         onPress={ () => this.handlePressedBack() }>
-                        {'<  네트워크 설정'}
+                        {'<  Network Settings'}
                     </X.Button>
                 </View>
                 <ScrollView
@@ -617,14 +604,14 @@ class Settings extends Component {
                             size='small'
                             color='settingsDefault'
                             onPress={ this.props.openWifiSettings }>
-                            WiFi설정 열기
+                            Open WiFi Settings
                         </X.Button>
                         <X.Line color='transparent' size='tiny' spacing='mini' />
                         <X.Button
                             size='small'
                             color='settingsDefault'
                             onPress={ this.props.openTetheringSettings }>
-                            테더링설정 열기
+                            Open Tethering Settings
                         </X.Button>
                     </X.Table>
                 </ScrollView>
@@ -643,14 +630,9 @@ class Settings extends Component {
                 PandaFirmwareHex: pandaFirmwareHex,
                 PandaDongleId: pandaDongleId,
                 CommunityFeaturesToggle: communityFeatures,
-                LaneChangeEnabled: laneChangeEnabled,
-                LongControlEnabled: longControlEnabled,
-                MadModeEnabled: madModeEnabled,
-                AutoLaneChangeEnabled: autoLaneChangeEnabled,
-                PutPrebuiltOn: putPrebuilt,                
             },
         } = this.props;
-        const { expandedCell, gitPullOnProgress } = this.state;
+        const { expandedCell } = this.state;
         const software = !!parseInt(isPassive) ? 'dashcam' : 'openpilot';
         return (
             <View style={ Styles.settings }>
@@ -659,7 +641,7 @@ class Settings extends Component {
                         color='ghost'
                         size='small'
                         onPress={ () => this.handlePressedBack() }>
-                        {'<  개발자 설정'}
+                        {'<  Developer Settings'}
                     </X.Button>
                 </View>
                 <ScrollView
@@ -668,71 +650,29 @@ class Settings extends Component {
                     <X.Table color='darkBlue'>
                         <X.TableCell
                             type='switch'
-                            title='커뮤니티기능 사용'
+                            title='Enable Community Features'
                             value={ !!parseInt(communityFeatures) }
                             iconSource={ Icons.developer }
                             descriptionExtra={
-                              <X.Text color='white' size='tiny'>                                  
-                                  커뮤니티 기능은 comma에서 공식 지원하지않으며 표준 안전모델 충족기준이 확인되지않았으니 사용시 주의하세요.
+                              <X.Text color='white' size='tiny'>
+                                  Use features from the open source community that are not maintained or supported by comma.ai and have not been confirmed to meet the standard safety model. These features include community supported cars and community supported hardware. Be extra cautious when using these features.{'\n'}
                               </X.Text>
                             }
                             isExpanded={ expandedCell == 'communityFeatures' }
                             handleExpanded={ () => this.handleExpanded('communityFeatures') }
-                            handleChanged={ this.props.setCommunityFeatures } />                                
-                            { !parseInt(isPassive) && !!parseInt(communityFeatures) ? (
-                                <X.TableCell
-                                    type='switch'
-                                    title='Long Control 사용'
-                                    value={ !!parseInt(longControlEnabled) }
-                                    iconSource={ Icons.openpilot }
-                                    description='경고 : 이 기능은 베타기능이며 오픈파일럿이 속도를 컨트롤하기때문에 사용시 주의하세요.'
-                                    isExpanded={ expandedCell == 'longcontrol_enabled' }
-                                    handleExpanded={ () => this.handleExpanded('longcontrol_enabled') }
-                                    handleChanged={ this.props.setLongControlEnabled } />
-                            ) : null }
-                            { !parseInt(isPassive) && !!parseInt(communityFeatures) && !parseInt(longControlEnabled) ? (
-                                <X.TableCell
-                                    type='switch'
-                                    title='MAD 모드 사용'
-                                    value={ !!parseInt(madModeEnabled) }
-                                    iconSource={ Icons.warning }
-                                    description='Long Control 미사용 차량에 한하여 사용가능하며 크루즈버튼으로 오픈파일럿이 활성화됩니다.'
-                                    isExpanded={ expandedCell == 'madMode_enabled' }
-                                    handleExpanded={ () => this.handleExpanded('madMode_enabled') }
-                                    handleChanged={ this.props.setMadModeEnabled } />
-                            ) : null }
-                            { !parseInt(isPassive) && !!parseInt(communityFeatures) && !!parseInt(laneChangeEnabled) ? (
-                                <X.TableCell
-                                    type='switch'
-                                    title='자동차선변경 사용'
-                                    value={ !!parseInt(autoLaneChangeEnabled) }
-                                    iconSource={ Icons.road }
-                                    description='경고 : 이 기능은 베타기능이며 안전을위해 후측방감지기능이 있는 차량만사용하세요.'
-                                    isExpanded={ expandedCell == 'autoLaneChange_enabled' }
-                                    handleExpanded={ () => this.handleExpanded('autoLaneChange_enabled') }
-                                    handleChanged={ this.props.setAutoLaneChangeEnabled } />
-                            ) : null }
+                            handleChanged={ this.props.setCommunityFeatures } />
                         <X.TableCell
                             type='switch'
-                            title='prebuilt 파일 생성'
-                            value={ !!parseInt(putPrebuilt) }
-                            iconSource={ Icons.developer }
-                            description='prebuilt 파일을 생성하여 부팅시 로딩시간을 줄여줍니다. 재부팅후 적용됩니다.'
-                            isExpanded={ expandedCell == 'putPrebuilt' }
-                            handleExpanded={ () => this.handleExpanded('putPrebuilt') }
-                            handleChanged={ this.props.setPutPrebuilt } />
-                        <X.TableCell
-                            type='switch'
-                            title='SSH 사용'
+                            title='Enable SSH'
                             value={ isSshEnabled }
                             iconSource={ Icons.developer }
-                            description='SSH를 사용한 EON연결 허용'
+                            description='Allow devices to connect to your device using Secure Shell (SSH).'
                             isExpanded={ expandedCell == 'ssh' }
                             handleExpanded={ () => this.handleExpanded('ssh') }
                             handleChanged={ this.props.setSshEnabled } />
                         <X.TableCell
                             iconSource={ Icons.developer }
-                            title='인증된 SSH 키'
+                            title='Authorized SSH Keys'
                             descriptionExtra={ this.renderSshInput() }
                             isExpanded={ expandedCell === 'ssh_keys' }
                             handleExpanded={ this.toggleExpandGithubInput }
@@ -742,46 +682,27 @@ class Settings extends Component {
                                 color='settingsDefault'
                                 onPress={ this.toggleExpandGithubInput }
                                 style={ { minWidth: '100%' } }>
-                                { expandedCell === 'ssh_keys' ? '취소' : '편집' }
+                                { expandedCell === 'ssh_keys' ? 'Cancel' : 'Edit' }
                             </X.Button>
                         </X.TableCell>
                     </X.Table>
-
-                    <X.Table color='darkBlue' padding='big'>
-                        { gitPullOnProgress === true ? (
-                            <X.Button
-                                size='small'
-                                color='settingsDefault'
-                                onPress={ () => {} }>
-                                git pull 진행중..
-                            </X.Button>
-                        ): (
-                            <X.Button
-                                size='small'
-                                color='settingsDefault'
-                                onPress={ () => this.handleGitPullButtonClick() }>
-                                git pull 수행
-                            </X.Button>
-                        )}
-                    </X.Table>
-
                     <X.Table spacing='none'>
                         <X.TableCell
-                            title='버전'
+                            title='Version'
                             value={ `${ software } v${ version }` } />
                         <X.TableCell
-                            title='Git 브랜치'
+                            title='Git Branch'
                             value={ gitBranch } />
                         <X.TableCell
-                            title='Git 리비전'
+                            title='Git Revision'
                             value={ gitRevision.slice(0, 12) }
                             valueTextSize='tiny' />
                         <X.TableCell
-                            title='판다 펌웨어'
+                            title='Panda Firmware'
                             value={ pandaFirmwareHex != null ? pandaFirmwareHex : 'N/A' }
                             valueTextSize='tiny' />
                         <X.TableCell
-                            title='판다 동글 ID'
+                            title='Panda Dongle ID'
                             value={ (pandaDongleId != null && pandaDongleId != "unprovisioned") ? pandaDongleId : 'N/A' }
                             valueTextSize='tiny' />
                     </X.Table>
@@ -790,7 +711,7 @@ class Settings extends Component {
                             color='settingsDefault'
                             size='small'
                             onPress={ this.props.uninstall }>
-                            { `${ software } 제거` }
+                            { `Uninstall ${ software }` }
                         </X.Button>
                     </X.Table>
                 </ScrollView>
@@ -822,7 +743,7 @@ class Settings extends Component {
                         weight='semibold'
                         size='small'
                         style={ Styles.githubUsernameInputLabel }>
-                        GitHub 사용자이름
+                        GitHub Username
                     </X.Text>
                     <TextInput
                         style={ Styles.githubUsernameInput }
@@ -841,7 +762,7 @@ class Settings extends Component {
                         isDisabled={ !githubUsernameIsValid }
                         onPress={ this.writeSshKeys }
                         style={ Styles.githubUsernameSaveButton }>
-                        <X.Text color='white' size='small' style={ Styles.githubUsernameInputSave }>저장</X.Text>
+                        <X.Text color='white' size='small' style={ Styles.githubUsernameInputSave }>Save</X.Text>
                     </X.Button>
                     { authKeysUpdateState !== null &&
                         <View style={ Styles.githubUsernameInputStatus }>
@@ -853,7 +774,7 @@ class Settings extends Component {
                                     style={ Styles.connectingIndicator } />
                             }
                             { authKeysUpdateState === 'failed' &&
-                                <X.Text color='white' size='tiny'>저장 실패. 사용자 이름과 인터넷에 연결상태를 확인하세요</X.Text>
+                                <X.Text color='white' size='tiny'>Save failed. Ensure that your username is correct and you are connected to the internet.</X.Text>
                             }
                         </View>
                     }
@@ -863,7 +784,7 @@ class Settings extends Component {
                             color='settingsDefault'
                             onPress={ this.clearSshKeys }
                             style={ Styles.githubUsernameSaveButton }>
-                            <X.Text color='white' size='small' style={ Styles.githubUsernameInputSave }>모두 제거</X.Text>
+                            <X.Text color='white' size='small' style={ Styles.githubUsernameInputSave }>Remove all</X.Text>
                         </X.Button>
                     </View>
                 </View>
@@ -957,21 +878,21 @@ const mapDispatchToProps = dispatch => ({
         ChffrPlus.openTetheringSettings();
     },
     reboot: () => {
-        Alert.alert('재부팅', '재부팅하시겠습니까?', [
-            { text: '취소', onPress: () => {}, style: 'cancel' },
-            { text: '재부팅', onPress: () => ChffrPlus.reboot() },
+        Alert.alert('Reboot', 'Are you sure you want to reboot?', [
+            { text: 'Cancel', onPress: () => {}, style: 'cancel' },
+            { text: 'Reboot', onPress: () => ChffrPlus.reboot() },
         ]);
     },
     shutdown: () => {
-        Alert.alert('종료', '종료하시겠습니까?', [
-            { text: '취소', onPress: () => {}, style: 'cancel' },
-            { text: '종료', onPress: () => ChffrPlus.shutdown() },
+        Alert.alert('Power Off', 'Are you sure you want to shutdown?', [
+            { text: 'Cancel', onPress: () => {}, style: 'cancel' },
+            { text: 'Shutdown', onPress: () => ChffrPlus.shutdown() },
         ]);
     },
     uninstall: () => {
-        Alert.alert('제거', '제거하시겠습니까?', [
-            { text: '취소', onPress: () => {}, style: 'cancel' },
-            { text: '제거', onPress: () => ChffrPlus.writeParam(Params.KEY_DO_UNINSTALL, "1") },
+        Alert.alert('Uninstall', 'Are you sure you want to uninstall?', [
+            { text: 'Cancel', onPress: () => {}, style: 'cancel' },
+            { text: 'Uninstall', onPress: () => ChffrPlus.writeParam(Params.KEY_DO_UNINSTALL, "1") },
         ]);
     },
     openTrainingGuide: () => {
@@ -1012,9 +933,9 @@ const mapDispatchToProps = dispatch => ({
     },
     setCommunityFeatures: (communityFeatures) => {
         if (communityFeatures == 1) {
-            Alert.alert('커뮤니티 기능 사용', '커뮤니티 기능은 comma에서 공식 지원하지않으며 표준 안전모델 충족기준이 확인되지않았으니 사용시 주의하세요', [
-                { text: '취소', onPress: () => {}, style: 'cancel' },
-                { text: '사용', onPress: () => {
+            Alert.alert('Enable Community Features', 'Community maintained features are not confirmed by comma.ai to meet the standard safety model. Be extra cautious using them.', [
+                { text: 'Cancel', onPress: () => {}, style: 'cancel' },
+                { text: 'Enable', onPress: () => {
                     dispatch(updateParam(Params.KEY_COMMUNITY_FEATURES, (communityFeatures | 0).toString()));
                 } },
             ]);
@@ -1022,35 +943,11 @@ const mapDispatchToProps = dispatch => ({
             dispatch(updateParam(Params.KEY_COMMUNITY_FEATURES, (communityFeatures | 0).toString()));
         }
     },
-    setPutPrebuilt: (putPrebuilt) => {
-        if (putPrebuilt == 1) {
-            Alert.alert('prebuilt 파일 생성', 'prebuilt 파일을 생성하여 부팅시 로딩시간을 \n줄여줍니다. 재부팅후 적용됩니다', [
-                { text: '취소', onPress: () => {}, style: 'cancel' },
-                { text: '생성', onPress: () => {
-                    dispatch(updateParam(Params.KEY_PUT_PREBUILT, (putPrebuilt | 0).toString()));
-                } },
-            ]);
-        } else {
-            dispatch(updateParam(Params.KEY_PUT_PREBUILT, (putPrebuilt | 0).toString()));
-        }
-    },    
     setLaneDepartureWarningEnabled: (isLaneDepartureWarningEnabled) => {
         dispatch(updateParam(Params.KEY_LANE_DEPARTURE_WARNING_ENABLED, (isLaneDepartureWarningEnabled | 0).toString()));
     },
     setLaneChangeEnabled: (laneChangeEnabled) => {
         dispatch(updateParam(Params.KEY_LANE_CHANGE_ENABLED, (laneChangeEnabled | 0).toString()));
-    },
-    setLongControlEnabled: (longControlEnabled) => {
-        dispatch(updateParam(Params.KEY_LONG_CONTROL_ENABLED, (longControlEnabled | 0).toString()));
-        if (longControlEnabled == 1) {
-          dispatch(updateParam(Params.KEY_MAD_MODE_ENABLED, (0).toString()));
-        }
-    },
-    setMadModeEnabled: (madModeEnabled) => {
-        dispatch(updateParam(Params.KEY_MAD_MODE_ENABLED, (madModeEnabled | 0).toString()));
-    },
-    setAutoLaneChangeEnabled: (autoLaneChangeEnabled) => {
-        dispatch(updateParam(Params.KEY_AUTO_LANE_CHANGE_ENABLED, (autoLaneChangeEnabled | 0).toString()));
     },
     deleteParam: (param) => {
         dispatch(deleteParam(param));
