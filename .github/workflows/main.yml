@@ -1,4 +1,4 @@
-name: openpilot apk tests
+name: build offload apk
 on:
   push:
     branches:
