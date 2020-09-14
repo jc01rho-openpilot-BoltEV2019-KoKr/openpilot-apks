@@ -251,27 +251,29 @@ class ChffrPlusModule(val ctx: ReactApplicationContext) :
     @ReactMethod
     fun processGitPull() {
         try {
-            Process p1 = Runtime.getRuntime().exec(arrayOf("/system/bin/su", "-c", "LD_LIBRARY_PATH=/data/phonelibs:/data/data/com.termux/files/usr/lib  data/data/com.termux/files/usr/bin/git -C /data/openpilot reset --hard"))
-            BufferedReader reader = new BufferedReader(new InputStreamReader(p1.getInputStream()));
-            String line;
-            while ((line = reader.readLine()) != null)
-                {}
+
+            val p1 = Runtime.getRuntime().exec(arrayOf("/system/bin/su", "-c", "LD_LIBRARY_PATH=/data/phonelibs:/data/data/com.termux/files/usr/lib  data/data/com.termux/files/usr/bin/git -C /data/openpilot reset --hard"))
+            var reader = BufferedReader(InputStreamReader(p1.getInputStream()));
+            reader.useLines {
+                it.map { line -> {} }
+            }
+
             p1.waitFor();
 
-            Process p2 = Runtime.getRuntime().exec(arrayOf("/system/bin/su", "-c", "LD_LIBRARY_PATH=/data/phonelibs:/data/data/com.termux/files/usr/lib  data/data/com.termux/files/usr/bin/git -C /data/openpilot pull"))
-            BufferedReader reader = new BufferedReader(new InputStreamReader(p2.getInputStream()));
-            String line;
-            while ((line = reader.readLine()) != null)
-                {}
-
+            val p2 = Runtime.getRuntime().exec(arrayOf("/system/bin/su", "-c", "LD_LIBRARY_PATH=/data/phonelibs:/data/data/com.termux/files/usr/lib  data/data/com.termux/files/usr/bin/git -C /data/openpilot pull"))
+            reader = BufferedReader(InputStreamReader(p2.getInputStream()));
+            reader.useLines {
+                it.map { line -> {} }
+            }
             p2.waitFor();
 
-            Process p3 = Runtime.getRuntime().exec(arrayOf("/system/bin/su", "-c", "sleep 10"))
-            BufferedReader reader = new BufferedReader(new InputStreamReader(p3.getInputStream()));
-            String line;
-            while ((line = reader.readLine()) != null)
-                {}
-            pe.waitFor();
+
+            val p3 = Runtime.getRuntime().exec(arrayOf("/system/bin/su", "-c", "sleep 10"))
+            reader = BufferedReader(InputStreamReader(p3.getInputStream()));
+            reader.useLines {
+                it.map { line -> {} }
+            }
+            p3.waitFor();
 
 
 
