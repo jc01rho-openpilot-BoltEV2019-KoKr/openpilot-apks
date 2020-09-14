@@ -35,10 +35,4 @@ jobs:
         with:
           name: ai.comma.plus.offroad.apk
           path: ai.comma.plus.offroad.apk
-      - uses: satackey/action-docker-layer-caching@v0.0.8
-        # Ignore the failure of a step and avoid terminating the job.
-      - uses: satackey/action-docker-layer-caching@v0.0.8
-        with:
-          key: docker-layer-caching-${{ github.workflow }}-${{ github.event_name }}-{hash}
-          restore-keys: docker-layer-caching-${{ github.workflow }}-${{ github.event_name }}-
-        continue-on-error: true
+
