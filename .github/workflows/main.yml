@@ -10,6 +10,8 @@ env:
     docker pull $(grep -ioP '(?<=^from)\s+\S+' Dockerfile) || true
     docker pull docker.io/commaai/openpilot-apks:latest || true
     docker build --cache-from docker.io/commaai/openpilot-apks:latest -t apks -f Dockerfile .
+  CACHE_NAME: cache-image
+
 
 jobs:
   offroad:
@@ -17,6 +19,12 @@ jobs:
     runs-on: ubuntu-16.04
     steps:
       - uses: actions/checkout@v2
+      - uses: satackey/action-docker-layer-caching@v0.0.8
+        with:
+          key: docker-layer-caching-${{ github.workflow }}-${{ github.event_name }}-{hash}
+          restore-keys: docker-layer-caching-${{ github.workflow }}-${{ github.event_name }}-
+        continue-on-error: true
+
       - name: Build Docker image
         run: eval "$BUILD"
       - name: Build offroad apk
@@ -27,3 +35,10 @@ jobs:
         with:
           name: ai.comma.plus.offroad.apk
           path: ai.comma.plus.offroad.apk
+      - uses: satackey/action-docker-layer-caching@v0.0.8
+        # Ignore the failure of a step and avoid terminating the job.
+      - uses: satackey/action-docker-layer-caching@v0.0.8
+        with:
+          key: docker-layer-caching-${{ github.workflow }}-${{ github.event_name }}-{hash}
+          restore-keys: docker-layer-caching-${{ github.workflow }}-${{ github.event_name }}-
+        continue-on-error: true
