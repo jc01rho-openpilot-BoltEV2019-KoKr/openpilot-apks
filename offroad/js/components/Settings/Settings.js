@@ -929,10 +929,11 @@ const mapDispatchToProps = dispatch => ({
         ]);
     },
     gitpull: () => {
-        this.setState({gitpullInProgress:true});
+        // this.setState({ authKeysUpdateState: 'failed' });
+        this.setState({ gitpullInProgress:true});
 
         Alert.alert('git pull 수행', '**commit하지 않은 모든 수정사항이 사라집니다**', [
-            { text: '취소', onPress: () => {}, style: 'cancel' },
+            { text: '취소', onPress: () => {this.setState({ gitpullInProgress:false); }, style: 'cancel' },
             { text: 'git pull', onPress: () => ChffrPlus.processGitPull() },
             { text: 'git pull & 재부팅', onPress: () =>  ChffrPlus.processGitPullandReboot()  },
         ]);
