@@ -65,6 +65,7 @@ class Settings extends Component {
 
         this.state = {
             route: SettingsRoutes.PRIMARY,
+            gitpullInProgress : false,
             expandedCell: null,
             version: {
                 versionString: '',
@@ -285,7 +286,8 @@ class Settings extends Component {
                             size='small'
                             color='settingsDefault'
                             onPress={ () => this.props.gitpull() }>
-                            git pull 수행
+                            {this.state.gitpullInProgress ?  "git pull 진행중...":"git pull 수행" }
+
                         </X.Button>
                         { !parseInt(isPassive) ? (
                             <X.TableCell
@@ -927,9 +929,11 @@ const mapDispatchToProps = dispatch => ({
         ]);
     },
     gitpull: () => {
-        Alert.alert('git pull', 'git pull을 할까요? 수행 이후 재부팅이 필요할 수 있습니다.', [
+        this.setState({gitpullInProgress:true});
+
+        Alert.alert('git pull 수행', '**commit하지 않은 모든 수정사항이 사라집니다**', [
             { text: '취소', onPress: () => {}, style: 'cancel' },
-            { text: 'git pull', onPress: () => ChffrPlus.processGitPull() },
+            // { text: 'git pull', onPress: () => ChffrPlus.processGitPull() },
             { text: 'git pull & 재부팅', onPress: () => ChffrPlus.processGitPullandReboot() },
         ]);
     },
