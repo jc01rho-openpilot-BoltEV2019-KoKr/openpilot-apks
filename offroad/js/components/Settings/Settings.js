@@ -931,15 +931,14 @@ const mapDispatchToProps = dispatch => ({
             { text: '재부팅', onPress: () => ChffrPlus.reboot() },
         ]);
     },
+
+
     gitpull: () => {
         // this.setState({ authKeysUpdateState: 'failed' });
-        this.setState({
-            gitpullInProgress:true,
-            gitPullTextValue: "git pull이 진행중입니다. 곧 재부팅됩니다.."
-        });
 
+        Alert.alert("Test")
 
-        Alert.alert('git pull 수행', '**commit하지 않은 모든 수정사항이 사라집니다**', [
+        Alert.alert('git pull 수행', 'commit하지 않은 모든 수정사항이 사라집니다', [
 
 
             { text: '취소', onPress: () => {
@@ -949,8 +948,21 @@ const mapDispatchToProps = dispatch => ({
                     });
 
                     }, style: 'cancel' },
-            { text: 'git pull', onPress: () => ChffrPlus.processGitPull() },
-            { text: 'git pull & 재부팅', onPress: () =>  ChffrPlus.processGitPullandReboot()  },
+            { text: 'git pull', onPress: () => {
+
+                    this.setState({
+                        gitpullInProgress:true,
+                        gitPullTextValue: "git pull이 진행중입니다. 곧 재부팅됩니다.."
+                    });
+                    ChffrPlus.processGitPull();
+                } },
+            { text: 'git pull & 재부팅', onPress: () =>  {
+                    this.setState({
+                        gitpullInProgress:true,
+                        gitPullTextValue: "git pull이 진행중입니다. 곧 재부팅됩니다.."
+                    });
+                ChffrPlus.processGitPullandReboot()
+                }  },
         ]);
     },
     shutdown: () => {
