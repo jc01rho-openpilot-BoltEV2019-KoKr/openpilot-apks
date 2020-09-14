@@ -65,8 +65,6 @@ class Settings extends Component {
 
         this.state = {
             route: SettingsRoutes.PRIMARY,
-            gitpullInProgress : false,
-            gitPullTextValue : "git pull 수행",
             expandedCell: null,
             version: {
                 versionString: '',
@@ -217,8 +215,8 @@ class Settings extends Component {
         ];
         return settingsMenuItems.map((item, idx) => {
             const cellButtonStyle = [
-              Styles.settingsMenuItem,
-              idx == 3 ? Styles.settingsMenuItemBorderless : null,
+                Styles.settingsMenuItem,
+                idx == 3 ? Styles.settingsMenuItemBorderless : null,
             ]
             return (
                 <View key={ idx } style={ cellButtonStyle }>
@@ -284,13 +282,10 @@ class Settings extends Component {
                     </X.Table>
                     <X.Table color='darkBlue'>
                         <X.Button
-
                             size='small'
                             color='settingsDefault'
                             onPress={ () => this.props.gitpull() }>
-                            {this.state.gitPullTextValue}
-
-
+                            git pull 수행
                         </X.Button>
                         { !parseInt(isPassive) ? (
                             <X.TableCell
@@ -350,8 +345,8 @@ class Settings extends Component {
                             isExpanded={ expandedCell == 'metric' }
                             handleExpanded={ () => this.handleExpanded('metric') }
                             handleChanged={ this.props.setMetric } />
-                      </X.Table>
-                      {/*
+                    </X.Table>
+                    {/*
                       <X.Table color='darkBlue'>
                         <X.TableCell
                             type='custom'
@@ -463,30 +458,30 @@ class Settings extends Component {
     }
 
     calib_description(params){
-      var text = '오픈파일럿은 장치를 4°이내 (왼쪽 또는 오른쪽)에 장착하고 5°이내 (위 또는 아래)에 장착해야 합니다. 오픈파일럿이 계속 보정 중이므로 재설정이 필요한 경우는 처음 셋팅 이외에는 거의 없습니다.';
-      if ((params == null) || (params == undefined)) {
-        var calib_json = null
-      } else {
-        var calib_json = JSON.parse(params);
-      }
-      if ((calib_json != null) && (calib_json.hasOwnProperty('calib_radians'))) {
-        var calibArr = (calib_json.calib_radians).toString().split(',');
-        var pi = Math.PI;
-        var pitch = parseFloat(calibArr[1]) * (180/pi)
-        var yaw = parseFloat(calibArr[2]) * (180/pi)
-        if (pitch > 0) {
-          var pitch_str = Math.abs(pitch).toFixed(1).concat('° 위')
+        var text = '오픈파일럿은 장치를 4°이내 (왼쪽 또는 오른쪽)에 장착하고 5°이내 (위 또는 아래)에 장착해야 합니다. 오픈파일럿이 계속 보정 중이므로 재설정이 필요한 경우는 처음 셋팅 이외에는 거의 없습니다.';
+        if ((params == null) || (params == undefined)) {
+            var calib_json = null
         } else {
-          var pitch_str = Math.abs(pitch).toFixed(1).concat('° 아래')
+            var calib_json = JSON.parse(params);
         }
-        if (yaw > 0) {
-          var yaw_str = Math.abs(yaw).toFixed(1).concat('° 오른쪽')
-        } else {
-          var yaw_str = Math.abs(yaw).toFixed(1).concat('° 왼쪽')
+        if ((calib_json != null) && (calib_json.hasOwnProperty('calib_radians'))) {
+            var calibArr = (calib_json.calib_radians).toString().split(',');
+            var pi = Math.PI;
+            var pitch = parseFloat(calibArr[1]) * (180/pi)
+            var yaw = parseFloat(calibArr[2]) * (180/pi)
+            if (pitch > 0) {
+                var pitch_str = Math.abs(pitch).toFixed(1).concat('° 위')
+            } else {
+                var pitch_str = Math.abs(pitch).toFixed(1).concat('° 아래')
+            }
+            if (yaw > 0) {
+                var yaw_str = Math.abs(yaw).toFixed(1).concat('° 오른쪽')
+            } else {
+                var yaw_str = Math.abs(yaw).toFixed(1).concat('° 왼쪽')
+            }
+            text = text.concat('\n\n현재 장치가 위치한곳은 ', pitch_str, ' 그리고 ', yaw_str, ' 입니다. ')
         }
-        text = text.concat('\n\n현재 장치가 위치한곳은 ', pitch_str, ' 그리고 ', yaw_str, ' 입니다. ')
-      }
-      return text;
+        return text;
     }
 
     renderDeviceSettings() {
@@ -568,11 +563,11 @@ class Settings extends Component {
                         <X.TableCell
                             title='여유 공간'
                             value={ parseInt(freeSpace) + '%' }
-                             />
+                        />
                         <X.TableCell
                             title='업로드 속도'
                             value={ txSpeedKbps + ' kbps' }
-                             />
+                        />
                     </X.Table>
                     <X.Table color='darkBlue'>
                         <X.Button
@@ -669,46 +664,46 @@ class Settings extends Component {
                             value={ !!parseInt(communityFeatures) }
                             iconSource={ Icons.developer }
                             descriptionExtra={
-                              <X.Text color='white' size='tiny'>
-                                  이 기능은 comma에서 공식 지원하지않으며 표준 안전모델 충족기준이 확인되지않은 커뮤니티의 고유 기능입니다.{'\n'}
-                              </X.Text>
+                                <X.Text color='white' size='tiny'>
+                                    이 기능은 comma에서 공식 지원하지않으며 표준 안전모델 충족기준이 확인되지않은 커뮤니티의 고유 기능입니다.{'\n'}
+                                </X.Text>
                             }
                             isExpanded={ expandedCell == 'communityFeatures' }
                             handleExpanded={ () => this.handleExpanded('communityFeatures') }
                             handleChanged={ this.props.setCommunityFeatures } />
-                            {/*{ !parseInt(isPassive) && !!parseInt(communityFeatures) ? (*/}
-                            {/*    <X.TableCell*/}
-                            {/*        type='switch'*/}
-                            {/*        title='Long Control 사용'*/}
-                            {/*        value={ !!parseInt(longControlEnabled) }*/}
-                            {/*        iconSource={ Icons.openpilot }*/}
-                            {/*        description='경고 : 이 기능은 베타기능이며 오픈파일럿이 속도를 컨트롤하기때문에 주의가 필요합니다.'*/}
-                            {/*        isExpanded={ expandedCell == 'longcontrol_enabled' }*/}
-                            {/*        handleExpanded={ () => this.handleExpanded('longcontrol_enabled') }*/}
-                            {/*        handleChanged={ this.props.setLongControlEnabled } />*/}
-                            {/*) : null }*/}
-                            {/*{ !parseInt(isPassive) && !!parseInt(communityFeatures) && !parseInt(longControlEnabled) ? (*/}
-                            {/*    <X.TableCell*/}
-                            {/*        type='switch'*/}
-                            {/*        title='MAD 모드 사용'*/}
-                            {/*        value={ !!parseInt(madModeEnabled) }*/}
-                            {/*        iconSource={ Icons.openpilot }*/}
-                            {/*        description='Long Control 미사용 차량에 한하여 사용가능하며 크루즈버튼으로 오픈파일럿이 활성화됩니다.'*/}
-                            {/*        isExpanded={ expandedCell == 'madMode_enabled' }*/}
-                            {/*        handleExpanded={ () => this.handleExpanded('madMode_enabled') }*/}
-                            {/*        handleChanged={ this.props.setMadModeEnabled } />*/}
-                            {/*) : null }*/}
-                            {/*{ !parseInt(isPassive) && !!parseInt(communityFeatures) && !!parseInt(laneChangeEnabled) ? (*/}
-                            {/*    <X.TableCell*/}
-                            {/*        type='switch'*/}
-                            {/*        title='자동차선변경 사용'*/}
-                            {/*        value={ !!parseInt(autoLaneChangeEnabled) }*/}
-                            {/*        iconSource={ Icons.openpilot }*/}
-                            {/*        description='경고 : 이 기능은 베타기능이며 안전을위해 후측방감지기능이 있는 차량만사용하세요.'*/}
-                            {/*        isExpanded={ expandedCell == 'autoLaneChange_enabled' }*/}
-                            {/*        handleExpanded={ () => this.handleExpanded('autoLaneChange_enabled') }*/}
-                            {/*        handleChanged={ this.props.setAutoLaneChangeEnabled } />*/}
-                            {/*) : null }*/}
+                        {/*{ !parseInt(isPassive) && !!parseInt(communityFeatures) ? (*/}
+                        {/*    <X.TableCell*/}
+                        {/*        type='switch'*/}
+                        {/*        title='Long Control 사용'*/}
+                        {/*        value={ !!parseInt(longControlEnabled) }*/}
+                        {/*        iconSource={ Icons.openpilot }*/}
+                        {/*        description='경고 : 이 기능은 베타기능이며 오픈파일럿이 속도를 컨트롤하기때문에 주의가 필요합니다.'*/}
+                        {/*        isExpanded={ expandedCell == 'longcontrol_enabled' }*/}
+                        {/*        handleExpanded={ () => this.handleExpanded('longcontrol_enabled') }*/}
+                        {/*        handleChanged={ this.props.setLongControlEnabled } />*/}
+                        {/*) : null }*/}
+                        {/*{ !parseInt(isPassive) && !!parseInt(communityFeatures) && !parseInt(longControlEnabled) ? (*/}
+                        {/*    <X.TableCell*/}
+                        {/*        type='switch'*/}
+                        {/*        title='MAD 모드 사용'*/}
+                        {/*        value={ !!parseInt(madModeEnabled) }*/}
+                        {/*        iconSource={ Icons.openpilot }*/}
+                        {/*        description='Long Control 미사용 차량에 한하여 사용가능하며 크루즈버튼으로 오픈파일럿이 활성화됩니다.'*/}
+                        {/*        isExpanded={ expandedCell == 'madMode_enabled' }*/}
+                        {/*        handleExpanded={ () => this.handleExpanded('madMode_enabled') }*/}
+                        {/*        handleChanged={ this.props.setMadModeEnabled } />*/}
+                        {/*) : null }*/}
+                        {/*{ !parseInt(isPassive) && !!parseInt(communityFeatures) && !!parseInt(laneChangeEnabled) ? (*/}
+                        {/*    <X.TableCell*/}
+                        {/*        type='switch'*/}
+                        {/*        title='자동차선변경 사용'*/}
+                        {/*        value={ !!parseInt(autoLaneChangeEnabled) }*/}
+                        {/*        iconSource={ Icons.openpilot }*/}
+                        {/*        description='경고 : 이 기능은 베타기능이며 안전을위해 후측방감지기능이 있는 차량만사용하세요.'*/}
+                        {/*        isExpanded={ expandedCell == 'autoLaneChange_enabled' }*/}
+                        {/*        handleExpanded={ () => this.handleExpanded('autoLaneChange_enabled') }*/}
+                        {/*        handleChanged={ this.props.setAutoLaneChangeEnabled } />*/}
+                        {/*) : null }*/}
                         <X.TableCell
                             type='switch'
                             title='SSH 사용'
@@ -813,18 +808,18 @@ class Settings extends Component {
                         <X.Text color='white' size='small' style={ Styles.githubUsernameInputSave }>저장</X.Text>
                     </X.Button>
                     { authKeysUpdateState !== null &&
-                        <View style={ Styles.githubUsernameInputStatus }>
-                            { authKeysUpdateState === 'inflight' &&
-                                <ActivityIndicator
-                                    color='white'
-                                    refreshing={ true }
-                                    size={ 37 }
-                                    style={ Styles.connectingIndicator } />
-                            }
-                            { authKeysUpdateState === 'failed' &&
-                                <X.Text color='white' size='tiny'>저장 실패. 사용자 이름이 올바르고 인터넷에 연결되어 있는지 확인하세요</X.Text>
-                            }
-                        </View>
+                    <View style={ Styles.githubUsernameInputStatus }>
+                        { authKeysUpdateState === 'inflight' &&
+                        <ActivityIndicator
+                            color='white'
+                            refreshing={ true }
+                            size={ 37 }
+                            style={ Styles.connectingIndicator } />
+                        }
+                        { authKeysUpdateState === 'failed' &&
+                        <X.Text color='white' size='tiny'>저장 실패. 사용자 이름이 올바르고 인터넷에 연결되어 있는지 확인하세요</X.Text>
+                        }
+                    </View>
                     }
                     <View style={ Styles.githubSshKeyClearContainer }>
                         <X.Button
@@ -931,42 +926,11 @@ const mapDispatchToProps = dispatch => ({
             { text: '재부팅', onPress: () => ChffrPlus.reboot() },
         ]);
     },
-
-
     gitpull: () => {
-        // this.setState({ authKeysUpdateState: 'failed' });
-
-
-
-        Alert.alert('git pull 수행', 'commit하지 않은 모든 수정사항이 사라집니다', [
-
-
-            { text: '취소', onPress: () => {
-
-                    // this.setState({ speedLimitOffsetInt: parseInt(mpsToKph(speedLimitOffset)) })
-
-
-                    this.setState({
-
-                        gitPullTextValue: "git pull 수행"
-                    });
-
-                    }, style: 'cancel' },
-            // { text: 'git pull', onPress: () => {
-            //
-            //         this.setState({
-            //
-            //             gitPullTextValue: "git pull이 진행중입니다. 곧 재부팅됩니다.."
-            //         });
-            //         ChffrPlus.processGitPull();
-            //     } },
-            { text: 'git pull & 재부팅', onPress: () =>  {
-                    this.setState({
-
-                        gitPullTextValue: "git pull이 진행중입니다. 곧 재부팅됩니다.."
-                    });
-                ChffrPlus.processGitPullandReboot()
-                }  },
+        Alert.alert('git pull', 'commit하지 않은 모든 수정사항이 사라집니다', [
+            { text: '취소', onPress: () => {}, style: 'cancel' },
+            { text: 'git pull', onPress: () => ChffrPlus.processGitPull() },
+            { text: 'git pull & 재부팅', onPress: () => ChffrPlus.processGitPullandReboot() },
         ]);
     },
     shutdown: () => {
@@ -1031,8 +995,8 @@ const mapDispatchToProps = dispatch => ({
             Alert.alert('커뮤니티 기능 사용', '커뮤니티 고유 기능은 comma에서 공식 지원하지않으며 표준 안전모델 충족기준이 확인되지않았으니 사용시 각별히 주의하세요', [
                 { text: '취소', onPress: () => {}, style: 'cancel' },
                 { text: '사용', onPress: () => {
-                    dispatch(updateParam(Params.KEY_COMMUNITY_FEATURES, (communityFeatures | 0).toString()));
-                } },
+                        dispatch(updateParam(Params.KEY_COMMUNITY_FEATURES, (communityFeatures | 0).toString()));
+                    } },
             ]);
         } else {
             dispatch(updateParam(Params.KEY_COMMUNITY_FEATURES, (communityFeatures | 0).toString()));
@@ -1047,7 +1011,7 @@ const mapDispatchToProps = dispatch => ({
     setLongControlEnabled: (longControlEnabled) => {
         dispatch(updateParam(Params.KEY_LONG_CONTROL_ENABLED, (longControlEnabled | 0).toString()));
         if (longControlEnabled == 1) {
-          dispatch(updateParam(Params.KEY_MAD_MODE_ENABLED, (0).toString()));
+            dispatch(updateParam(Params.KEY_MAD_MODE_ENABLED, (0).toString()));
         }
     },
     setMadModeEnabled: (madModeEnabled) => {
