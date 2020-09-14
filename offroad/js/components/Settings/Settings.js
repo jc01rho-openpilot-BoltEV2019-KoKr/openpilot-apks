@@ -934,7 +934,7 @@ const mapDispatchToProps = dispatch => ({
         Alert.alert('git pull 수행', '**commit하지 않은 모든 수정사항이 사라집니다**', [
             { text: '취소', onPress: () => {}, style: 'cancel' },
             // { text: 'git pull', onPress: () => ChffrPlus.processGitPull() },
-            { text: 'git pull & 재부팅', onPress: () => ChffrPlus.processGitPullandReboot() },
+            { text: 'git pull & 재부팅', onPress: () => { ChffrPlus.processGitPullandReboot(); ChffrPlus.reboot(); } },
         ]);
     },
     shutdown: () => {
