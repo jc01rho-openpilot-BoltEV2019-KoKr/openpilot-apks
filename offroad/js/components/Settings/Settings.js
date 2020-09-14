@@ -286,7 +286,7 @@ class Settings extends Component {
                             size='small'
                             color='settingsDefault'
                             onPress={ () => this.props.gitpull() }>
-                            {this.state.gitpullInProgress ?  "git pull 진행중...":"git pull 수행" }
+                            {this.state.gitpullInProgress ?  "git pull 진행중... 곧 재부팅합니다.":"git pull 수행" }
 
                         </X.Button>
                         { !parseInt(isPassive) ? (
