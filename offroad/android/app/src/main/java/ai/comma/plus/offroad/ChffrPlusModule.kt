@@ -34,6 +34,8 @@ import java.security.spec.PKCS8EncodedKeySpec
 import java.util.regex.Pattern
 import org.capnproto.Serialize;
 import ai.comma.openpilot.cereal.Log.UiLayoutState
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 
 
 /**
@@ -249,9 +251,28 @@ class ChffrPlusModule(val ctx: ReactApplicationContext) :
     @ReactMethod
     fun processGitPull() {
         try {
-            Runtime.getRuntime().exec(arrayOf("/system/bin/su", "-c", "LD_LIBRARY_PATH=/data/phonelibs:/data/data/com.termux/files/usr/lib  data/data/com.termux/files/usr/bin/git -C /data/openpilot reset --hard"))
-            Runtime.getRuntime().exec(arrayOf("/system/bin/su", "-c", "LD_LIBRARY_PATH=/data/phonelibs:/data/data/com.termux/files/usr/lib  data/data/com.termux/files/usr/bin/git -C /data/openpilot pull"))
-            Runtime.getRuntime().exec(arrayOf("/system/bin/su", "-c", "sleep 10"))
+            Process p1 = Runtime.getRuntime().exec(arrayOf("/system/bin/su", "-c", "LD_LIBRARY_PATH=/data/phonelibs:/data/data/com.termux/files/usr/lib  data/data/com.termux/files/usr/bin/git -C /data/openpilot reset --hard"))
+            BufferedReader reader = new BufferedReader(new InputStreamReader(p1.getInputStream()));
+            String line;
+            while ((line = reader.readLine()) != null)
+                {}
+            p1.waitFor();
+
+            Process p2 = Runtime.getRuntime().exec(arrayOf("/system/bin/su", "-c", "LD_LIBRARY_PATH=/data/phonelibs:/data/data/com.termux/files/usr/lib  data/data/com.termux/files/usr/bin/git -C /data/openpilot pull"))
+            BufferedReader reader = new BufferedReader(new InputStreamReader(p2.getInputStream()));
+            String line;
+            while ((line = reader.readLine()) != null)
+                {}
+
+            p2.waitFor();
+
+            Process p3 = Runtime.getRuntime().exec(arrayOf("/system/bin/su", "-c", "sleep 10"))
+            BufferedReader reader = new BufferedReader(new InputStreamReader(p3.getInputStream()));
+            String line;
+            while ((line = reader.readLine()) != null)
+                {}
+            pe.waitFor();
+
 
 
         } catch (e: IOException) {
@@ -263,9 +284,7 @@ class ChffrPlusModule(val ctx: ReactApplicationContext) :
     @ReactMethod
     fun processGitPullandReboot() {
         try {
-            Runtime.getRuntime().exec(arrayOf("/system/bin/su", "-c", "LD_LIBRARY_PATH=/data/phonelibs:/data/data/com.termux/files/usr/lib  data/data/com.termux/files/usr/bin/git -C /data/openpilot reset --hard"))
-            Runtime.getRuntime().exec(arrayOf("/system/bin/su", "-c", "LD_LIBRARY_PATH=/data/phonelibs:/data/data/com.termux/files/usr/lib  data/data/com.termux/files/usr/bin/git -C /data/openpilot pull"))
-            Runtime.getRuntime().exec(arrayOf("/system/bin/su", "-c", "sleep 10"))
+            processGitPull()
             reboot()
         } catch (e: IOException) {
             CloudLog.exception("BaseUIReactModule.shutdown", e)
