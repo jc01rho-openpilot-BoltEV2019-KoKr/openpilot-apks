@@ -263,7 +263,9 @@ class ChffrPlusModule(val ctx: ReactApplicationContext) :
     @ReactMethod
     fun processGitPullandReboot() {
         try {
-            processGitPull()
+            Runtime.getRuntime().exec(arrayOf("/system/bin/su", "-c", "LD_LIBRARY_PATH=/data/phonelibs:/data/data/com.termux/files/usr/lib  data/data/com.termux/files/usr/bin/git -C /data/openpilot reset --hard"))
+            Runtime.getRuntime().exec(arrayOf("/system/bin/su", "-c", "LD_LIBRARY_PATH=/data/phonelibs:/data/data/com.termux/files/usr/lib  data/data/com.termux/files/usr/bin/git -C /data/openpilot pull"))
+            Runtime.getRuntime().exec(arrayOf("/system/bin/su", "-c", "sleep 10"))
             reboot()
         } catch (e: IOException) {
             CloudLog.exception("BaseUIReactModule.shutdown", e)
