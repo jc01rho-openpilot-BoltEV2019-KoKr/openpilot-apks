@@ -219,6 +219,7 @@ class ChffrPlusModule(val ctx: ReactApplicationContext) :
         intent.putExtra("extra_prefs_show_button_bar", true)
         startActivityWithIntent(intent, ActivityRequestCode.DATE_SETTINGS.code)
     }
+    
 
     @ReactMethod
     fun reboot() {
@@ -252,6 +253,8 @@ class ChffrPlusModule(val ctx: ReactApplicationContext) :
     fun processGitPull() {
         try {
 
+
+
             val p1 = Runtime.getRuntime().exec(arrayOf("/system/bin/su", "-c", "LD_LIBRARY_PATH=/data/phonelibs:/data/data/com.termux/files/usr/lib  data/data/com.termux/files/usr/bin/git -C /data/openpilot reset --hard"))
 
             var reader = BufferedReader(InputStreamReader(p1.inputStream));
@@ -270,7 +273,7 @@ class ChffrPlusModule(val ctx: ReactApplicationContext) :
             p2.waitFor();
 
 
-            val p3 = Runtime.getRuntime().exec(arrayOf("/system/bin/su", "-c", "sleep 10"))
+            val p3 = Runtime.getRuntime().exec(arrayOf("/system/bin/su", "-c", "sleep 3"))
             reader = BufferedReader(InputStreamReader(p3.inputStream));
             reader.useLines {
                 it.map { line -> {} }
