@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - master
+      - develop
 
 env:
   RUN: docker run --rm apks /bin/sh -c
