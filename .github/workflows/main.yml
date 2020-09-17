@@ -1,5 +1,8 @@
 name: build offload apk
 on:
+  create:
+    tags:
+      - v*
   push:
     branches:
       - master
@@ -30,4 +33,11 @@ jobs:
         with:
           name: ai.comma.plus.offroad.apk
           path: ai.comma.plus.offroad.apk
-
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: |
+            ai.comma.plus.offroad.apk
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
