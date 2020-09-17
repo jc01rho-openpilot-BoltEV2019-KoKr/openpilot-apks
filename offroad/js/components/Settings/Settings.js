@@ -5,6 +5,8 @@ import {
     ScrollView,
     TextInput,
     View,
+    ToastAndroid,
+    Platform,
 } from 'react-native';
 import { NavigationActions } from 'react-navigation';
 import { connect } from 'react-redux';
@@ -74,6 +76,7 @@ class Settings extends Component {
             speedLimitOffsetInt: '0',
             githubUsername: '',
             authKeysUpdateState: null,
+            gitPullOnProgress : true,
         }
 
         this.writeSshKeys = this.writeSshKeys.bind(this);
@@ -124,10 +127,28 @@ class Settings extends Component {
         this.props.refreshParams();
     }
 
+    handleGitPullButtonClick() {
+
+
+        Alert.alert('git pull', 'commit하지 않은 모든 수정사항이 사라집니다', [
+            { text: '취소', onPress: () => {}, style: 'cancel' },
+            { text: 'git pull', onPress: () => {this.setState({gitPullOnProgress:true}); ChffrPlus.processGitPull(); this.setState({gitPullOnProgress:false})} },
+            { text: 'git pull & 재부팅', onPress: () => {this.setState({gitPullOnProgress:true});ChffrPlus.processGitPullandReboot();} },
+        ],
+        { cancelable: false },
+        );
+
+
+    }
+
+
     handlePressedResetCalibration = async () => {
         this.props.deleteParam(Params.KEY_CALIBRATION_PARAMS);
         this.props.deleteParam(Params.KEY_LIVE_PARAMETERS);
     }
+
+
+
 
     // handleChangedSpeedLimitOffset(operator) {
     //     const { speedLimitOffset, isMetric } = this.props;
@@ -281,12 +302,28 @@ class Settings extends Component {
                         { this.renderSettingsMenu() }
                     </X.Table>
                     <X.Table color='darkBlue'>
-                        <X.Button
-                            size='small'
-                            color='settingsDefault'
-                            onPress={ () => this.props.gitpull() }>
-                            git pull 수행
-                        </X.Button>
+                        { this.state.gitPullOnProgress ? (
+                            <X.Button
+                                size='small'
+                                color='settingsDefault'
+                                onPress={ () => {} }>
+                                git pull 진행중..
+                            </X.Button>
+                        ): (
+
+
+                            <X.Button
+                                size='small'
+                                color='settingsDefault'
+                                onPress={ () => this.handleGitPullButtonClick() }>
+                                git pull 수행
+                            </X.Button>
+
+                        )}
+
+
+
+
                         { !parseInt(isPassive) ? (
                             <X.TableCell
                                 type='switch'
@@ -926,13 +963,7 @@ const mapDispatchToProps = dispatch => ({
             { text: '재부팅', onPress: () => ChffrPlus.reboot() },
         ]);
     },
-    gitpull: () => {
-        Alert.alert('git pull', 'commit하지 않은 모든 수정사항이 사라집니다', [
-            { text: '취소', onPress: () => {}, style: 'cancel' },
-            { text: 'git pull', onPress: () => ChffrPlus.processGitPull() },
-            { text: 'git pull & 재부팅', onPress: () => ChffrPlus.processGitPullandReboot() },
-        ]);
-    },
+
     shutdown: () => {
         Alert.alert('종료', '종료하시겠습니까?', [
             { text: '취소', onPress: () => {}, style: 'cancel' },
