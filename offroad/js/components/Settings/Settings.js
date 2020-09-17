@@ -76,7 +76,7 @@ class Settings extends Component {
             speedLimitOffsetInt: '0',
             githubUsername: '',
             authKeysUpdateState: null,
-            gitPullOnProgress : true,
+            gitPullOnProgress : false,
         }
 
         this.writeSshKeys = this.writeSshKeys.bind(this);
