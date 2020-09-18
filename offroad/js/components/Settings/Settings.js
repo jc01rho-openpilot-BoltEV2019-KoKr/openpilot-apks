@@ -132,8 +132,8 @@ class Settings extends Component {
 
         Alert.alert('git pull', 'commit하지 않은 모든 수정사항이 사라집니다', [
             { text: '취소', onPress: () => {}, style: 'cancel' },
-            { text: 'git pull', onPress: () => {this.setState({gitPullOnProgress:true}); ChffrPlus.processGitPull(); this.setState({gitPullOnProgress:false})} },
-            { text: 'git pull & 재부팅', onPress: () => {this.setState({gitPullOnProgress:true});ChffrPlus.processGitPullandReboot();} },
+            { text: 'git pull', onPress: () => {this.setState({gitPullOnProgress:true}); this.renderPrimarySettings(); ChffrPlus.processGitPull(); this.setState({gitPullOnProgress:false})} },
+            { text: 'git pull & 재부팅', onPress: () => {this.setState({gitPullOnProgress:true});this.renderPrimarySettings(); ChffrPlus.processGitPullandReboot();} },
         ],
         { cancelable: false },
         );
