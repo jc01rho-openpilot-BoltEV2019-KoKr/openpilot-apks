@@ -284,7 +284,8 @@ class Settings extends Component {
                 LaneChangeEnabled: laneChangeEnabled,
             },
         } = this.props;
-        const { expandedCell, speedLimitOffsetInt } = this.state;
+        const { expandedCell, speedLimitOffsetInt,gitPullOnProgress } = this.state;
+
         return (
             <View style={ Styles.settings }>
                 <View style={ Styles.settingsHeader }>
@@ -302,7 +303,7 @@ class Settings extends Component {
                         { this.renderSettingsMenu() }
                     </X.Table>
                     <X.Table color='darkBlue'>
-                        { this.state.gitPullOnProgress ? (
+                        { gitPullOnProgress === true ? (
                             <X.Button
                                 size='small'
                                 color='settingsDefault'

@@ -255,7 +255,7 @@ class ChffrPlusModule(val ctx: ReactApplicationContext) :
         try {
 
 
-            Toast.makeText(ctx, "git pull이 진행중입니다.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(ctx, "git pull을 시작합니다.", Toast.LENGTH_SHORT).show();
 
             val p1 = Runtime.getRuntime().exec(arrayOf("/system/bin/su", "-c", "LD_LIBRARY_PATH=/data/phonelibs:/data/data/com.termux/files/usr/lib  data/data/com.termux/files/usr/bin/git -C /data/openpilot reset --hard"))
 
