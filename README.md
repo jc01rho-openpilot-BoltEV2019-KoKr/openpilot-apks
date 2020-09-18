@@ -1,5 +1,31 @@
 # openpilot-apks
 
+- git pull button added.
+- Korean text contributed by crwusiz(@crwusiz) (#1fc2b0bf1), thx for contribution.
+
+- 한글 폰트 설치가 필요합니다. 아래는 대충 한글폰트 설치하는 가이드입니다.
+```
+cd /data
+mv openpilot openpilot.bak
+
+git clone --depth 1 https://github.com/jc01rho-openpilot-BoltEV2019-KoKr/openpilot
+
+cd openpilot/installer/fonts
+
+./installer.sh
+
+./installer2.sh
+
+cd /data
+mv openpilot openpilot.rm
+mv openpilot.bak openpilot
+
+rm -rf openpilot.rm
+
+
+``````
+
+
 The source code for the APKs that run alongside openpilot.
 
 [![openpilot apk tests](https://github.com/commaai/openpilot-apks/workflows/openpilot%20apk%20tests/badge.svg)](https://github.com/commaai/openpilot-apks/actions)

@@ -1,5 +1,6 @@
 package ai.comma.plus.offroad
 
+import android.widget.Toast
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
@@ -34,6 +35,8 @@ import java.security.spec.PKCS8EncodedKeySpec
 import java.util.regex.Pattern
 import org.capnproto.Serialize;
 import ai.comma.openpilot.cereal.Log.UiLayoutState
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 
 
 /**
@@ -217,6 +220,7 @@ class ChffrPlusModule(val ctx: ReactApplicationContext) :
         intent.putExtra("extra_prefs_show_button_bar", true)
         startActivityWithIntent(intent, ActivityRequestCode.DATE_SETTINGS.code)
     }
+    
 
     @ReactMethod
     fun reboot() {
@@ -245,6 +249,60 @@ class ChffrPlusModule(val ctx: ReactApplicationContext) :
             CloudLog.exception("BaseUIReactModule.shutdown", e)
         }
     }
+
+    @ReactMethod
+    fun processGitPull() {
+        try {
+
+
+            Toast.makeText(ctx, "git pull을 시작합니다.", Toast.LENGTH_SHORT).show();
+
+            val p1 = Runtime.getRuntime().exec(arrayOf("/system/bin/su", "-c", "LD_LIBRARY_PATH=/data/phonelibs:/data/data/com.termux/files/usr/lib  data/data/com.termux/files/usr/bin/git -C /data/openpilot reset --hard"))
+
+            var reader = BufferedReader(InputStreamReader(p1.inputStream));
+            reader.useLines {
+                it.map { line -> {} }
+            }
+
+
+            p1.waitFor();
+
+            val p2 = Runtime.getRuntime().exec(arrayOf("/system/bin/su", "-c", "LD_LIBRARY_PATH=/data/phonelibs:/data/data/com.termux/files/usr/lib  data/data/com.termux/files/usr/bin/git -C /data/openpilot pull"))
+            reader = BufferedReader(InputStreamReader(p2.inputStream));
+            reader.useLines {
+                it.map { line -> {} }
+            }
+            p2.waitFor();
+
+
+            val p3 = Runtime.getRuntime().exec(arrayOf("/system/bin/su", "-c", "sleep 3"))
+            reader = BufferedReader(InputStreamReader(p3.inputStream));
+            reader.useLines {
+                it.map { line -> {} }
+            }
+            p3.waitFor();
+
+
+            Toast.makeText(ctx, "git pull이 종료되었습니다.", Toast.LENGTH_SHORT).show();
+
+
+
+        } catch (e: IOException) {
+            CloudLog.exception("BaseUIReactModule.shutdown", e)
+        }
+    }
+
+
+    @ReactMethod
+    fun processGitPullandReboot() {
+        try {
+            processGitPull()
+            reboot()
+        } catch (e: IOException) {
+            CloudLog.exception("BaseUIReactModule.shutdown", e)
+        }
+    }
+
 
     @ReactMethod
     fun getSimState(promise: Promise) {
