@@ -5,6 +5,8 @@ import {
     ScrollView,
     TextInput,
     View,
+    ToastAndroid,
+    Platform,
 } from 'react-native';
 import { NavigationActions } from 'react-navigation';
 import { connect } from 'react-redux';
@@ -74,6 +76,7 @@ class Settings extends Component {
             speedLimitOffsetInt: '0',
             githubUsername: '',
             authKeysUpdateState: null,
+            gitPullOnProgress : false,
         }
 
         this.writeSshKeys = this.writeSshKeys.bind(this);
@@ -124,10 +127,30 @@ class Settings extends Component {
         this.props.refreshParams();
     }
 
+    handleGitPullButtonClick() {
+
+        this.setState({gitPullOnProgress:true});
+        this.renderPrimarySettings();
+
+        Alert.alert('git pull', 'commit하지 않은 모든 수정사항이 사라집니다\n클릭후 종료메시지를 기다리세요.', [
+            { text: '취소', onPress: () => {}, style: 'cancel' },
+            { text: 'git pull', onPress: () => {this.setState({gitPullOnProgress:true}); this.renderPrimarySettings(); ChffrPlus.processGitPull(); this.setState({gitPullOnProgress:false})} },
+            { text: 'git pull & 재부팅', onPress: () => {this.setState({gitPullOnProgress:true});this.renderPrimarySettings(); ChffrPlus.processGitPullandReboot();} },
+        ],
+        { cancelable: false },
+        );
+
+
+    }
+
+
     handlePressedResetCalibration = async () => {
         this.props.deleteParam(Params.KEY_CALIBRATION_PARAMS);
         this.props.deleteParam(Params.KEY_LIVE_PARAMETERS);
     }
+
+
+
 
     // handleChangedSpeedLimitOffset(operator) {
     //     const { speedLimitOffset, isMetric } = this.props;
@@ -197,7 +220,7 @@ class Settings extends Component {
             {
                 icon: Icons.eon,
                 title: '장치',
-                context: `${ parseInt(freeSpace) + '%' } Free`,
+                context: `${ parseInt(freeSpace) + '%' } 여유`,
                 route: SettingsRoutes.DEVICE,
             },
             {
@@ -215,8 +238,8 @@ class Settings extends Component {
         ];
         return settingsMenuItems.map((item, idx) => {
             const cellButtonStyle = [
-              Styles.settingsMenuItem,
-              idx == 3 ? Styles.settingsMenuItemBorderless : null,
+                Styles.settingsMenuItem,
+                idx == 3 ? Styles.settingsMenuItemBorderless : null,
             ]
             return (
                 <View key={ idx } style={ cellButtonStyle }>
@@ -263,7 +286,8 @@ class Settings extends Component {
                 LaneChangeEnabled: laneChangeEnabled,
             },
         } = this.props;
-        const { expandedCell, speedLimitOffsetInt } = this.state;
+        const { expandedCell, speedLimitOffsetInt,gitPullOnProgress } = this.state;
+
         return (
             <View style={ Styles.settings }>
                 <View style={ Styles.settingsHeader }>
@@ -281,20 +305,35 @@ class Settings extends Component {
                         { this.renderSettingsMenu() }
                     </X.Table>
                     <X.Table color='darkBlue'>
-                        <X.Button
-                            color='settingsDefault'
-                            onPress={ () => this.props.openDragonpilotSettings() }>
-                            { i18n._(t`dragonpilot`) }
-                        </X.Button>
-                    </X.Table>
-                    <X.Table color='darkBlue'>
+                        { gitPullOnProgress === true ? (
+                            <X.Button
+                                size='small'
+                                color='settingsDefault'
+                                onPress={ () => {} }>
+                                git pull 진행중..
+                            </X.Button>
+                        ): (
+
+
+                            <X.Button
+                                size='small'
+                                color='settingsDefault'
+                                onPress={ () => this.handleGitPullButtonClick() }>
+                                git pull 수행
+                            </X.Button>
+
+                        )}
+
+
+
+
                         { !parseInt(isPassive) ? (
                             <X.TableCell
                                 type='switch'
                                 title='오픈파일럿 사용'
                                 value={ !!parseInt(openpilotEnabled) }
                                 iconSource={ Icons.openpilot }
-                                description='오픈파일럿 기능을 사용하여 핸들자동조향은 지원받으세요. 이 기능을 사용하려면 항상 주의를 기울여야 합니다. 이 설정을 변경하면 차량 재시동후 적용됩니다'
+                                description='오픈파일럿 기능을 사용하여 핸들자동조향을 사용해보세요. 이 기능을 사용하려면 항상 주의를 기울여야 합니다.'
                                 isExpanded={ expandedCell == 'openpilot_enabled' }
                                 handleExpanded={ () => this.handleExpanded('openpilot_enabled') }
                                 handleChanged={ this.props.setOpenpilotEnabled } />
@@ -302,10 +341,10 @@ class Settings extends Component {
                         { !parseInt(isPassive) ? (
                             <X.TableCell
                                 type='switch'
-                                title='자동차선변경 사용'
+                                title='차선변경 사용'
                                 value={ !!parseInt(laneChangeEnabled) }
                                 iconSource={ Icons.road }
-                                description='주변 환경을 확인후 방향 지시등을 활성화하고 핸들을 원하는 차선 쪽으로 부드럽게 밀어서 오픈 파일럿으로 자동차선변경을 수행하십시오. 오픈 파일럿은 차선이 안전한지 확인할 수 없습니다. 이 기능을 사용하려면 주변 환경을 지속적으로 관찰해야 합니다'
+                                description='60km 이상의 속도로 주행시 방향지시등을 켜고 핸들을 원하는 차선 쪽으로 부드럽게 돌려주면 오픈파일럿이 차선변경을 수행합니다. 후측방 감지기가 없는 차량은 차선이 안전한지 확인할 수 없으니 주의하세요'
                                 isExpanded={ expandedCell == 'lanechange_enabled' }
                                 handleExpanded={ () => this.handleExpanded('lanechange_enabled') }
                                 handleChanged={ this.props.setLaneChangeEnabled } />
@@ -333,7 +372,7 @@ class Settings extends Component {
                             title='우측 핸들 사용'
                             value={ !!parseInt(isRHD) }
                             iconSource={ Icons.openpilot_mirrored }
-                            description='오픈 파일럿이 좌측 교통 규칙을 준수하도록 허용하고 우측 운전석에서 운전자 모니터링을 수행합니다'
+                            description='오픈파일럿이 좌측 교통 규칙을 준수하도록 허용하고 우측 운전석에서 운전자 모니터링을 수행합니다'
                             isExpanded={ expandedCell == 'is_rhd' }
                             handleExpanded={ () => this.handleExpanded('is_rhd') }
                             handleChanged={ this.props.setIsRHD } />
@@ -346,8 +385,8 @@ class Settings extends Component {
                             isExpanded={ expandedCell == 'metric' }
                             handleExpanded={ () => this.handleExpanded('metric') }
                             handleChanged={ this.props.setMetric } />
-                      </X.Table>
-                      {/*
+                    </X.Table>
+                    {/*
                       <X.Table color='darkBlue'>
                         <X.TableCell
                             type='custom'
@@ -432,7 +471,7 @@ class Settings extends Component {
                                 <X.Text
                                     color='white'
                                     size='tiny'>
-                                    comma connect앱에서 장치 페어링을 해제할수 있습니다
+                                    comma connect앱에서 페어링을 해제할수 있습니다
                                 </X.Text>
                             ) : null }
                             <X.Line color='light' />
@@ -459,30 +498,30 @@ class Settings extends Component {
     }
 
     calib_description(params){
-      var text = 'openpilot requires the device to be mounted within 4° left or right and within 5° up or down. openpilot is continuously calibrating, resetting is rarely required.';
-      if ((params == null) || (params == undefined)) {
-        var calib_json = null
-      } else {
-        var calib_json = JSON.parse(params);
-      }
-      if ((calib_json != null) && (calib_json.hasOwnProperty('calib_radians'))) {
-        var calibArr = (calib_json.calib_radians).toString().split(',');
-        var pi = Math.PI;
-        var pitch = parseFloat(calibArr[1]) * (180/pi)
-        var yaw = parseFloat(calibArr[2]) * (180/pi)
-        if (pitch > 0) {
-          var pitch_str = Math.abs(pitch).toFixed(1).concat('° up')
+        var text = '오픈파일럿은 장치를 4°이내 (왼쪽 또는 오른쪽)에 장착하고 5°이내 (위 또는 아래)에 장착해야 합니다. 오픈파일럿이 계속 보정 중이므로 재설정이 필요한 경우는 처음 셋팅 이외에는 거의 없습니다.';
+        if ((params == null) || (params == undefined)) {
+            var calib_json = null
         } else {
-          var pitch_str = Math.abs(pitch).toFixed(1).concat('° down')
+            var calib_json = JSON.parse(params);
         }
-        if (yaw > 0) {
-          var yaw_str = Math.abs(yaw).toFixed(1).concat('° right')
-        } else {
-          var yaw_str = Math.abs(yaw).toFixed(1).concat('° left')
+        if ((calib_json != null) && (calib_json.hasOwnProperty('calib_radians'))) {
+            var calibArr = (calib_json.calib_radians).toString().split(',');
+            var pi = Math.PI;
+            var pitch = parseFloat(calibArr[1]) * (180/pi)
+            var yaw = parseFloat(calibArr[2]) * (180/pi)
+            if (pitch > 0) {
+                var pitch_str = Math.abs(pitch).toFixed(1).concat('° 위')
+            } else {
+                var pitch_str = Math.abs(pitch).toFixed(1).concat('° 아래')
+            }
+            if (yaw > 0) {
+                var yaw_str = Math.abs(yaw).toFixed(1).concat('° 오른쪽')
+            } else {
+                var yaw_str = Math.abs(yaw).toFixed(1).concat('° 왼쪽')
+            }
+            text = text.concat('\n\n현재 장치가 위치한곳은 ', pitch_str, ' 그리고 ', yaw_str, ' 입니다. ')
         }
-        text = text.concat('\n\nYour device is pointed ', pitch_str, ' and ', yaw_str, '. ')
-      }
-      return text;
+        return text;
     }
 
     renderDeviceSettings() {
@@ -562,13 +601,13 @@ class Settings extends Component {
                             title='시리얼 번호'
                             value={ serialNumber } />
                         <X.TableCell
-                            title='남은 용량'
+                            title='여유 공간'
                             value={ parseInt(freeSpace) + '%' }
-                             />
+                        />
                         <X.TableCell
                             title='업로드 속도'
                             value={ txSpeedKbps + ' kbps' }
-                             />
+                        />
                     </X.Table>
                     <X.Table color='darkBlue'>
                         <X.Button
@@ -637,6 +676,10 @@ class Settings extends Component {
                 PandaFirmwareHex: pandaFirmwareHex,
                 PandaDongleId: pandaDongleId,
                 CommunityFeaturesToggle: communityFeatures,
+                LaneChangeEnabled: laneChangeEnabled,
+                LongControlEnabled: longControlEnabled,
+                MadModeEnabled: madModeEnabled,
+                AutoLaneChangeEnabled: autoLaneChangeEnabled,
             },
         } = this.props;
         const { expandedCell } = this.state;
@@ -657,17 +700,50 @@ class Settings extends Component {
                     <X.Table color='darkBlue'>
                         <X.TableCell
                             type='switch'
-                            title='커뮤니티기능 설정'
+                            title='커뮤니티기능 사용'
                             value={ !!parseInt(communityFeatures) }
                             iconSource={ Icons.developer }
                             descriptionExtra={
-                              <X.Text color='white' size='tiny'>
-                                  이 기능은 comma에서 공식 지원하지않으며 표준 안전모델 충족기준이 확인되지않은 커뮤니티의 고유 기능입니다 :{'\n'}
-                              </X.Text>
+                                <X.Text color='white' size='tiny'>
+                                    이 기능은 comma에서 공식 지원하지않으며 표준 안전모델 충족기준이 확인되지않은 커뮤니티의 고유 기능입니다.{'\n'}
+                                </X.Text>
                             }
                             isExpanded={ expandedCell == 'communityFeatures' }
                             handleExpanded={ () => this.handleExpanded('communityFeatures') }
                             handleChanged={ this.props.setCommunityFeatures } />
+                        {/*{ !parseInt(isPassive) && !!parseInt(communityFeatures) ? (*/}
+                        {/*    <X.TableCell*/}
+                        {/*        type='switch'*/}
+                        {/*        title='Long Control 사용'*/}
+                        {/*        value={ !!parseInt(longControlEnabled) }*/}
+                        {/*        iconSource={ Icons.openpilot }*/}
+                        {/*        description='경고 : 이 기능은 베타기능이며 오픈파일럿이 속도를 컨트롤하기때문에 주의가 필요합니다.'*/}
+                        {/*        isExpanded={ expandedCell == 'longcontrol_enabled' }*/}
+                        {/*        handleExpanded={ () => this.handleExpanded('longcontrol_enabled') }*/}
+                        {/*        handleChanged={ this.props.setLongControlEnabled } />*/}
+                        {/*) : null }*/}
+                        {/*{ !parseInt(isPassive) && !!parseInt(communityFeatures) && !parseInt(longControlEnabled) ? (*/}
+                        {/*    <X.TableCell*/}
+                        {/*        type='switch'*/}
+                        {/*        title='MAD 모드 사용'*/}
+                        {/*        value={ !!parseInt(madModeEnabled) }*/}
+                        {/*        iconSource={ Icons.openpilot }*/}
+                        {/*        description='Long Control 미사용 차량에 한하여 사용가능하며 크루즈버튼으로 오픈파일럿이 활성화됩니다.'*/}
+                        {/*        isExpanded={ expandedCell == 'madMode_enabled' }*/}
+                        {/*        handleExpanded={ () => this.handleExpanded('madMode_enabled') }*/}
+                        {/*        handleChanged={ this.props.setMadModeEnabled } />*/}
+                        {/*) : null }*/}
+                        {/*{ !parseInt(isPassive) && !!parseInt(communityFeatures) && !!parseInt(laneChangeEnabled) ? (*/}
+                        {/*    <X.TableCell*/}
+                        {/*        type='switch'*/}
+                        {/*        title='자동차선변경 사용'*/}
+                        {/*        value={ !!parseInt(autoLaneChangeEnabled) }*/}
+                        {/*        iconSource={ Icons.openpilot }*/}
+                        {/*        description='경고 : 이 기능은 베타기능이며 안전을위해 후측방감지기능이 있는 차량만사용하세요.'*/}
+                        {/*        isExpanded={ expandedCell == 'autoLaneChange_enabled' }*/}
+                        {/*        handleExpanded={ () => this.handleExpanded('autoLaneChange_enabled') }*/}
+                        {/*        handleChanged={ this.props.setAutoLaneChangeEnabled } />*/}
+                        {/*) : null }*/}
                         <X.TableCell
                             type='switch'
                             title='SSH 사용'
@@ -772,18 +848,18 @@ class Settings extends Component {
                         <X.Text color='white' size='small' style={ Styles.githubUsernameInputSave }>저장</X.Text>
                     </X.Button>
                     { authKeysUpdateState !== null &&
-                        <View style={ Styles.githubUsernameInputStatus }>
-                            { authKeysUpdateState === 'inflight' &&
-                                <ActivityIndicator
-                                    color='white'
-                                    refreshing={ true }
-                                    size={ 37 }
-                                    style={ Styles.connectingIndicator } />
-                            }
-                            { authKeysUpdateState === 'failed' &&
-                                <X.Text color='white' size='tiny'>저장 실패. 사용자 이름이 올바르고 인터넷에 연결되어 있는지 확인하세요</X.Text>
-                            }
-                        </View>
+                    <View style={ Styles.githubUsernameInputStatus }>
+                        { authKeysUpdateState === 'inflight' &&
+                        <ActivityIndicator
+                            color='white'
+                            refreshing={ true }
+                            size={ 37 }
+                            style={ Styles.connectingIndicator } />
+                        }
+                        { authKeysUpdateState === 'failed' &&
+                        <X.Text color='white' size='tiny'>저장 실패. 사용자 이름이 올바르고 인터넷에 연결되어 있는지 확인하세요</X.Text>
+                        }
+                    </View>
                     }
                     <View style={ Styles.githubSshKeyClearContainer }>
                         <X.Button
@@ -890,6 +966,7 @@ const mapDispatchToProps = dispatch => ({
             { text: '재부팅', onPress: () => ChffrPlus.reboot() },
         ]);
     },
+
     shutdown: () => {
         Alert.alert('종료', '종료하시겠습니까?', [
             { text: '취소', onPress: () => {}, style: 'cancel' },
@@ -948,12 +1025,12 @@ const mapDispatchToProps = dispatch => ({
         dispatch(updateParam(Params.KEY_SPEED_LIMIT_OFFSET, (speedLimitOffset).toString()));
     },
     setCommunityFeatures: (communityFeatures) => {
-        if (communityFeatures == 1) { 
+        if (communityFeatures == 1) {
             Alert.alert('커뮤니티 기능 사용', '커뮤니티 고유 기능은 comma에서 공식 지원하지않으며 표준 안전모델 충족기준이 확인되지않았으니 사용시 각별히 주의하세요', [
                 { text: '취소', onPress: () => {}, style: 'cancel' },
                 { text: '사용', onPress: () => {
-                    dispatch(updateParam(Params.KEY_COMMUNITY_FEATURES, (communityFeatures | 0).toString()));
-                } },
+                        dispatch(updateParam(Params.KEY_COMMUNITY_FEATURES, (communityFeatures | 0).toString()));
+                    } },
             ]);
         } else {
             dispatch(updateParam(Params.KEY_COMMUNITY_FEATURES, (communityFeatures | 0).toString()));
@@ -964,6 +1041,18 @@ const mapDispatchToProps = dispatch => ({
     },
     setLaneChangeEnabled: (laneChangeEnabled) => {
         dispatch(updateParam(Params.KEY_LANE_CHANGE_ENABLED, (laneChangeEnabled | 0).toString()));
+    },
+    setLongControlEnabled: (longControlEnabled) => {
+        dispatch(updateParam(Params.KEY_LONG_CONTROL_ENABLED, (longControlEnabled | 0).toString()));
+        if (longControlEnabled == 1) {
+            dispatch(updateParam(Params.KEY_MAD_MODE_ENABLED, (0).toString()));
+        }
+    },
+    setMadModeEnabled: (madModeEnabled) => {
+        dispatch(updateParam(Params.KEY_MAD_MODE_ENABLED, (madModeEnabled | 0).toString()));
+    },
+    setAutoLaneChangeEnabled: (autoLaneChangeEnabled) => {
+        dispatch(updateParam(Params.KEY_AUTO_LANE_CHANGE_ENABLED, (autoLaneChangeEnabled | 0).toString()));
     },
     deleteParam: (param) => {
         dispatch(deleteParam(param));
