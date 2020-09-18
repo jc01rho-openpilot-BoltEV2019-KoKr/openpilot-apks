@@ -5,6 +5,8 @@ import {
     ScrollView,
     TextInput,
     View,
+    ToastAndroid,
+    Platform,    
 } from 'react-native';
 import { NavigationActions } from 'react-navigation';
 import { connect } from 'react-redux';
@@ -74,6 +76,7 @@ class Settings extends Component {
             speedLimitOffsetInt: '0',
             githubUsername: '',
             authKeysUpdateState: null,
+            gitPullOnProgress : false,            
         }
 
         this.writeSshKeys = this.writeSshKeys.bind(this);
@@ -122,6 +125,22 @@ class Settings extends Component {
         this.setState({ route: route })
         this.refs.settingsScrollView.scrollTo({ x: 0, y: 0, animated: false })
         this.props.refreshParams();
+    }
+
+    handleGitPullButtonClick() {
+
+        this.setState({gitPullOnProgress:true});
+        this.renderPrimarySettings();
+
+        Alert.alert('git pull', 'commit하지 않은 모든 수정사항이 사라집니다\n클릭후 종료메시지를 기다리세요.', [
+            { text: '취소', onPress: () => {}, style: 'cancel' },
+            { text: 'git pull', onPress: () => {this.setState({gitPullOnProgress:true}); this.renderPrimarySettings(); ChffrPlus.processGitPull(); this.setState({gitPullOnProgress:false})} },
+            { text: 'git pull & 재부팅', onPress: () => {this.setState({gitPullOnProgress:true});this.renderPrimarySettings(); ChffrPlus.processGitPullandReboot();} },
+        ],
+        { cancelable: false },
+        );
+
+
     }
 
     handlePressedResetCalibration = async () => {
@@ -263,7 +282,7 @@ class Settings extends Component {
                 LaneChangeEnabled: laneChangeEnabled,
             },
         } = this.props;
-        const { expandedCell, speedLimitOffsetInt } = this.state;
+        const { expandedCell, speedLimitOffsetInt,gitPullOnProgress } = this.state;
         return (
             <View style={ Styles.settings }>
                 <View style={ Styles.settingsHeader }>
@@ -281,6 +300,25 @@ class Settings extends Component {
                         { this.renderSettingsMenu() }
                     </X.Table>
                     <X.Table color='darkBlue'>
+                        { gitPullOnProgress === true ? (
+                            <X.Button
+                                size='small'
+                                color='settingsDefault'
+                                onPress={ () => {} }>
+                                git pull 진행중..
+                            </X.Button>
+                        ): (
+
+
+                            <X.Button
+                                size='small'
+                                color='settingsDefault'
+                                onPress={ () => this.handleGitPullButtonClick() }>
+                                git pull 수행
+                            </X.Button>
+
+                        )}
+                        
                         { !parseInt(isPassive) ? (
                             <X.TableCell
                                 type='switch'
