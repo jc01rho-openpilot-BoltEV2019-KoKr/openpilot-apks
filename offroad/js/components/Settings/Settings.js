@@ -678,8 +678,8 @@ class Settings extends Component {
                             value={ !!parseInt(communityFeatures) }
                             iconSource={ Icons.developer }
                             descriptionExtra={
-                              <X.Text color='white' size='tiny'>
-                                  이 기능은 comma에서 공식 지원하지않으며 표준 안전모델 충족기준이 확인되지않은 커뮤니티의 고유 기능입니다.{'\n'}
+                              <X.Text color='white' size='tiny'>                                  
+                                  커뮤니티 기능은 comma에서 공식 지원하지않으며 표준 안전모델 충족기준이 확인되지않았으니 사용시 주의하세요.
                               </X.Text>
                             }
                             isExpanded={ expandedCell == 'communityFeatures' }
@@ -691,7 +691,7 @@ class Settings extends Component {
                                     title='Long Control 사용'
                                     value={ !!parseInt(longControlEnabled) }
                                     iconSource={ Icons.openpilot }
-                                    description='경고 : 이 기능은 베타기능이며 오픈파일럿이 속도를 컨트롤하기때문에 주의가 필요합니다.'
+                                    description='경고 : 이 기능은 베타기능이며 오픈파일럿이 속도를 컨트롤하기때문에 사용시 주의하세요.'
                                     isExpanded={ expandedCell == 'longcontrol_enabled' }
                                     handleExpanded={ () => this.handleExpanded('longcontrol_enabled') }
                                     handleChanged={ this.props.setLongControlEnabled } />
@@ -723,7 +723,7 @@ class Settings extends Component {
                             title='prebuilt 파일 생성'
                             value={ !!parseInt(putPrebuilt) }
                             iconSource={ Icons.developer }
-                            description='prebuilt 파일을 생성하여 부팅시 로딩시간을 줄여줍니다.\n(재부팅후 적용)'
+                            description='prebuilt 파일을 생성하여 부팅시 로딩시간을 줄여줍니다.{'\n'}재부팅후 적용됩니다.'
                             isExpanded={ expandedCell == 'putPrebuilt' }
                             handleExpanded={ () => this.handleExpanded('putPrebuilt') }
                             handleChanged={ this.props.setPutPrebuilt } />
@@ -859,7 +859,7 @@ class Settings extends Component {
                                     style={ Styles.connectingIndicator } />
                             }
                             { authKeysUpdateState === 'failed' &&
-                                <X.Text color='white' size='tiny'>저장 실패. 사용자 이름이 올바르고 인터넷에 연결되어 있는지 확인하세요</X.Text>
+                                <X.Text color='white' size='tiny'>저장 실패. 사용자 이름과 인터넷에 연결상태를 확인하세요</X.Text>
                             }
                         </View>
                     }
@@ -1018,7 +1018,7 @@ const mapDispatchToProps = dispatch => ({
     },
     setCommunityFeatures: (communityFeatures) => {
         if (communityFeatures == 1) {
-            Alert.alert('커뮤니티 기능 사용', '커뮤니티 고유 기능은 comma에서 공식 지원하지않으며 표준 안전모델 충족기준이 확인되지않았으니 사용시 각별히 주의하세요', [
+            Alert.alert('커뮤니티 기능 사용', '커뮤니티 기능은 comma에서 공식 지원하지않으며 표준 안전모델 충족기준이 확인되지않았으니 사용시 주의하세요', [
                 { text: '취소', onPress: () => {}, style: 'cancel' },
                 { text: '사용', onPress: () => {
                     dispatch(updateParam(Params.KEY_COMMUNITY_FEATURES, (communityFeatures | 0).toString()));
@@ -1030,7 +1030,7 @@ const mapDispatchToProps = dispatch => ({
     },
     setPutPrebuilt: (putPrebuilt) => {
         if (putPrebuilt == 1) {
-            Alert.alert('prebuilt 파일 생성', 'prebuilt 파일을 생성하여 부팅시 로딩시간을 줄여줍니다.\n(재부팅후 적용됨)', [
+            Alert.alert('prebuilt 파일 생성', 'prebuilt 파일을 생성하여 부팅시 로딩시간을 \n줄여줍니다. 재부팅후 적용됩니다', [
                 { text: '취소', onPress: () => {}, style: 'cancel' },
                 { text: '생성', onPress: () => {
                     dispatch(updateParam(Params.KEY_PUT_PREBUILT, (putPrebuilt | 0).toString()));
