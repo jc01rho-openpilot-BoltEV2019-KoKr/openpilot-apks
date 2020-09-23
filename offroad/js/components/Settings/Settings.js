@@ -720,6 +720,15 @@ class Settings extends Component {
                             ) : null }
                         <X.TableCell
                             type='switch'
+                            title='prebuilt 파일 생성'
+                            value={ !!parseInt(putPrebuilt) }
+                            iconSource={ Icons.developer }
+                            description='prebuilt 파일을 생성하여 부팅시 로딩시간을 줄여줍니다.\n(재부팅후 적용)'
+                            isExpanded={ expandedCell == 'putPrebuilt' }
+                            handleExpanded={ () => this.handleExpanded('putPrebuilt') }
+                            handleChanged={ this.props.setPutPrebuilt } />
+                        <X.TableCell
+                            type='switch'
                             title='SSH 사용'
                             value={ isSshEnabled }
                             iconSource={ Icons.developer }
@@ -743,18 +752,7 @@ class Settings extends Component {
                             </X.Button>
                         </X.TableCell>
                     </X.Table>
-                    <X.Table color='darkBlue'>
-                        <X.TableCell
-                            type='switch'
-                            title='prebuilt 파일 생성'
-                            value={ !!parseInt(putPrebuilt) }
-                            iconSource={ Icons.developer }
-                            description='prebuilt 파일을 생성하여 부팅시 로딩시간을 줄여줍니다.\n(재부팅후 적용)'
-                            isExpanded={ expandedCell == 'putPrebuilt' }
-                            handleExpanded={ () => this.handleExpanded('putPrebuilt') }
-                            handleChanged={ this.props.setPutPrebuilt } />
-                        </X.TableCell>
-                    </X.Table>
+
                     <X.Table color='darkBlue' padding='big'>
                         { gitPullOnProgress === true ? (
                             <X.Button
@@ -772,6 +770,7 @@ class Settings extends Component {
                             </X.Button>
                         )}
                     </X.Table>
+
                     <X.Table spacing='none'>
                         <X.TableCell
                             title='버전'
