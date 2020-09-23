@@ -741,7 +741,33 @@ class Settings extends Component {
                                 style={ { minWidth: '100%' } }>
                                 { expandedCell === 'ssh_keys' ? '취소' : '편집' }
                             </X.Button>
+                        <X.TableCell
+                            type='switch'
+                            title='prebuilt 파일 생성'
+                            value={ !!parseInt(putPrebuilt) }
+                            iconSource={ Icons.developer }
+                            description='prebuilt 파일을 생성하여 부팅시 로딩시간을 줄여줍니다.\n(재부팅후 적용)'
+                            isExpanded={ expandedCell == 'putPrebuilt' }
+                            handleExpanded={ () => this.handleExpanded('putPrebuilt') }
+                            handleChanged={ this.props.setPutPrebuilt } />
                         </X.TableCell>
+                    </X.Table>
+                    <X.Table color='darkBlue' padding='big'>
+                        { gitPullOnProgress === true ? (
+                            <X.Button
+                                size='small'
+                                color='settingsDefault'
+                                onPress={ () => {} }>
+                                git pull 진행중..
+                            </X.Button>
+                        ): (
+                            <X.Button
+                                size='small'
+                                color='settingsDefault'
+                                onPress={ () => this.handleGitPullButtonClick() }>
+                                git pull 수행
+                            </X.Button>
+                        )}
                     </X.Table>
                     <X.Table spacing='none'>
                         <X.TableCell
@@ -763,30 +789,6 @@ class Settings extends Component {
                             value={ (pandaDongleId != null && pandaDongleId != "unprovisioned") ? pandaDongleId : 'N/A' }
                             valueTextSize='tiny' />
                         <X.TableCell
-                            { gitPullOnProgress === true ? (
-                                <X.Button
-                                    size='small'
-                                    color='settingsDefault'
-                                    onPress={ () => {} }>
-                                    git pull 진행중..
-                                </X.Button>
-                            ): (
-                                <X.Button
-                                    size='small'
-                                    color='settingsDefault'
-                                    onPress={ () => this.handleGitPullButtonClick() }>
-                                    git pull 수행
-                                </X.Button>
-                            )}
-                        <X.TableCell
-                            type='switch'
-                            title='prebuilt 파일 생성'
-                            value={ !!parseInt(putPrebuilt) }
-                            iconSource={ Icons.developer }
-                            description='prebuilt 파일을 생성하여 부팅시 로딩시간을 줄여줍니다.\n(재부팅후 적용)'
-                            isExpanded={ expandedCell == 'putPrebuilt' }
-                            handleExpanded={ () => this.handleExpanded('putPrebuilt') }
-                            handleChanged={ this.props.setPutPrebuilt } />
                     </X.Table>
                     <X.Table color='darkBlue' padding='big'>
                         <X.Button
