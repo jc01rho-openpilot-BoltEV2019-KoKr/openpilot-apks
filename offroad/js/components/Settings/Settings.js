@@ -788,7 +788,6 @@ class Settings extends Component {
                             title='판다 동글 ID'
                             value={ (pandaDongleId != null && pandaDongleId != "unprovisioned") ? pandaDongleId : 'N/A' }
                             valueTextSize='tiny' />
-                        <X.TableCell
                     </X.Table>
                     <X.Table color='darkBlue' padding='big'>
                         <X.Button
