@@ -490,7 +490,7 @@ class Settings extends Component {
     }
 
     calib_description(params){
-      var text = '오픈파일럿은 장치를 4°이내 (왼쪽 또는 오른쪽)에 장착하고 5°이내 (위 또는 아래)에 장착해야 합니다. 오픈파일럿이 계속 보정 중이므로 재설정이 필요한 경우는 처음 셋팅 이외에는 거의 없습니다.';
+      var text = '오픈파일럿은 장치를 왼쪽 또는 오른쪽 4° 이내에 장착하고 위 또는 아래 5° 이내에 장착해야 합니다. 오픈파일럿이 계속 보정 중이므로 재설정이 필요한 경우는 처음 셋팅 이외에는 거의 없습니다.';
       if ((params == null) || (params == undefined)) {
         var calib_json = null
       } else {
@@ -502,16 +502,16 @@ class Settings extends Component {
         var pitch = parseFloat(calibArr[1]) * (180/pi)
         var yaw = parseFloat(calibArr[2]) * (180/pi)
         if (pitch > 0) {
-          var pitch_str = Math.abs(pitch).toFixed(1).concat('° 위')
+          var pitch_str = Math.abs(pitch).toFixed(1).concat('° 위로')
         } else {
-          var pitch_str = Math.abs(pitch).toFixed(1).concat('° 아래')
+          var pitch_str = Math.abs(pitch).toFixed(1).concat('° 아래로')
         }
         if (yaw > 0) {
-          var yaw_str = Math.abs(yaw).toFixed(1).concat('° 오른쪽')
+          var yaw_str = Math.abs(yaw).toFixed(1).concat('° 오른쪽으로')
         } else {
-          var yaw_str = Math.abs(yaw).toFixed(1).concat('° 왼쪽')
+          var yaw_str = Math.abs(yaw).toFixed(1).concat('° 왼쪽으로')
         }
-        text = text.concat('\n\n현재 장치가 위치한곳은 ', pitch_str, ' 그리고 ', yaw_str, ' 입니다. ')
+        text = text.concat('\n\n장치가', pitch_str, ' 그리고 ', yaw_str, ' 위치해 있습니다. ')
       }
       return text;
     }
@@ -739,15 +739,6 @@ class Settings extends Component {
                             ) : null }
                         <X.TableCell
                             type='switch'
-                            title='prebuilt 파일 생성'
-                            value={ !!parseInt(putPrebuilt) }
-                            iconSource={ Icons.developer }
-                            description='prebuilt 파일을 생성하여 부팅시 로딩시간을 줄여줍니다. (재부팅후 적용)'
-                            isExpanded={ expandedCell == 'putPrebuilt' }
-                            handleExpanded={ () => this.handleExpanded('putPrebuilt') }
-                            handleChanged={ this.props.setPutPrebuilt } />
-                        <X.TableCell
-                            type='switch'
                             title='SSH 사용'
                             value={ isSshEnabled }
                             iconSource={ Icons.developer }
@@ -790,6 +781,15 @@ class Settings extends Component {
                             title='판다 동글 ID'
                             value={ (pandaDongleId != null && pandaDongleId != "unprovisioned") ? pandaDongleId : 'N/A' }
                             valueTextSize='tiny' />
+                        <X.TableCell
+                            type='switch'
+                            title='prebuilt 파일 생성'
+                            value={ !!parseInt(putPrebuilt) }
+                            iconSource={ Icons.developer }
+                            description='prebuilt 파일을 생성하여 부팅시 로딩시간을 줄여줍니다.\n(재부팅후 적용)'
+                            isExpanded={ expandedCell == 'putPrebuilt' }
+                            handleExpanded={ () => this.handleExpanded('putPrebuilt') }
+                            handleChanged={ this.props.setPutPrebuilt } />
                     </X.Table>
                     <X.Table color='darkBlue' padding='big'>
                         <X.Button
@@ -1030,7 +1030,7 @@ const mapDispatchToProps = dispatch => ({
     },
     setPutPrebuilt: (putPrebuilt) => {
         if (putPrebuilt == 1) {
-            Alert.alert('prebuilt 파일 생성', 'prebuilt 파일을 생성하여 부팅시 로딩시간을 줄여줍니다. (재부팅후 적용됨)', [
+            Alert.alert('prebuilt 파일 생성', 'prebuilt 파일을 생성하여 부팅시 로딩시간을 줄여줍니다.\n(재부팅후 적용됨)', [
                 { text: '취소', onPress: () => {}, style: 'cancel' },
                 { text: '생성', onPress: () => {
                     dispatch(updateParam(Params.KEY_PUT_PREBUILT, (putPrebuilt | 0).toString()));
