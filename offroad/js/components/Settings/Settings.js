@@ -741,6 +741,9 @@ class Settings extends Component {
                                 style={ { minWidth: '100%' } }>
                                 { expandedCell === 'ssh_keys' ? '취소' : '편집' }
                             </X.Button>
+                        </X.TableCell>
+                    </X.Table>
+                    <X.Table color='darkBlue'>
                         <X.TableCell
                             type='switch'
                             title='prebuilt 파일 생성'
