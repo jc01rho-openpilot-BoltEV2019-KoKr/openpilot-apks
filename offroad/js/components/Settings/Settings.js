@@ -723,7 +723,7 @@ class Settings extends Component {
                             title='prebuilt 파일 생성'
                             value={ !!parseInt(putPrebuilt) }
                             iconSource={ Icons.developer }
-                            description='prebuilt 파일을 생성하여 부팅시 로딩시간을 줄여줍니다.{'\n'}재부팅후 적용됩니다.'
+                            description='prebuilt 파일을 생성하여 부팅시 로딩시간을 줄여줍니다. 재부팅후 적용됩니다.'
                             isExpanded={ expandedCell == 'putPrebuilt' }
                             handleExpanded={ () => this.handleExpanded('putPrebuilt') }
                             handleChanged={ this.props.setPutPrebuilt } />
