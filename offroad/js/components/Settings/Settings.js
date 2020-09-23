@@ -672,6 +672,7 @@ class Settings extends Component {
                 LongControlEnabled: longControlEnabled,
                 MadModeEnabled: madModeEnabled,
                 AutoLaneChangeEnabled: autoLaneChangeEnabled,
+                PutPrebuiltOn: putPrebuilt,                
             },
         } = this.props;
         const { expandedCell } = this.state;
@@ -702,7 +703,7 @@ class Settings extends Component {
                             }
                             isExpanded={ expandedCell == 'communityFeatures' }
                             handleExpanded={ () => this.handleExpanded('communityFeatures') }
-                            handleChanged={ this.props.setCommunityFeatures } />
+                            handleChanged={ this.props.setCommunityFeatures } />                                
                             { !parseInt(isPassive) && !!parseInt(communityFeatures) ? (
                                 <X.TableCell
                                     type='switch'
@@ -736,6 +737,15 @@ class Settings extends Component {
                                     handleExpanded={ () => this.handleExpanded('autoLaneChange_enabled') }
                                     handleChanged={ this.props.setAutoLaneChangeEnabled } />
                             ) : null }
+                        <X.TableCell
+                            type='switch'
+                            title='prebuilt 파일 생성'
+                            value={ !!parseInt(putPrebuilt) }
+                            iconSource={ Icons.developer }
+                            description='prebuilt 파일을 생성하여 부팅시 로딩시간을 줄여줍니다. (재부팅후 적용)'
+                            isExpanded={ expandedCell == 'putPrebuilt' }
+                            handleExpanded={ () => this.handleExpanded('putPrebuilt') }
+                            handleChanged={ this.props.setPutPrebuilt } />
                         <X.TableCell
                             type='switch'
                             title='SSH 사용'
@@ -1018,6 +1028,18 @@ const mapDispatchToProps = dispatch => ({
             dispatch(updateParam(Params.KEY_COMMUNITY_FEATURES, (communityFeatures | 0).toString()));
         }
     },
+    setPutPrebuilt: (putPrebuilt) => {
+        if (putPrebuilt == 1) {
+            Alert.alert('prebuilt 파일 생성', 'prebuilt 파일을 생성하여 부팅시 로딩시간을 줄여줍니다. (재부팅후 적용됨)', [
+                { text: '취소', onPress: () => {}, style: 'cancel' },
+                { text: '생성', onPress: () => {
+                    dispatch(updateParam(Params.KEY_PUT_PREBUILT, (putPrebuilt | 0).toString()));
+                } },
+            ]);
+        } else {
+            dispatch(updateParam(Params.KEY_PUT_PREBUILT, (putPrebuilt | 0).toString()));
+        }
+    },    
     setLaneDepartureWarningEnabled: (isLaneDepartureWarningEnabled) => {
         dispatch(updateParam(Params.KEY_LANE_DEPARTURE_WARNING_ENABLED, (isLaneDepartureWarningEnabled | 0).toString()));
     },
