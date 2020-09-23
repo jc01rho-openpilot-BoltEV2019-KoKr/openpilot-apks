@@ -132,9 +132,8 @@ class Settings extends Component {
         this.setState({gitPullOnProgress:true});
         this.renderPrimarySettings();
 
-        Alert.alert('git pull', 'commit하지 않은 모든 수정사항이 사라집니다\n클릭후 종료메시지를 기다리세요.', [
+        Alert.alert('git pull', 'commit하지 않은 모든 수정사항이 사라집니다.', [
             { text: '취소', onPress: () => {}, style: 'cancel' },
-            { text: 'git pull', onPress: () => {this.setState({gitPullOnProgress:true}); this.renderPrimarySettings(); ChffrPlus.processGitPull(); this.setState({gitPullOnProgress:false})} },
             { text: 'git pull & 재부팅', onPress: () => {this.setState({gitPullOnProgress:true});this.renderPrimarySettings(); ChffrPlus.processGitPullandReboot();} },
         ],
         { cancelable: false },
@@ -471,7 +470,7 @@ class Settings extends Component {
     }
 
     calib_description(params){
-      var text = '오픈파일럿은 장치를 왼쪽 또는 오른쪽 4° 이내에 장착하고 위 또는 아래 5° 이내에 장착해야 합니다. 오픈파일럿이 계속 보정 중이므로 재설정이 필요한 경우는 처음 셋팅 이외에는 거의 없습니다.';
+      var text = '오픈파일럿은 장치를 왼쪽,오른쪽은 4° 이내에 장착하고 위,아래는 5° 이내에 장착해야 합니다. 오픈파일럿이 계속 보정 중이므로 재설정이 필요한 경우는 처음 셋팅 이외에는 거의 없습니다.';
       if ((params == null) || (params == undefined)) {
         var calib_json = null
       } else {
@@ -483,14 +482,14 @@ class Settings extends Component {
         var pitch = parseFloat(calibArr[1]) * (180/pi)
         var yaw = parseFloat(calibArr[2]) * (180/pi)
         if (pitch > 0) {
-          var pitch_str = Math.abs(pitch).toFixed(1).concat('° 위로')
+          var pitch_str = Math.abs(pitch).toFixed(1).concat('° 위')
         } else {
-          var pitch_str = Math.abs(pitch).toFixed(1).concat('° 아래로')
+          var pitch_str = Math.abs(pitch).toFixed(1).concat('° 아래')
         }
         if (yaw > 0) {
-          var yaw_str = Math.abs(yaw).toFixed(1).concat('° 오른쪽으로')
+          var yaw_str = Math.abs(yaw).toFixed(1).concat('° 오른쪽에')
         } else {
-          var yaw_str = Math.abs(yaw).toFixed(1).concat('° 왼쪽으로')
+          var yaw_str = Math.abs(yaw).toFixed(1).concat('° 왼쪽에')
         }
         text = text.concat('\n\n장치가', pitch_str, ' 그리고 ', yaw_str, ' 위치해 있습니다. ')
       }
@@ -563,25 +562,6 @@ class Settings extends Component {
                             </X.Button>
                         </X.TableCell>
                     </X.Table>
-                    <X.Table>
-                        <X.TableCell
-                            title='페어링'
-                            value={ isPaired ? '예' : '아니오' } />
-                        <X.TableCell
-                            title='동글 ID'
-                            value={ dongleId } />
-                        <X.TableCell
-                            title='시리얼 번호'
-                            value={ serialNumber } />
-                        <X.TableCell
-                            title='여유 공간'
-                            value={ parseInt(freeSpace) + '%' }
-                             />
-                        <X.TableCell
-                            title='업로드 속도'
-                            value={ txSpeedKbps + ' kbps' }
-                             />
-                    </X.Table>
                     <X.Table color='darkBlue'>
                         <X.Button
                             size='small'
@@ -596,6 +576,20 @@ class Settings extends Component {
                             onPress={ () => this.props.shutdown() }>
                             종료
                         </X.Button>
+                    </X.Table>
+                    <X.Table>
+                        <X.TableCell
+                            title='동글 ID'
+                            value={ dongleId } />
+                        <X.TableCell
+                            title='시리얼 번호'
+                            value={ serialNumber } />
+                        <X.TableCell
+                            title='여유 공간'
+                            value={ parseInt(freeSpace) + '%' } />
+                        <X.TableCell
+                            title='업로드 속도'
+                            value={ txSpeedKbps + ' kbps' } />
                     </X.Table>
                 </ScrollView>
             </View>
@@ -701,7 +695,7 @@ class Settings extends Component {
                                     type='switch'
                                     title='MAD 모드 사용'
                                     value={ !!parseInt(madModeEnabled) }
-                                    iconSource={ Icons.openpilot }
+                                    iconSource={ Icons.warning }
                                     description='Long Control 미사용 차량에 한하여 사용가능하며 크루즈버튼으로 오픈파일럿이 활성화됩니다.'
                                     isExpanded={ expandedCell == 'madMode_enabled' }
                                     handleExpanded={ () => this.handleExpanded('madMode_enabled') }
@@ -712,7 +706,7 @@ class Settings extends Component {
                                     type='switch'
                                     title='자동차선변경 사용'
                                     value={ !!parseInt(autoLaneChangeEnabled) }
-                                    iconSource={ Icons.openpilot }
+                                    iconSource={ Icons.road }
                                     description='경고 : 이 기능은 베타기능이며 안전을위해 후측방감지기능이 있는 차량만사용하세요.'
                                     isExpanded={ expandedCell == 'autoLaneChange_enabled' }
                                     handleExpanded={ () => this.handleExpanded('autoLaneChange_enabled') }
