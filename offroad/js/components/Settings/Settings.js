@@ -282,7 +282,7 @@ class Settings extends Component {
                 LaneChangeEnabled: laneChangeEnabled,
             },
         } = this.props;
-        const { expandedCell, speedLimitOffsetInt,gitPullOnProgress } = this.state;
+        const { expandedCell, speedLimitOffsetInt } = this.state;
         return (
             <View style={ Styles.settings }>
                 <View style={ Styles.settingsHeader }>
@@ -300,25 +300,6 @@ class Settings extends Component {
                         { this.renderSettingsMenu() }
                     </X.Table>
                     <X.Table color='darkBlue'>
-                        { gitPullOnProgress === true ? (
-                            <X.Button
-                                size='small'
-                                color='settingsDefault'
-                                onPress={ () => {} }>
-                                git pull 진행중..
-                            </X.Button>
-                        ): (
-
-
-                            <X.Button
-                                size='small'
-                                color='settingsDefault'
-                                onPress={ () => this.handleGitPullButtonClick() }>
-                                git pull 수행
-                            </X.Button>
-
-                        )}
-                        
                         { !parseInt(isPassive) ? (
                             <X.TableCell
                                 type='switch'
@@ -675,7 +656,7 @@ class Settings extends Component {
                 PutPrebuiltOn: putPrebuilt,                
             },
         } = this.props;
-        const { expandedCell } = this.state;
+        const { expandedCell, gitPullOnProgress } = this.state;
         const software = !!parseInt(isPassive) ? 'dashcam' : 'openpilot';
         return (
             <View style={ Styles.settings }>
@@ -781,6 +762,22 @@ class Settings extends Component {
                             title='판다 동글 ID'
                             value={ (pandaDongleId != null && pandaDongleId != "unprovisioned") ? pandaDongleId : 'N/A' }
                             valueTextSize='tiny' />
+                        <X.TableCell
+                            { gitPullOnProgress === true ? (
+                                <X.Button
+                                    size='small'
+                                    color='settingsDefault'
+                                    onPress={ () => {} }>
+                                    git pull 진행중..
+                                </X.Button>
+                            ): (
+                                <X.Button
+                                    size='small'
+                                    color='settingsDefault'
+                                    onPress={ () => this.handleGitPullButtonClick() }>
+                                    git pull 수행
+                                </X.Button>
+                            )}
                         <X.TableCell
                             type='switch'
                             title='prebuilt 파일 생성'
