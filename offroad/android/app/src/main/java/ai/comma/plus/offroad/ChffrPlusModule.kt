@@ -220,6 +220,26 @@ class ChffrPlusModule(val ctx: ReactApplicationContext) :
         intent.putExtra("extra_prefs_show_button_bar", true)
         startActivityWithIntent(intent, ActivityRequestCode.DATE_SETTINGS.code)
     }
+
+    @ReactMethod
+    fun touchPrebuilt() {
+            try {
+                Runtime.getRuntime().exec(arrayOf("/system/bin/su", "-c", "touch /data/openpilot/prebuilt"))
+            } catch (e: IOException) {
+                CloudLog.exception("BaseUIReactModule.reboot", e)
+            }
+
+    }
+
+    @ReactMethod
+    fun deletePrebuilt() {
+            try {
+                Runtime.getRuntime().exec(arrayOf("/system/bin/su", "-c", "rm /data/openpilot/prebuilt"))
+            } catch (e: IOException) {
+                CloudLog.exception("BaseUIReactModule.reboot", e)
+            }
+
+    }
     
 
     @ReactMethod

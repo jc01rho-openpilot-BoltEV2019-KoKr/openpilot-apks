@@ -148,6 +148,9 @@ class Settings extends Component {
         this.props.deleteParam(Params.KEY_CALIBRATION_PARAMS);
         this.props.deleteParam(Params.KEY_LIVE_PARAMETERS);
     }
+    handlePressedMakePrebuilt = async() => {
+
+    }
 
 
 
@@ -324,6 +327,22 @@ class Settings extends Component {
 
                         )}
 
+                        <X.TableCell
+                            type='custom'
+                            title='prebuilt 생성하기'
+
+                            description={ this.prebuilt_description(calibrationParams) }
+                            isExpanded={ expandedCell == 'prebuilt' }
+                            handleExpanded={ () => this.handleExpanded('calibration') }>
+                            <X.Button
+                                size='tiny'
+                                color='settingsDefault'
+                                onPress={ this.handlePressedResetCalibration  }
+                                style={ { minWidth: '100%' } }>
+                                리셋
+                            </X.Button>
+                        </X.TableCell>
+
 
 
 
@@ -495,6 +514,12 @@ class Settings extends Component {
                 </ScrollView>
             </View>
         )
+    }
+
+    prebuilt_description() {
+        var text = 'prebuilt 파일을 만들어 다음 부팅부터 빌드를 건너뜁니다. c,h.hpp,c++ 파일 수정시에는 꼭 prebuilt를 삭제하셔야 변경점이 반영됩니다.'
+        return text
+
     }
 
     calib_description(params){
