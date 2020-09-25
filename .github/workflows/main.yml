@@ -1,13 +1,5 @@
 name: build offload apk
-on:
-  push:
-    branches:
-      - .*
-    tags:
-      - .*
-  create:
-    tags:
-      - v*
+on : push
 
 
 env:
