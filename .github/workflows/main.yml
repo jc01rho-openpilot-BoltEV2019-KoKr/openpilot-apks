@@ -2,9 +2,9 @@ name: build offload apk
 on:
   push:
     branches:
-      - *
+      - .*
     tags:
-      - *
+      - .*
   create:
     tags:
       - v*
