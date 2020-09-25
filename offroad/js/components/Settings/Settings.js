@@ -329,17 +329,24 @@ class Settings extends Component {
 
                         <X.TableCell
                             type='custom'
-                            title='prebuilt 생성하기'
+                            title='prebuilt 설정'
 
                             description={ this.prebuilt_description(calibrationParams) }
                             isExpanded={ expandedCell == 'prebuilt' }
-                            handleExpanded={ () => this.handleExpanded('calibration') }>
+                            handleExpanded={ () => this.handleExpanded('prrbuilt_ready') }>
                             <X.Button
                                 size='tiny'
                                 color='settingsDefault'
-                                onPress={ this.handlePressedResetCalibration  }
+                                onPress={ this.handlePressedMakePrebuilt()  }
                                 style={ { minWidth: '100%' } }>
-                                리셋
+                                prebuilt 생성
+                            </X.Button>
+                            <X.Button
+                                size='tiny'
+                                color='settingsDefault'
+                                onPress={ this.handlePressedMakePrebuilt()  }
+                                style={ { minWidth: '100%' } }>
+                                prebuilt 삭제
                             </X.Button>
                         </X.TableCell>
 
