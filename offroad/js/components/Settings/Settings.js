@@ -318,6 +318,15 @@ class Settings extends Component {
                                 handleExpanded={ () => this.handleExpanded('openpilot_enabled') }
                                 handleChanged={ this.props.setOpenpilotEnabled } />
                         ) : null }
+                        <X.TableCell
+                            type='switch'
+                            title='미터법 사용'
+                            value={ !!parseInt(isMetric) }
+                            iconSource={ Icons.metric }
+                            description='주행속도표시를 km/h로 변경합니다'
+                            isExpanded={ expandedCell == 'metric' }
+                            handleExpanded={ () => this.handleExpanded('metric') }
+                            handleChanged={ this.props.setMetric } />                        
                         { !parseInt(isPassive) ? (
                             <X.TableCell
                                 type='switch'
@@ -356,15 +365,6 @@ class Settings extends Component {
                             isExpanded={ expandedCell == 'is_rhd' }
                             handleExpanded={ () => this.handleExpanded('is_rhd') }
                             handleChanged={ this.props.setIsRHD } />
-                        <X.TableCell
-                            type='switch'
-                            title='미터법 사용'
-                            value={ !!parseInt(isMetric) }
-                            iconSource={ Icons.metric }
-                            description='주행속도표시를 km/h로 변경합니다'
-                            isExpanded={ expandedCell == 'metric' }
-                            handleExpanded={ () => this.handleExpanded('metric') }
-                            handleChanged={ this.props.setMetric } />
                       </X.Table>
                       {/*
                       <X.Table color='darkBlue'>
@@ -609,7 +609,10 @@ class Settings extends Component {
                     <X.Button
                         color='ghost'
                         size='small'
-                        onPress={ () => this.handlePressedBack() }>
+                        onPress={ this.props.openWifiSettings }>
+            
+                        //onPress={ () => this.handlePressedBack() }>
+            
                         {'<  네트워크 설정'}
                     </X.Button>
                 </View>
@@ -673,6 +676,15 @@ class Settings extends Component {
                     <X.Table color='darkBlue'>
                         <X.TableCell
                             type='switch'
+                            title='SSH 접속 사용'
+                            value={ isSshEnabled }
+                            iconSource={ Icons.developer }
+                            description='SSH를 이용한 EON의 접속을 허용합니다.'
+                            isExpanded={ expandedCell == 'ssh' }
+                            handleExpanded={ () => this.handleExpanded('ssh') }
+                            handleChanged={ this.props.setSshEnabled } />
+                        <X.TableCell
+                            type='switch'
                             title='prebuilt 파일 생성'
                             value={ !!parseInt(putPrebuilt) }
                             iconSource={ Icons.developer }
@@ -726,17 +738,8 @@ class Settings extends Component {
                                     handleExpanded={ () => this.handleExpanded('autoLaneChange_enabled') }
                                     handleChanged={ this.props.setAutoLaneChangeEnabled } />
                             ) : null }
-                        <X.TableCell
-                            type='switch'
-                            title='SSH 접속 사용'
-                            value={ isSshEnabled }
-                            iconSource={ Icons.developer }
-                            description='SSH를 이용한 EON의 접속을 허용합니다.'
-                            isExpanded={ expandedCell == 'ssh' }
-                            handleExpanded={ () => this.handleExpanded('ssh') }
-                            handleChanged={ this.props.setSshEnabled } />
                                 
-                                {/*
+                        {/*
                         <X.TableCell
                             iconSource={ Icons.developer }
                             title='인증된 SSH 키'
@@ -755,10 +758,7 @@ class Settings extends Component {
                         */}
                     </X.Table>
 
-                    <X.Table spacing='none'>
-                        <X.TableCell
-                            title='버전'
-                            value={ `${ software } v${ version }` } />                        
+                    <X.Table spacing='none'>                
                         <X.TableCell
                             title='Git 브랜치'
                             value={ gitBranch } />
@@ -809,7 +809,7 @@ class Settings extends Component {
                             color='settingsDefault'
                             size='small'
                             onPress={ this.props.uninstall }>
-                            { `${ software } 제거` }
+                            { `${ software } v${ version } 제거` }
                         </X.Button>
                     </X.Table>
                 </ScrollView>
