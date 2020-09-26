@@ -740,22 +740,26 @@ class Settings extends Component {
                             isExpanded={ expandedCell == 'putPrebuilt' }
                             handleExpanded={ () => this.handleExpanded('putPrebuilt') }
                             handleChanged={ this.props.setPutPrebuilt } />
-//                        <X.TableCell
-//                            iconSource={ Icons.developer }
-//                            title='인증된 SSH 키'
-//                            descriptionExtra={ this.renderSshInput() }
-//                            isExpanded={ expandedCell === 'ssh_keys' }
-//                            handleExpanded={ this.toggleExpandGithubInput }
-//                            type='custom'>
-//                            <X.Button
-//                                size='tiny'
-//                                color='settingsDefault'
-//                                onPress={ this.toggleExpandGithubInput }
-//                                style={ { minWidth: '100%' } }>
-//                                { expandedCell === 'ssh_keys' ? '취소' : '편집' }
-//                            </X.Button>
-//                        </X.TableCell>
+                        </X.TableCell>
                     </X.Table>
+                    {/*
+                        <X.TableCell
+                            iconSource={ Icons.developer }
+                            title='인증된 SSH 키'
+                            descriptionExtra={ this.renderSshInput() }
+                            isExpanded={ expandedCell === 'ssh_keys' }
+                            handleExpanded={ this.toggleExpandGithubInput }
+                            type='custom'>
+                            <X.Button
+                                size='tiny'
+                                color='settingsDefault'
+                                onPress={ this.toggleExpandGithubInput }
+                                style={ { minWidth: '100%' } }>
+                                { expandedCell === 'ssh_keys' ? '취소' : '편집' }
+                            </X.Button>
+                        </X.TableCell>
+                    </X.Table>
+                    */}
 
                     <X.Table spacing='none'>
                         <X.TableCell
