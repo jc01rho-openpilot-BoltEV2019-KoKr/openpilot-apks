@@ -335,7 +335,7 @@ class SetupWifi extends Component {
                         <X.Text
                             size='small'
                             weight='semibold'>
-                            The network "{ connectingNetwork ? connectingNetwork.ssid : '' }" 에 연결하려면 패스워드가 필요합니다.
+                            "{ connectingNetwork ? connectingNetwork.ssid : '' }"에 연결하려면 패스워드가 필요합니다.
                         </X.Text>
                         <View style={ Styles.setupWifiPasswordInputRow }>
                             <View style={ Styles.setupWifiPasswordInputLabel }>
