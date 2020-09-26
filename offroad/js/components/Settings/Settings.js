@@ -130,9 +130,9 @@ class Settings extends Component {
     handleGitPullButtonClick() {
         this.setState({gitPullOnProgress:true});
         this.renderPrimarySettings();
-        Alert.alert('git pull', 'commit하지 않은 모든 수정사항이 사라집니다.', [
+        Alert.alert('Git pull', 'commit하지 않은 모든 수정사항이 사라집니다.', [
             { text: '취소', onPress: () => {}, style: 'cancel' },
-            { text: 'git pull & 재부팅', onPress: () => {this.setState({gitPullOnProgress:true});this.renderPrimarySettings(); ChffrPlus.processGitPullandReboot();} },
+            { text: 'Git pull & 재부팅', onPress: () => {this.setState({gitPullOnProgress:true});this.renderPrimarySettings(); ChffrPlus.processGitPullandReboot();} },
         ],
         { cancelable: false },
         );
@@ -356,6 +356,8 @@ class Settings extends Component {
                             isExpanded={ expandedCell == 'record_front' }
                             handleExpanded={ () => this.handleExpanded('record_front') }
                             handleChanged={ this.props.setRecordFront } />
+                      </X.Table>
+                      {/*
                         <X.TableCell
                             type='switch'
                             title='우측 핸들 사용'
@@ -364,9 +366,7 @@ class Settings extends Component {
                             description='오픈파일럿이 좌측 교통 규칙을 준수하도록 허용하고 우측 운전석의 운전자 모니터링을 수행합니다'
                             isExpanded={ expandedCell == 'is_rhd' }
                             handleExpanded={ () => this.handleExpanded('is_rhd') }
-                            handleChanged={ this.props.setIsRHD } />
-                      </X.Table>
-                      {/*
+                            handleChanged={ this.props.setIsRHD } />                      
                       <X.Table color='darkBlue'>
                         <X.TableCell
                             type='custom'
@@ -451,7 +451,7 @@ class Settings extends Component {
                                 <X.Text
                                     color='white'
                                     size='tiny'>
-                                    comma connect앱에서 페어링을 해제할수 있습니다
+                                    comma connect 앱에서 페어링을 해제할수 있습니다
                                 </X.Text>
                             ) : null }
                             <X.Line color='light' />
@@ -609,10 +609,7 @@ class Settings extends Component {
                     <X.Button
                         color='ghost'
                         size='small'
-                        onPress={ this.props.openWifiSettings }>
-            
-                        //onPress={ () => this.handlePressedBack() }>
-            
+                        onPress={ () => this.handlePressedBack() }>
                         {'<  네트워크 설정'}
                     </X.Button>
                 </View>
@@ -625,7 +622,7 @@ class Settings extends Component {
                             size='small'
                             color='settingsDefault'
                             onPress={ this.props.openWifiSettings }>
-                            WiFi 설정
+                            Wifi 설정
                         </X.Button>
                         <X.Line color='transparent' size='tiny' spacing='mini' />
                         <X.Button
@@ -773,14 +770,14 @@ class Settings extends Component {
                                 size='small'
                                 color='settingsDefault'
                                 onPress={ () => {} }>
-                                git pull 진행중..
+                                Git pull 진행중..
                             </X.Button>
                         ): (
                             <X.Button
                                 size='small'
                                 color='settingsDefault'
                                 onPress={ () => this.handleGitPullButtonClick() }>
-                                git pull 수행
+                                Git pull 수행
                             </X.Button>
                         )}
                     </X.Table>
@@ -976,13 +973,13 @@ const mapDispatchToProps = dispatch => ({
         ChffrPlus.openTetheringSettings();
     },
     reboot: () => {
-        Alert.alert('시스템 재부팅', '재부팅하시겠습니까?', [
+        Alert.alert('재부팅', '재부팅하시겠습니까?', [
             { text: '취소', onPress: () => {}, style: 'cancel' },
             { text: '재부팅', onPress: () => ChffrPlus.reboot() },
         ]);
     },
     shutdown: () => {
-        Alert.alert('시스템 종료', '종료하시겠습니까?', [
+        Alert.alert('종료', '종료하시겠습니까?', [
             { text: '취소', onPress: () => {}, style: 'cancel' },
             { text: '종료', onPress: () => ChffrPlus.shutdown() },
         ]);
