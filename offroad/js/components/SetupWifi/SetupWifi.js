@@ -343,7 +343,7 @@ class SetupWifi extends Component {
                                     size='small'
                                     color='whiteFieldLabel'
                                     style={ Styles.setupWifiPasswordInputLabelText }>
-                                    비밀번호:
+                                    패스워드:
                                 </X.Text>
                             </View>
                             <TextInput
@@ -364,7 +364,7 @@ class SetupWifi extends Component {
                             color='white'
                             size='big'
                             weight='bold'>
-                            WiFi 연결
+                            Wifi 설정
                         </X.Text>
                         <X.Button
                             size='small'
@@ -391,7 +391,7 @@ class SetupWifi extends Component {
                                     <X.Text
                                         color='white'
                                         size='small'>
-                                        { isLoading && networks.length == 0 ? 'WiFi 네트워크 검색중...'
+                                        { isLoading && networks.length == 0 ? 'Wifi 네트워크 검색중...'
                                             : !isLoading && networks.length == 0 ?
                                             this.state.errorMessage : '' }
                                     </X.Text>
