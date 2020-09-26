@@ -670,16 +670,16 @@ class Settings extends Component {
                 <ScrollView
                     ref="settingsScrollView"
                     style={ Styles.settingsWindow }>
-                    <X.Table color='darkBlue'>                     
+                    <X.Table color='darkBlue'>
                         <X.TableCell
                             type='switch'
-                            title='SSH 접속 사용'
-                            value={ isSshEnabled }
+                            title='prebuilt 파일 생성'
+                            value={ !!parseInt(putPrebuilt) }
                             iconSource={ Icons.developer }
-                            description='SSH를 이용한 EON의 접속을 허용합니다.'
-                            isExpanded={ expandedCell == 'ssh' }
-                            handleExpanded={ () => this.handleExpanded('ssh') }
-                            handleChanged={ this.props.setSshEnabled } />                                
+                            description='prebuilt 파일을 생성하여 부팅시 로딩시간을 줄여줍니다. 재부팅후 적용됩니다.'
+                            isExpanded={ expandedCell == 'putPrebuilt' }
+                            handleExpanded={ () => this.handleExpanded('putPrebuilt') }
+                            handleChanged={ this.props.setPutPrebuilt } />
                         <X.TableCell
                             type='switch'
                             title='커뮤니티기능 사용'
@@ -728,13 +728,15 @@ class Settings extends Component {
                             ) : null }
                         <X.TableCell
                             type='switch'
-                            title='prebuilt 파일 생성'
-                            value={ !!parseInt(putPrebuilt) }
+                            title='SSH 접속 사용'
+                            value={ isSshEnabled }
                             iconSource={ Icons.developer }
-                            description='prebuilt 파일을 생성하여 부팅시 로딩시간을 줄여줍니다. 재부팅후 적용됩니다.'
-                            isExpanded={ expandedCell == 'putPrebuilt' }
-                            handleExpanded={ () => this.handleExpanded('putPrebuilt') }
-                            handleChanged={ this.props.setPutPrebuilt } />   
+                            description='SSH를 이용한 EON의 접속을 허용합니다.'
+                            isExpanded={ expandedCell == 'ssh' }
+                            handleExpanded={ () => this.handleExpanded('ssh') }
+                            handleChanged={ this.props.setSshEnabled } />
+                                
+                                {/*
                         <X.TableCell
                             iconSource={ Icons.developer }
                             title='인증된 SSH 키'
@@ -750,6 +752,7 @@ class Settings extends Component {
                                 { expandedCell === 'ssh_keys' ? '취소' : '편집' }
                             </X.Button>
                         </X.TableCell>
+                        */}
                     </X.Table>
 
                     <X.Table spacing='none'>
@@ -800,6 +803,7 @@ class Settings extends Component {
                             판다 플래싱
                         </X.Button>
                     </X.Table>
+
                     <X.Table color='darkBlue' padding='big'>
                         <X.Button
                             color='settingsDefault'
