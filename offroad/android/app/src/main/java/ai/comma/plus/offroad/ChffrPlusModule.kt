@@ -251,7 +251,6 @@ class ChffrPlusModule(val ctx: ReactApplicationContext) :
     @ReactMethod
     fun processGitPull() {
         try {
-
             Toast.makeText(ctx, "git pull을 시작합니다.", Toast.LENGTH_SHORT).show();
 
             val p1 = Runtime.getRuntime().exec(arrayOf("/system/bin/su", "-c", "LD_LIBRARY_PATH=/data/phonelibs:/data/data/com.termux/files/usr/lib  data/data/com.termux/files/usr/bin/git -C /data/openpilot reset --hard"))
@@ -260,7 +259,6 @@ class ChffrPlusModule(val ctx: ReactApplicationContext) :
             reader.useLines {
                 it.map { line -> {} }
             }
-
             p1.waitFor();
 
             val p2 = Runtime.getRuntime().exec(arrayOf("/system/bin/su", "-c", "LD_LIBRARY_PATH=/data/phonelibs:/data/data/com.termux/files/usr/lib  data/data/com.termux/files/usr/bin/git -C /data/openpilot pull"))
@@ -284,6 +282,15 @@ class ChffrPlusModule(val ctx: ReactApplicationContext) :
         }
     }
 
+    @ReactMethod
+    fun updatePandaFirmware() {
+        try {
+            Runtime.getRuntime().exec(arrayOf("/system/bin/su", "-c", "sh /data/openpilot/panda_flashing.sh"))
+        } catch (e: IOException) {
+            CloudLog.exception("BaseUIReactModule.updatePanda", e)
+        }
+    }
+                
     @ReactMethod
     fun processGitPullandReboot() {
         try {
