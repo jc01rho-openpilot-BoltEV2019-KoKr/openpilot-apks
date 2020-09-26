@@ -97,12 +97,12 @@ class SetupPair extends Component {
                                 <X.Text>
                                     <X.Text
                                         color='white'>
-                                        { isPaired ? '의 계정에 성공적으로 페어링됨 ' : '다운로드 ' }
+                                        { isPaired ? '페어링됨' : '페어링안됨 ' }
                                     </X.Text>
                                     <X.Text
                                         color='white'
                                         weight='bold'>
-                                        { 'comma connect ' }
+                                        {'\n'}{ 'comma connect 앱을 ' }
                                     </X.Text>
                                     { isPaired ? null : (
                                       <X.Text
