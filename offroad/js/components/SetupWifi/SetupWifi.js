@@ -302,7 +302,7 @@ class SetupWifi extends Component {
                                         color='dark'
                                         isChecked={ showPassword }
                                         onPress={ this.handleShowPasswordToggled }
-                                        label='Show password' />
+                                        label='패스워드 보기' />
                                 </View>
                                 <X.Button
                                     key='cancel'
@@ -408,7 +408,7 @@ class SetupWifi extends Component {
                                 <X.Text
                                     color='white'
                                     weight='semibold'>
-                                    뒤로가기
+                                    뒤로
                                 </X.Text>
                             </X.Button>
                         ) : null }
@@ -419,7 +419,7 @@ class SetupWifi extends Component {
                             <X.Text
                                 color='white'
                                 weight='semibold'>
-                                { !connectedNetworkSsid ? '지금은 건너뛰기' : '계속하기' }
+                                { !connectedNetworkSsid ? '취소' : '확인' }
                             </X.Text>
                         </X.Button>
                     </View>
