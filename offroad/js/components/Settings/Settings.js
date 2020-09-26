@@ -670,16 +670,7 @@ class Settings extends Component {
                 <ScrollView
                     ref="settingsScrollView"
                     style={ Styles.settingsWindow }>
-                    <X.Table color='darkBlue'>
-                        <X.TableCell
-                            type='switch'
-                            title='prebuilt 파일 생성'
-                            value={ !!parseInt(putPrebuilt) }
-                            iconSource={ Icons.developer }
-                            description='prebuilt 파일을 생성하여 부팅시 로딩시간을 줄여줍니다. 재부팅후 적용됩니다.'
-                            isExpanded={ expandedCell == 'putPrebuilt' }
-                            handleExpanded={ () => this.handleExpanded('putPrebuilt') }
-                            handleChanged={ this.props.setPutPrebuilt } />                        
+                    <X.Table color='darkBlue'>                     
                         <X.TableCell
                             type='switch'
                             title='SSH 접속 사용'
@@ -735,6 +726,15 @@ class Settings extends Component {
                                     handleExpanded={ () => this.handleExpanded('autoLaneChange_enabled') }
                                     handleChanged={ this.props.setAutoLaneChangeEnabled } />
                             ) : null }
+                        <X.TableCell
+                            type='switch'
+                            title='prebuilt 파일 생성'
+                            value={ !!parseInt(putPrebuilt) }
+                            iconSource={ Icons.developer }
+                            description='prebuilt 파일을 생성하여 부팅시 로딩시간을 줄여줍니다. 재부팅후 적용됩니다.'
+                            isExpanded={ expandedCell == 'putPrebuilt' }
+                            handleExpanded={ () => this.handleExpanded('putPrebuilt') }
+                            handleChanged={ this.props.setPutPrebuilt } />   
                         <X.TableCell
                             iconSource={ Icons.developer }
                             title='인증된 SSH 키'
