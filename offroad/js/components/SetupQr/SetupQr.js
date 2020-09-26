@@ -98,7 +98,7 @@ class SetupPair extends Component {
                                     <X.Text
                                         color='white'
                                         weight='bold'>
-                                        { 'comma connect 앱 다운로드' }{'\n'}{'코드를 스캔하야 페어링하세여'}
+                                        { 'comma connect 앱 다운로드' }{'\n'}{'코드를 스캔하여 페어링하세요'}
                                     </X.Text>
                                 </X.Text>
                             </View>
