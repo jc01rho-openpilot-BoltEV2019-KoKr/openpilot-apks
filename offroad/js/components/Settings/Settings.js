@@ -670,11 +670,6 @@ class Settings extends Component {
                 <ScrollView
                     ref="settingsScrollView"
                     style={ Styles.settingsWindow }>
-                    <X.Table spacing='none'>
-                        <X.TableCell
-                            title='버전'
-                            value={ `${ software } v${ version }` } />
-                    </X.Table>
                     <X.Table color='darkBlue'>
                         <X.TableCell
                             type='switch'
@@ -762,6 +757,9 @@ class Settings extends Component {
                     */}
 
                     <X.Table spacing='none'>
+                        <X.TableCell
+                            title='버전'
+                            value={ `${ software } v${ version }` } />                        
                         <X.TableCell
                             title='Git 브랜치'
                             value={ gitBranch } />
