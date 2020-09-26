@@ -128,25 +128,33 @@ class Settings extends Component {
     }
 
     handleGitPullButtonClick() {
-
         this.setState({gitPullOnProgress:true});
         this.renderPrimarySettings();
-
         Alert.alert('git pull', 'commit하지 않은 모든 수정사항이 사라집니다.', [
             { text: '취소', onPress: () => {}, style: 'cancel' },
             { text: 'git pull & 재부팅', onPress: () => {this.setState({gitPullOnProgress:true});this.renderPrimarySettings(); ChffrPlus.processGitPullandReboot();} },
         ],
         { cancelable: false },
         );
-
-
     }
 
     handlePressedResetCalibration = async () => {
         this.props.deleteParam(Params.KEY_CALIBRATION_PARAMS);
         this.props.deleteParam(Params.KEY_LIVE_PARAMETERS);
+        this.setState({ calibration: null });
+        Alert.alert('재부팅', '캘리브레이션 작업을위해서는 재부팅이 필요합니다.', [
+            { text: '취소', onPress: () => {}, style: 'cancel' },
+            { text: '재부팅', onPress: () => ChffrPlus.reboot() },
+        ]);        
     }
 
+    handlePressedUpdatePanda = async () => {
+        Alert.alert('판다 플래싱', '판다 플래싱을 실행합니다. 진행되는 동안 판다 LED가 녹색으로 빠르게 깜빡일 것이며, 플래싱이 완료되면 재부팅을 합니다.', [
+            { text: '취소', onPress: () => {}, style: 'cancel' },
+            { text: '실행', onPress: () => ChffrPlus.updatePandaFirmware() },
+        ]);
+    }
+    
     // handleChangedSpeedLimitOffset(operator) {
     //     const { speedLimitOffset, isMetric } = this.props;
     //     let _speedLimitOffset;
@@ -198,7 +206,7 @@ class Settings extends Component {
                 Version: version,
             },
         } = this.props;
-        const software = !!parseInt(isPassive) ? 'dashcam' : 'openpilot';
+        const software = !!parseInt(isPassive) ? '대시캠' : '오픈파일럿';
         let connectivity = 'Disconnected'
         if (wifiState.isConnected && wifiState.ssid) {
             connectivity = wifiState.ssid;
@@ -305,7 +313,7 @@ class Settings extends Component {
                                 title='오픈파일럿 사용'
                                 value={ !!parseInt(openpilotEnabled) }
                                 iconSource={ Icons.openpilot }
-                                description='오픈파일럿 기능을 사용하여 핸들자동조향을 사용해보세요. 이 기능을 사용하려면 항상 주의를 기울여야 합니다.'
+                                description='오픈파일럿 기능을 사용하여 자동조향 기능을 사용해보세요. 이 기능은 항상 주의를 기울여야 합니다.'
                                 isExpanded={ expandedCell == 'openpilot_enabled' }
                                 handleExpanded={ () => this.handleExpanded('openpilot_enabled') }
                                 handleChanged={ this.props.setOpenpilotEnabled } />
@@ -332,10 +340,10 @@ class Settings extends Component {
                             handleChanged={ this.props.setLaneDepartureWarningEnabled } />
                         <X.TableCell
                             type='switch'
-                            title='운전자모니터링 기록 및 업로드 사용'
+                            title='운전자 모니터링 기록 사용'
                             value={ !!parseInt(recordFront) }
                             iconSource={ Icons.network }
-                            description='운전자 모니터링 카메라 데이터를 업로드하고 운전자 모니터링 알고리즘 개선에 참여하세요'
+                            description='운전자 모니터링 카메라 데이터를 기록하고 운전자 모니터링 알고리즘개선에 참여하세요'
                             isExpanded={ expandedCell == 'record_front' }
                             handleExpanded={ () => this.handleExpanded('record_front') }
                             handleChanged={ this.props.setRecordFront } />
@@ -344,7 +352,7 @@ class Settings extends Component {
                             title='우측 핸들 사용'
                             value={ !!parseInt(isRHD) }
                             iconSource={ Icons.openpilot_mirrored }
-                            description='오픈파일럿이 좌측 교통 규칙을 준수하도록 허용하고 우측 운전석에서 운전자 모니터링을 수행합니다'
+                            description='오픈파일럿이 좌측 교통 규칙을 준수하도록 허용하고 우측 운전석의 운전자 모니터링을 수행합니다'
                             isExpanded={ expandedCell == 'is_rhd' }
                             handleExpanded={ () => this.handleExpanded('is_rhd') }
                             handleChanged={ this.props.setIsRHD } />
@@ -497,10 +505,7 @@ class Settings extends Component {
     }
 
     renderDeviceSettings() {
-        const {
-            expandedCell,
-        } = this.state;
-
+        const { expandedCell } = this.state;
         const {
             serialNumber,
             txSpeedKbps,
@@ -513,7 +518,7 @@ class Settings extends Component {
             },
             isOffroad,
         } = this.props;
-        const software = !!parseInt(isPassive) ? 'dashcam' : 'openpilot';
+        const software = !!parseInt(isPassive) ? '대시캠' : '오픈파일럿';
         return (
             <View style={ Styles.settings }>
                 <View style={ Styles.settingsHeader }>
@@ -567,14 +572,14 @@ class Settings extends Component {
                             size='small'
                             color='settingsDefault'
                             onPress={ () => this.props.reboot() }>
-                            재부팅
+                            시스템 재부팅
                         </X.Button>
-                        <X.Line color='transparent' size='tiny' spacing='mini' />
+                        <X.Line color='transparent' size='tiny' spacing='mini' />                            
                         <X.Button
                             size='small'
                             color='settingsDefault'
                             onPress={ () => this.props.shutdown() }>
-                            종료
+                            시스템 종료
                         </X.Button>
                     </X.Table>
                     <X.Table>
@@ -617,14 +622,14 @@ class Settings extends Component {
                             size='small'
                             color='settingsDefault'
                             onPress={ this.props.openWifiSettings }>
-                            WiFi설정 열기
+                            WiFi 설정
                         </X.Button>
                         <X.Line color='transparent' size='tiny' spacing='mini' />
                         <X.Button
                             size='small'
                             color='settingsDefault'
                             onPress={ this.props.openTetheringSettings }>
-                            테더링설정 열기
+                            테더링 설정
                         </X.Button>
                     </X.Table>
                 </ScrollView>
@@ -651,7 +656,7 @@ class Settings extends Component {
             },
         } = this.props;
         const { expandedCell, gitPullOnProgress } = this.state;
-        const software = !!parseInt(isPassive) ? 'dashcam' : 'openpilot';
+        const software = !!parseInt(isPassive) ? '대시캠' : '오픈파일럿';
         return (
             <View style={ Styles.settings }>
                 <View style={ Styles.settingsHeader }>
@@ -787,6 +792,14 @@ class Settings extends Component {
                     </X.Table>
                     <X.Table color='darkBlue' padding='big'>
                         <X.Button
+                            size='small'
+                            color='settingsDefault'
+                            onPress={ this.handlePressedUpdatePanda  }>
+                            판다 플래싱
+                        </X.Button>
+                    </X.Table>
+                    <X.Table color='darkBlue' padding='big'>
+                        <X.Button
                             color='settingsDefault'
                             size='small'
                             onPress={ this.props.uninstall }>
@@ -805,15 +818,15 @@ class Settings extends Component {
         return (
             <View>
                 <X.Text color='white' size='tiny'>
-                    WARNING:
+                    경고:
                     {'\n'}
-                    This grants SSH access to all public keys in your GitHub settings.
+                    이렇게 하면 GitHub 설정에 있는 공용 키로 SSH 접속권한이 부여됩니다.
                     {'\n'}
-                    Never enter a GitHub username other than your own.
+                    자신의 사용자 이름 이외의 GitHub 사용자 이름을 입력하지 마십시오.
                     {'\n'}
-                    The built-in SSH key will be disabled if you proceed.
+                    계속 진행하면 내장된 SSH키가 비활성화 됩니다.
                     {'\n'}
-                    A comma employee will never ask you to add their GitHub.
+                    COMMA 직원은 절대 GitHub를 추가하라고 하지 않습니다.
                     {'\n'}
                 </X.Text>
                 <View style={ Styles.githubUsernameInputContainer }>
@@ -957,13 +970,13 @@ const mapDispatchToProps = dispatch => ({
         ChffrPlus.openTetheringSettings();
     },
     reboot: () => {
-        Alert.alert('재부팅', '재부팅하시겠습니까?', [
+        Alert.alert('시스템 재부팅', '재부팅하시겠습니까?', [
             { text: '취소', onPress: () => {}, style: 'cancel' },
             { text: '재부팅', onPress: () => ChffrPlus.reboot() },
         ]);
     },
     shutdown: () => {
-        Alert.alert('종료', '종료하시겠습니까?', [
+        Alert.alert('시스템 종료', '종료하시겠습니까?', [
             { text: '취소', onPress: () => {}, style: 'cancel' },
             { text: '종료', onPress: () => ChffrPlus.shutdown() },
         ]);
@@ -1024,7 +1037,7 @@ const mapDispatchToProps = dispatch => ({
     },
     setPutPrebuilt: (putPrebuilt) => {
         if (putPrebuilt == 1) {
-            Alert.alert('prebuilt 파일 생성', 'prebuilt 파일을 생성하여 부팅시 로딩시간을 \n줄여줍니다. 재부팅후 적용됩니다', [
+            Alert.alert('prebuilt 파일 생성', 'prebuilt 파일을 생성하여 부팅시 로딩시간을 \n줄여줍니다. 이 설정은 재부팅후 적용됩니다', [
                 { text: '취소', onPress: () => {}, style: 'cancel' },
                 { text: '생성', onPress: () => {
                     dispatch(updateParam(Params.KEY_PUT_PREBUILT, (putPrebuilt | 0).toString()));
