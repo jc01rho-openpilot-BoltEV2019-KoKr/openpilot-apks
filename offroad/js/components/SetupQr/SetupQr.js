@@ -133,14 +133,14 @@ class SetupPair extends Component {
                                         color='setupPrimary'
                                         onPress={ this.props.handleSetupComplete }
                                         style={ Styles.setupPairingButtonsContinue }>
-                                        계속하기
+                                        확인
                                     </X.Button>
                                 ) : (
                                     <X.Button
                                         color='setupInverted'
                                         onPress={ this.props.handleSetupComplete }
                                         style={ Styles.setupPairingButtonsContinue }>
-                                        다음에하기
+                                        취소
                                     </X.Button>
                                 ) }
                             </View>
