@@ -458,7 +458,7 @@ class Settings extends Component {
                             <X.Text
                                 color='white'
                                 size='tiny'>
-                                서비스 이용 약관 : {'https://my.comma.ai/terms.html'}
+                                서비스 이용 약관은 {'https://my.comma.ai/terms.html'} 에서 확인하세요.
                             </X.Text>
                         </X.Table>
                         { isPaired ? null : (
@@ -467,7 +467,7 @@ class Settings extends Component {
                                     color='settingsDefault'
                                     size='small'
                                     onPress={ this.props.openPairing }>
-                                    페어링설정
+                                    페어링 설정
                                 </X.Button>
                             </X.Table>
                         ) }
