@@ -740,7 +740,6 @@ class Settings extends Component {
                             isExpanded={ expandedCell == 'putPrebuilt' }
                             handleExpanded={ () => this.handleExpanded('putPrebuilt') }
                             handleChanged={ this.props.setPutPrebuilt } />
-                        </X.TableCell>
 //                        <X.TableCell
 //                            iconSource={ Icons.developer }
 //                            title='인증된 SSH 키'
