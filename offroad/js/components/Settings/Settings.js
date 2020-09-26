@@ -673,13 +673,22 @@ class Settings extends Component {
                     <X.Table color='darkBlue'>
                         <X.TableCell
                             type='switch'
+                            title='prebuilt 파일 생성'
+                            value={ !!parseInt(putPrebuilt) }
+                            iconSource={ Icons.developer }
+                            description='prebuilt 파일을 생성하여 부팅시 로딩시간을 줄여줍니다. 재부팅후 적용됩니다.'
+                            isExpanded={ expandedCell == 'putPrebuilt' }
+                            handleExpanded={ () => this.handleExpanded('putPrebuilt') }
+                            handleChanged={ this.props.setPutPrebuilt } />                        
+                        <X.TableCell
+                            type='switch'
                             title='SSH 접속 사용'
                             value={ isSshEnabled }
                             iconSource={ Icons.developer }
                             description='SSH를 이용한 EON의 접속을 허용합니다.'
                             isExpanded={ expandedCell == 'ssh' }
                             handleExpanded={ () => this.handleExpanded('ssh') }
-                            handleChanged={ this.props.setSshEnabled } />
+                            handleChanged={ this.props.setSshEnabled } />                                
                         <X.TableCell
                             type='switch'
                             title='커뮤니티기능 사용'
@@ -727,18 +736,6 @@ class Settings extends Component {
                                     handleChanged={ this.props.setAutoLaneChangeEnabled } />
                             ) : null }
                         <X.TableCell
-                            type='switch'
-                            title='prebuilt 파일 생성'
-                            value={ !!parseInt(putPrebuilt) }
-                            iconSource={ Icons.developer }
-                            description='prebuilt 파일을 생성하여 부팅시 로딩시간을 줄여줍니다. 재부팅후 적용됩니다.'
-                            isExpanded={ expandedCell == 'putPrebuilt' }
-                            handleExpanded={ () => this.handleExpanded('putPrebuilt') }
-                            handleChanged={ this.props.setPutPrebuilt } />
-                        </X.TableCell>
-                    </X.Table>
-                    {/*
-                        <X.TableCell
                             iconSource={ Icons.developer }
                             title='인증된 SSH 키'
                             descriptionExtra={ this.renderSshInput() }
@@ -754,7 +751,6 @@ class Settings extends Component {
                             </X.Button>
                         </X.TableCell>
                     </X.Table>
-                    */}
 
                     <X.Table spacing='none'>
                         <X.TableCell
