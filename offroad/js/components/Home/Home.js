@@ -131,7 +131,7 @@ class Home extends Component {
             updateReleaseNotes,
         } = this.props;
 
-        const softwareName = !!parseInt(params.Passive) ? 'dashcam' : 'openpilot';
+        const softwareName = !!parseInt(params.Passive) ? '대시캠' : '오픈파일럿';
         const softwareString = `${ softwareName } v${ params.Version }`;
         const hasDeviceStats = typeof(deviceStats.all) !== 'undefined';
         const isMetric = !!parseInt(params.IsMetric);
@@ -504,7 +504,7 @@ class Home extends Component {
                                               size='tiny'
                                               weight='light'
                                               style={ Styles.homeBodyAccountPairButtonContext }>
-                                              comma connect앱으로 {'\n'}페어링하세요
+                                              comma connect {'\n'}앱으로 페어링하세요
                                           </X.Text>
                                       </X.Gradient>
                                   </X.Button>
