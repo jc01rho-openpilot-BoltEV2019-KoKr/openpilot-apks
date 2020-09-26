@@ -56,7 +56,7 @@ class SetupPair extends Component {
                             color='white'
                             size='big'
                             weight='bold'>
-                            장치와 계정을 페어링하세요
+                            페어링 설정
                         </X.Text>
                     </View>
                     <View style={ Styles.setupPairingBody }>
@@ -75,7 +75,7 @@ class SetupPair extends Component {
                                                   color='whiteFieldLabel'
                                                   size='tiny'
                                                   weight='semibold'>
-                                                  Succesfully paired to account
+                                                  계정에 성공적으로 페어링되었습니다
                                               </X.Text>
                                           </View>
                                       </View>
@@ -102,12 +102,12 @@ class SetupPair extends Component {
                                     <X.Text
                                         color='white'
                                         weight='bold'>
-                                        {'\n'}{ 'comma connect 앱을 ' }
+                                        {'\n'}{ 'comma connect 앱 다운로드후 ' }
                                     </X.Text>
                                     { isPaired ? null : (
                                       <X.Text
                                           color='white'>
-                                          {'\n'}{ '코드를 스캔해서 페어링을 시도하세요' }
+                                          {'\n'}{ '코드를 스캔해서 페어링하세요' }
                                       </X.Text>
                                     ) }
                                 </X.Text>
@@ -140,7 +140,7 @@ class SetupPair extends Component {
                                         color='setupInverted'
                                         onPress={ this.props.handleSetupComplete }
                                         style={ Styles.setupPairingButtonsContinue }>
-                                        지금은 건너뛰기
+                                        다음에하기
                                     </X.Button>
                                 ) }
                             </View>
