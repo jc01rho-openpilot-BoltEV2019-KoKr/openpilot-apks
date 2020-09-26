@@ -362,12 +362,12 @@ class Onboarding extends Component {
                     </View>
                     <View style={ Styles.onboardingStepPointBody }>
                         <X.Text size='bigger' color='white' weight='bold'>
-                            오픈파일럿은 진보된 운전자 보조 시스템입니다
+                            오픈파일럿은 운전자 보조 시스템입니다
                         </X.Text>
                         <X.Text
                             size='smallish' color='white' weight='light'
                             style={ Styles.onboardingStepContextSmall }>
-                            운전자 지원 시스템은 자율주행 차량이 아닙니다. 이것은 오픈파일럿이 운전자 없이 주행을 하는것이 아니라 운전자와 함께 동작하도록 설계되었다는것을 의미합니다. 운전하려면 항상 주의를 기울여야 합니다
+                            오픈파일럿은 자율주행 시스템이 아닙니다. 이것은 오픈파일럿이 운전자 없이 주행을 하는것이 아니라 운전자와 함께 동작하도록 설계되었다는것을 의미합니다. 사용시 항상 주의해야 합니다
                         </X.Text>
                         <X.CheckboxField
                             size='small'
@@ -798,7 +798,7 @@ class Onboarding extends Component {
                 </View>
                 <View style={ Styles.onboardingStepPointBody }>
                     <X.Text size='bigger' color='white' weight='bold'>
-                        오픈파일럿은 브레이크를 밟으면 비활성화됩니다
+                        오픈파일럿은 브레이크를 밟으면 해제됩니다
                     </X.Text>
                     <X.Text
                         size='smallish' color='white' weight='light'
@@ -954,7 +954,7 @@ class Onboarding extends Component {
                             color='setupInverted'
                             textColor='white'
                             onPress={ this.handleRestartPressed }>
-                            다시사작
+                            트레이닝 다시보기
                         </X.Button>
                     </View>
                 </View>
