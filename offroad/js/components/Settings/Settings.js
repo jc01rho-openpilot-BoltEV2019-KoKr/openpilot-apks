@@ -670,7 +670,21 @@ class Settings extends Component {
                 <ScrollView
                     ref="settingsScrollView"
                     style={ Styles.settingsWindow }>
+                    <X.Table spacing='none'>
+                        <X.TableCell
+                            title='버전'
+                            value={ `${ software } v${ version }` } />
+                    </X.Table>
                     <X.Table color='darkBlue'>
+                        <X.TableCell
+                            type='switch'
+                            title='SSH 접속 사용'
+                            value={ isSshEnabled }
+                            iconSource={ Icons.developer }
+                            description='SSH를 이용한 EON의 접속을 허용합니다.'
+                            isExpanded={ expandedCell == 'ssh' }
+                            handleExpanded={ () => this.handleExpanded('ssh') }
+                            handleChanged={ this.props.setSshEnabled } />
                         <X.TableCell
                             type='switch'
                             title='커뮤니티기능 사용'
@@ -726,32 +740,32 @@ class Settings extends Component {
                             isExpanded={ expandedCell == 'putPrebuilt' }
                             handleExpanded={ () => this.handleExpanded('putPrebuilt') }
                             handleChanged={ this.props.setPutPrebuilt } />
-                        <X.TableCell
-                            type='switch'
-                            title='SSH 사용'
-                            value={ isSshEnabled }
-                            iconSource={ Icons.developer }
-                            description='SSH를 사용한 EON연결 허용'
-                            isExpanded={ expandedCell == 'ssh' }
-                            handleExpanded={ () => this.handleExpanded('ssh') }
-                            handleChanged={ this.props.setSshEnabled } />
-                        <X.TableCell
-                            iconSource={ Icons.developer }
-                            title='인증된 SSH 키'
-                            descriptionExtra={ this.renderSshInput() }
-                            isExpanded={ expandedCell === 'ssh_keys' }
-                            handleExpanded={ this.toggleExpandGithubInput }
-                            type='custom'>
-                            <X.Button
-                                size='tiny'
-                                color='settingsDefault'
-                                onPress={ this.toggleExpandGithubInput }
-                                style={ { minWidth: '100%' } }>
-                                { expandedCell === 'ssh_keys' ? '취소' : '편집' }
-                            </X.Button>
+//                        <X.TableCell
+//                            iconSource={ Icons.developer }
+//                            title='인증된 SSH 키'
+//                            descriptionExtra={ this.renderSshInput() }
+//                            isExpanded={ expandedCell === 'ssh_keys' }
+//                            handleExpanded={ this.toggleExpandGithubInput }
+//                            type='custom'>
+//                            <X.Button
+//                                size='tiny'
+//                                color='settingsDefault'
+//                                onPress={ this.toggleExpandGithubInput }
+//                                style={ { minWidth: '100%' } }>
+//                                { expandedCell === 'ssh_keys' ? '취소' : '편집' }
+//                            </X.Button>
                         </X.TableCell>
                     </X.Table>
 
+                    <X.Table spacing='none'>
+                        <X.TableCell
+                            title='Git 브랜치'
+                            value={ gitBranch } />
+                        <X.TableCell
+                            title='Git 리비전'
+                            value={ gitRevision.slice(0, 12) }
+                            valueTextSize='tiny' />
+                    </X.Table>
                     <X.Table color='darkBlue' padding='big'>
                         { gitPullOnProgress === true ? (
                             <X.Button
@@ -771,16 +785,6 @@ class Settings extends Component {
                     </X.Table>
 
                     <X.Table spacing='none'>
-                        <X.TableCell
-                            title='버전'
-                            value={ `${ software } v${ version }` } />
-                        <X.TableCell
-                            title='Git 브랜치'
-                            value={ gitBranch } />
-                        <X.TableCell
-                            title='Git 리비전'
-                            value={ gitRevision.slice(0, 12) }
-                            valueTextSize='tiny' />
                         <X.TableCell
                             title='판다 펌웨어'
                             value={ pandaFirmwareHex != null ? pandaFirmwareHex : 'N/A' }
