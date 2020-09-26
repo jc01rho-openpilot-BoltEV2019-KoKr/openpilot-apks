@@ -71,7 +71,7 @@ class SetupWifi extends Component {
             if (this.state.isLoading && this.state.networks.length < 1) {
                 this.setState({
                     isLoading: false,
-                    errorMessage: 'There was a problem scanning WiFi networks. \nMake sure WiFi is enabled in \"More Options\" above.',
+                    errorMessage: 'Wifi 네트워크를 검색하는 중 문제발생 \n위 \"추가옵션\"에서 Wifi를 사용하도록 설정되어있는지 확인하세요.',
                 })
             }
         }, 15000);
@@ -302,7 +302,7 @@ class SetupWifi extends Component {
                                         color='dark'
                                         isChecked={ showPassword }
                                         onPress={ this.handleShowPasswordToggled }
-                                        label='패스워드 보기' />
+                                        label='패스워드 표시' />
                                 </View>
                                 <X.Button
                                     key='cancel'
@@ -335,7 +335,7 @@ class SetupWifi extends Component {
                         <X.Text
                             size='small'
                             weight='semibold'>
-                            The network "{ connectingNetwork ? connectingNetwork.ssid : '' }" requires a password.
+                            The network "{ connectingNetwork ? connectingNetwork.ssid : '' }" 에 연결하려면 패스워드가 필요합니다.
                         </X.Text>
                         <View style={ Styles.setupWifiPasswordInputRow }>
                             <View style={ Styles.setupWifiPasswordInputLabel }>
