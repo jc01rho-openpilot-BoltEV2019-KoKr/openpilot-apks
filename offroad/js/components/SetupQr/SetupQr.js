@@ -96,20 +96,10 @@ class SetupPair extends Component {
                             <View style={ Styles.setupPairingText }>
                                 <X.Text>
                                     <X.Text
-                                        color='white'>
-                                        { isPaired ? '페어링됨' : '페어링안됨 ' }
-                                    </X.Text>
-                                    <X.Text
                                         color='white'
                                         weight='bold'>
-                                        {'\n'}{ 'comma connect 앱 다운로드후 ' }
+                                        { 'comma connect 앱 다운로드' }{'\n'}{'코드를 스캔하야 페어링하세여'}
                                     </X.Text>
-                                    { isPaired ? null : (
-                                      <X.Text
-                                          color='white'>
-                                          {'\n'}{ '코드를 스캔해서 페어링하세요' }
-                                      </X.Text>
-                                    ) }
                                 </X.Text>
                             </View>
                             <View style={ Styles.setupPairingIcons }>
