@@ -135,13 +135,13 @@ class Settings extends Component {
         this.props.deleteParam(Params.KEY_LIVE_PARAMETERS);
 
     }
-    handlePressedMakePrebuilt = async() => {
+    handlePressedMakePrebuilt() {
         // this.props.deleteParam(Params.KEY_CALIBRATION_PARAMS);
         this.props.setPrebuiltOn(1)
         ChffrPlus.makePrebuilt()
 
     }
-    handlePressedDeletePrebuilt = async() => {
+    handlePressedDeletePrebuilt() {
         // this.props.deleteParam(Params.KEY_CALIBRATION_PARAMS);
         this.props.setPrebuiltOn(0)
         ChffrPlus.deletePrebuilt()
