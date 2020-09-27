@@ -540,30 +540,30 @@ class Settings extends Component {
     }
 
     calib_description(params){
-        var text = '오픈파일럿은 장치를 4°이내 (왼쪽 또는 오른쪽)에 장착하고 5°이내 (위 또는 아래)에 장착해야 합니다. 오픈파일럿이 계속 보정 중이므로 재설정이 필요한 경우는 처음 셋팅 이외에는 거의 없습니다.';
-        if ((params == null) || (params == undefined)) {
-            var calib_json = null
+      var text = '오픈파일럿은 장치를 4°이내 (왼쪽 또는 오른쪽)에 장착하고 5°이내 (위 또는 아래)에 장착해야 합니다. 오픈파일럿이 계속 보정 중이므로 재설정이 필요한 경우는 처음 셋팅 이외에는 거의 없습니다.';
+      if ((params == null) || (params == undefined)) {
+        var calib_json = null
+      } else {
+        var calib_json = JSON.parse(params);
+      }
+      if ((calib_json != null) && (calib_json.hasOwnProperty('calib_radians'))) {
+        var calibArr = (calib_json.calib_radians).toString().split(',');
+        var pi = Math.PI;
+        var pitch = parseFloat(calibArr[1]) * (180/pi)
+        var yaw = parseFloat(calibArr[2]) * (180/pi)
+        if (pitch > 0) {
+          var pitch_str = Math.abs(pitch).toFixed(1).concat('° 위')
         } else {
-            var calib_json = JSON.parse(params);
+          var pitch_str = Math.abs(pitch).toFixed(1).concat('° 아래')
         }
-        if ((calib_json != null) && (calib_json.hasOwnProperty('calib_radians'))) {
-            var calibArr = (calib_json.calib_radians).toString().split(',');
-            var pi = Math.PI;
-            var pitch = parseFloat(calibArr[1]) * (180/pi)
-            var yaw = parseFloat(calibArr[2]) * (180/pi)
-            if (pitch > 0) {
-                var pitch_str = Math.abs(pitch).toFixed(1).concat('° 위')
-            } else {
-                var pitch_str = Math.abs(pitch).toFixed(1).concat('° 아래')
-            }
-            if (yaw > 0) {
-                var yaw_str = Math.abs(yaw).toFixed(1).concat('° 오른쪽')
-            } else {
-                var yaw_str = Math.abs(yaw).toFixed(1).concat('° 왼쪽')
-            }
-            text = text.concat('\n\n현재 장치가 위치한곳은 ', pitch_str, ' 그리고 ', yaw_str, ' 입니다. ')
+        if (yaw > 0) {
+          var yaw_str = Math.abs(yaw).toFixed(1).concat('° 오른쪽')
+        } else {
+          var yaw_str = Math.abs(yaw).toFixed(1).concat('° 왼쪽')
         }
-        return text;
+        text = text.concat('\n\n현재 장치가 위치한곳은 ', pitch_str, ' 그리고 ', yaw_str, ' 입니다. ')
+      }
+      return text;
     }
 
     renderDeviceSettings() {
@@ -746,9 +746,9 @@ class Settings extends Component {
                             value={ !!parseInt(communityFeatures) }
                             iconSource={ Icons.developer }
                             descriptionExtra={
-                                <X.Text color='white' size='tiny'>
-                                    이 기능은 comma에서 공식 지원하지않으며 표준 안전모델 충족기준이 확인되지않은 커뮤니티의 고유 기능입니다.{'\n'}
-                                </X.Text>
+                              <X.Text color='white' size='tiny'>
+                                  이 기능은 comma에서 공식 지원하지않으며 표준 안전모델 충족기준이 확인되지않은 커뮤니티의 고유 기능입니다.{'\n'}
+                              </X.Text>
                             }
                             isExpanded={ expandedCell == 'communityFeatures' }
                             handleExpanded={ () => this.handleExpanded('communityFeatures') }
@@ -890,18 +890,18 @@ class Settings extends Component {
                         <X.Text color='white' size='small' style={ Styles.githubUsernameInputSave }>저장</X.Text>
                     </X.Button>
                     { authKeysUpdateState !== null &&
-                    <View style={ Styles.githubUsernameInputStatus }>
-                        { authKeysUpdateState === 'inflight' &&
-                        <ActivityIndicator
-                            color='white'
-                            refreshing={ true }
-                            size={ 37 }
-                            style={ Styles.connectingIndicator } />
-                        }
-                        { authKeysUpdateState === 'failed' &&
-                        <X.Text color='white' size='tiny'>저장 실패. 사용자 이름이 올바르고 인터넷에 연결되어 있는지 확인하세요</X.Text>
-                        }
-                    </View>
+                        <View style={ Styles.githubUsernameInputStatus }>
+                            { authKeysUpdateState === 'inflight' &&
+                                <ActivityIndicator
+                                    color='white'
+                                    refreshing={ true }
+                                    size={ 37 }
+                                    style={ Styles.connectingIndicator } />
+                            }
+                            { authKeysUpdateState === 'failed' &&
+                                <X.Text color='white' size='tiny'>저장 실패. 사용자 이름이 올바르고 인터넷에 연결되어 있는지 확인하세요</X.Text>
+                            }
+                        </View>
                     }
                     <View style={ Styles.githubSshKeyClearContainer }>
                         <X.Button
@@ -1074,8 +1074,8 @@ const mapDispatchToProps = dispatch => ({
             Alert.alert('커뮤니티 기능 사용', '커뮤니티 고유 기능은 comma에서 공식 지원하지않으며 표준 안전모델 충족기준이 확인되지않았으니 사용시 각별히 주의하세요', [
                 { text: '취소', onPress: () => {}, style: 'cancel' },
                 { text: '사용', onPress: () => {
-                        dispatch(updateParam(Params.KEY_COMMUNITY_FEATURES, (communityFeatures | 0).toString()));
-                    } },
+                    dispatch(updateParam(Params.KEY_COMMUNITY_FEATURES, (communityFeatures | 0).toString()));
+                } },
             ]);
         } else {
             dispatch(updateParam(Params.KEY_COMMUNITY_FEATURES, (communityFeatures | 0).toString()));
@@ -1090,7 +1090,7 @@ const mapDispatchToProps = dispatch => ({
     setLongControlEnabled: (longControlEnabled) => {
         dispatch(updateParam(Params.KEY_LONG_CONTROL_ENABLED, (longControlEnabled | 0).toString()));
         if (longControlEnabled == 1) {
-            dispatch(updateParam(Params.KEY_MAD_MODE_ENABLED, (0).toString()));
+          dispatch(updateParam(Params.KEY_MAD_MODE_ENABLED, (0).toString()));
         }
     },
     setMadModeEnabled: (madModeEnabled) => {
