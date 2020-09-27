@@ -275,9 +275,9 @@ class Settings extends Component {
                 RecordFront: recordFront,
                 IsRHD: isRHD,
                 IsMetric: isMetric,
-                LongitudinalControl: hasLongitudinalControl,
-                LimitSetSpeed: limitSetSpeed,
-                SpeedLimitOffset: speedLimitOffset,
+                // LongitudinalControl: hasLongitudinalControl,
+                // LimitSetSpeed: limitSetSpeed,
+                // SpeedLimitOffset: speedLimitOffset,
                 OpenpilotEnabledToggle: openpilotEnabled,
                 Passive: isPassive,
                 IsLdwEnabled: isLaneDepartureWarningEnabled,
@@ -287,7 +287,7 @@ class Settings extends Component {
         } = this.props;
 
 
-        ChffrPlus.displayToast(IsPrebuiltOn)
+
 
 
 
@@ -338,7 +338,7 @@ class Settings extends Component {
                             isExpanded={ expandedCell == 'prebuilt' }
                             handleExpanded={ () => this.handleExpanded('prebuilt') }>
 
-                            {!!parseInt(isPrebuiltOn) === 0 ? (<X.Button
+                            {!parseInt(isPrebuiltOn) ? (<X.Button
                                 size='tiny'
                                 color='settingsDefault'
                                 onPress={ this.handlePressedMakePrebuilt()  }
