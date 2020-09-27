@@ -328,14 +328,14 @@ class Settings extends Component {
                                 size='tiny'
                                 color='settingsDefault'
                                 onPress={ this.handlePressedMakePrebuilt()  }
-                                style={ { minWidth: '100%' } }>
+                                >
                                 prebuilt 생성
                             </X.Button>
                             <X.Button
                                 size='tiny'
                                 color='settingsDefault'
                                 onPress={ this.handlePressedDeletePrebuilt()  }
-                                style={ { minWidth: '100%' } }>
+                                >
                                 prebuilt 삭제
                             </X.Button>
                         </X.TableCell>
