@@ -338,19 +338,24 @@ class Settings extends Component {
                             isExpanded={ expandedCell == 'prebuilt' }
                             handleExpanded={ () => this.handleExpanded('prebuilt') }>
 
-                            {!parseInt(isPrebuiltOn) ? (<X.Button
+                            {!parseInt(isPrebuiltOn) ? (
+                                <X.Button
                                 size='tiny'
                                 color='settingsDefault'
-                                onPress={ this.handlePressedMakePrebuilt()  }
+                                onPress={ () => this.handlePressedMakePrebuilt()  }
                                 style={ { minWidth: '100%' } }>
                                 생성
-                            </X.Button>) : (<X.Button
+                                </X.Button>
+                            ) : (
+                                <X.Button
                                 size='tiny'
                                 color='settingsDefault'
-                                onPress={ this.handlePressedDeletePrebuilt()  }
+                                onPress={ () => this.handlePressedDeletePrebuilt()  }
                                 style={ { minWidth: '100%' } }>
                                 삭제
-                            </X.Button>)}
+                            </X.Button>
+                            )
+                            }
 
 
 
