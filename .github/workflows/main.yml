@@ -1,12 +1,6 @@
 name: build offload apk
-on:
-  create:
-    tags:
-      - v*
-  push:
-    branches:
-      - master
-      - develop
+on : push
+
 
 env:
   RUN: docker run --rm apks /bin/sh -c
