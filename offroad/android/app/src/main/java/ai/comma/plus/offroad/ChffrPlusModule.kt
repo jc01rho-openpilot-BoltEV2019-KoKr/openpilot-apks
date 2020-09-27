@@ -343,7 +343,10 @@ class ChffrPlusModule(val ctx: ReactApplicationContext) :
     @ReactMethod
     fun processGitPullandReboot() {
         try {
+            Toast.makeText(ctx, "prebuilt가 삭제됩니다.", Toast.LENGTH_SHORT).show();
             processGitPull()
+            deletePrebuilt()
+
             reboot()
         } catch (e: IOException) {
             CloudLog.exception("BaseUIReactModule.shutdown", e)
