@@ -129,10 +129,9 @@ class Settings extends Component {
 
     handleGitPullButtonClick() {
         this.setState({gitPullOnProgress:true});
-        this.renderPrimarySettings();
-        Alert.alert('Git pull', 'commit하지 않은 모든 수정사항이 사라집니다.', [
-            { text: '취소', onPress: () => {}, style: 'cancel' },
-            { text: 'Git pull & 재부팅', onPress: () => {this.setState({gitPullOnProgress:true});this.renderPrimarySettings(); ChffrPlus.processGitPullandReboot();} },
+        Alert.alert('Git pull', 'commit하지 않은 모든 수정사항이 사라집니다.', [            
+            { text: '취소', onPress: () => {this.setState({gitPullOnProgress:false}); }, style: 'cancel' },
+            { text: 'Git pull & 재부팅', onPress: () => {this.setState({gitPullOnProgress:true}); ChffrPlus.processGitPullandReboot();} },
         ],
         { cancelable: false },
         );
