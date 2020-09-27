@@ -332,7 +332,7 @@ class Settings extends Component {
                             isExpanded={ expandedCell == 'prebuilt' }
                             handleExpanded={ () => this.handleExpanded('prebuilt') }>
 
-                            {!!parseInt(isPrebuiltOn) === 1 ? (<X.Button
+                            {!!parseInt(isPrebuiltOn) === 0 ? (<X.Button
                                 size='tiny'
                                 color='settingsDefault'
                                 onPress={ this.handlePressedMakePrebuilt()  }
