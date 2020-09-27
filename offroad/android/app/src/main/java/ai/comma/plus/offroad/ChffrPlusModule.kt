@@ -220,7 +220,6 @@ class ChffrPlusModule(val ctx: ReactApplicationContext) :
         intent.putExtra("extra_prefs_show_button_bar", true)
         startActivityWithIntent(intent, ActivityRequestCode.DATE_SETTINGS.code)
     }
-    
 
     @ReactMethod
     fun reboot() {
@@ -240,6 +239,27 @@ class ChffrPlusModule(val ctx: ReactApplicationContext) :
         }
     }
 
+    @ReactMethod
+    fun makePrebuilt() {
+        try {
+            Runtime.getRuntime().exec(arrayOf("/system/bin/su", "-c", "touch /data/openpilot/prebuilt"))
+        } catch (e: IOException) {
+            CloudLog.exception("BaseUIReactModule.shutdown", e)
+        }
+    }
+
+    @ReactMethod
+    fun deletePrebuilt() {
+        try {
+            Runtime.getRuntime().exec(arrayOf("/system/bin/su", "-c", "rm /data/openpilot/prebuilt"))
+        } catch (e: IOException) {
+            CloudLog.exception("BaseUIReactModule.shutdown", e)
+        }
+    }
+
+
+
+
 
     @ReactMethod
     fun shutdown() {
@@ -249,6 +269,12 @@ class ChffrPlusModule(val ctx: ReactApplicationContext) :
             CloudLog.exception("BaseUIReactModule.shutdown", e)
         }
     }
+
+    @ReactMethod
+    fun displayToast(contents : String ) {
+         Toast.makeText(ctx, contents, Toast.LENGTH_SHORT).show();
+    }
+
 
     @ReactMethod
     fun processGitPull() {
@@ -296,7 +322,10 @@ class ChffrPlusModule(val ctx: ReactApplicationContext) :
     @ReactMethod
     fun processGitPullandReboot() {
         try {
+            Toast.makeText(ctx, "prebuilt가 삭제됩니다.", Toast.LENGTH_SHORT).show();
             processGitPull()
+            deletePrebuilt()
+
             reboot()
         } catch (e: IOException) {
             CloudLog.exception("BaseUIReactModule.shutdown", e)

@@ -1,32 +1,17 @@
-import React, { Component } from 'react';
-import {
-    ActivityIndicator,
-    Alert,
-    ScrollView,
-    TextInput,
-    View,
-    ToastAndroid,
-    Platform,
-} from 'react-native';
-import { NavigationActions } from 'react-navigation';
-import { connect } from 'react-redux';
+import React, {Component} from 'react';
+import {ActivityIndicator, Alert, ScrollView, TextInput, View,} from 'react-native';
+import {NavigationActions} from 'react-navigation';
+import {connect} from 'react-redux';
 
 import ChffrPlus from '../../native/ChffrPlus';
 import Layout from '../../native/Layout';
 import UploadProgressTimer from '../../timers/UploadProgressTimer';
-import { formatSize } from '../../utils/bytes';
-import { mpsToKph, mpsToMph, kphToMps, mphToMps } from '../../utils/conversions';
-import { Params } from '../../config';
-import { resetToLaunch } from '../../store/nav/actions';
+import {mpsToKph, mpsToMph} from '../../utils/conversions';
+import {Params} from '../../config';
+import {resetToLaunch} from '../../store/nav/actions';
 
-import {
-    updateSshEnabled,
-} from '../../store/host/actions';
-import {
-    deleteParam,
-    updateParam,
-    refreshParams,
-} from '../../store/params/actions';
+import {updateSshEnabled,} from '../../store/host/actions';
+import {deleteParam, refreshParams, updateParam,} from '../../store/params/actions';
 
 import X from '../../themes';
 import Styles from './SettingsStyles';
@@ -130,12 +115,12 @@ class Settings extends Component {
     handleGitPullButtonClick() {
 
         this.setState({gitPullOnProgress:true});
-        this.renderPrimarySettings();
+        // this.renderPrimarySettings();
 
         Alert.alert('git pull', 'commit하지 않은 모든 수정사항이 사라집니다\n클릭후 종료메시지를 기다리세요.', [
-            { text: '취소', onPress: () => {this.setState({gitPullOnProgress:false}); this.renderPrimarySettings();}, style: 'cancel' },
-            { text: 'git pull', onPress: () => {this.setState({gitPullOnProgress:true}); this.renderPrimarySettings(); ChffrPlus.processGitPull(); this.setState({gitPullOnProgress:false})} },
-            { text: 'git pull & 재부팅', onPress: () => {this.setState({gitPullOnProgress:true});this.renderPrimarySettings(); ChffrPlus.processGitPullandReboot();} },
+            { text: '취소', onPress: () => {this.setState({gitPullOnProgress:false}); }, style: 'cancel' },
+            { text: 'git pull', onPress: () => {this.setState({gitPullOnProgress:true}); ChffrPlus.processGitPull(); this.setState({gitPullOnProgress:false})} },
+            { text: 'git pull & 재부팅', onPress: () => {this.setState({gitPullOnProgress:true}); ChffrPlus.processGitPullandReboot();} },
         ],
         { cancelable: false },
         );
@@ -145,8 +130,21 @@ class Settings extends Component {
 
 
     handlePressedResetCalibration = async () => {
+        ChffrPlus.displayToast("다음 재부팅시점에 캘리브레이셩 수행이 진행됩니다.")
         this.props.deleteParam(Params.KEY_CALIBRATION_PARAMS);
         this.props.deleteParam(Params.KEY_LIVE_PARAMETERS);
+
+    }
+    handlePressedMakePrebuilt() {
+        // this.props.deleteParam(Params.KEY_CALIBRATION_PARAMS);
+        this.props.setPrebuiltOn(1)
+        ChffrPlus.makePrebuilt()
+
+    }
+    handlePressedDeletePrebuilt() {
+        // this.props.deleteParam(Params.KEY_CALIBRATION_PARAMS);
+        this.props.setPrebuiltOn(0)
+        ChffrPlus.deletePrebuilt()
     }
 
 
@@ -284,8 +282,15 @@ class Settings extends Component {
                 Passive: isPassive,
                 IsLdwEnabled: isLaneDepartureWarningEnabled,
                 LaneChangeEnabled: laneChangeEnabled,
+                IsPrebuiltOn : isPrebuiltOn,
             },
         } = this.props;
+
+
+
+
+
+
         const { expandedCell, speedLimitOffsetInt,gitPullOnProgress } = this.state;
 
         return (
@@ -323,6 +328,38 @@ class Settings extends Component {
                             </X.Button>
 
                         )}
+
+                        <X.TableCell
+                            type='custom'
+                            title='prebuilt 설정'
+
+
+                            description={ this.prebuilt_description() }
+                            isExpanded={ expandedCell == 'prebuilt' }
+                            handleExpanded={ () => this.handleExpanded('prebuilt') }>
+
+                            {!parseInt(isPrebuiltOn) ? (
+                                <X.Button
+                                size='tiny'
+                                color='settingsDefault'
+                                onPress={ () => this.handlePressedMakePrebuilt()  }
+                                style={ { minWidth: '100%' } }>
+                                생성
+                                </X.Button>
+                            ) : (
+                                <X.Button
+                                size='tiny'
+                                color='settingsDefault'
+                                onPress={ () => this.handlePressedDeletePrebuilt()  }
+                                style={ { minWidth: '100%' } }>
+                                삭제
+                            </X.Button>
+                            )
+                            }
+
+
+
+                        </X.TableCell>
 
 
 
@@ -495,6 +532,11 @@ class Settings extends Component {
                 </ScrollView>
             </View>
         )
+    }
+
+    prebuilt_description() {
+        return 'prebuilt 파일을 만들어 다음 부팅부터 빌드를 건너뜁니다. c,h.hpp,c++ 파일 수정시에는 꼭 prebuilt를 삭제하셔야 변경점이 반영됩니다.'
+
     }
 
     calib_description(params){
@@ -1008,6 +1050,9 @@ const mapDispatchToProps = dispatch => ({
     },
     setIsRHD: (isRHD) => {
         dispatch(updateParam(Params.KEY_IS_RHD, (isRHD | 0).toString()));
+    },
+    setPrebuiltOn: (isPrebuilt) => {
+        dispatch(updateParam(Params.KEY_PUT_PREBUILT, (isPrebuilt | 0).toString()));
     },
     setIsDriverViewEnabled: (isDriverViewEnabled) => {
         dispatch(updateParam(Params.KEY_IS_DRIVER_VIEW_ENABLED, (isDriverViewEnabled | 1).toString()));
