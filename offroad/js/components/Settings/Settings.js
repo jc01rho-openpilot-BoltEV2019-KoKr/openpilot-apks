@@ -135,10 +135,11 @@ class Settings extends Component {
         ChffrPlus.displayToast("다음 재부팅시점에 캘리브레이셩 수행이 진행됩니다.")
     }
     handlePressedMakePrebuilt = async() => {
+        ChffrPlus.makePrebuilt()
 
     }
     handlePressedDeletePrebuilt = async() => {
-
+        ChffrPlus.deletePrebuilt()
     }
 
 
@@ -328,15 +329,15 @@ class Settings extends Component {
                                 size='tiny'
                                 color='settingsDefault'
                                 onPress={ this.handlePressedMakePrebuilt()  }
-                                >
-                                prebuilt 생성
+                                style={ { minWidth: '100%' } }>
+                                생성
                             </X.Button>
                             <X.Button
                                 size='tiny'
                                 color='settingsDefault'
                                 onPress={ this.handlePressedDeletePrebuilt()  }
-                                >
-                                prebuilt 삭제
+                                style={ { minWidth: '100%' } }>
+                                삭제
                             </X.Button>
                         </X.TableCell>
 
