@@ -222,27 +222,6 @@ class ChffrPlusModule(val ctx: ReactApplicationContext) :
     }
 
     @ReactMethod
-    fun touchPrebuilt() {
-            try {
-                Runtime.getRuntime().exec(arrayOf("/system/bin/su", "-c", "touch /data/openpilot/prebuilt"))
-            } catch (e: IOException) {
-                CloudLog.exception("BaseUIReactModule.reboot", e)
-            }
-
-    }
-
-    @ReactMethod
-    fun deletePrebuilt() {
-            try {
-                Runtime.getRuntime().exec(arrayOf("/system/bin/su", "-c", "rm /data/openpilot/prebuilt"))
-            } catch (e: IOException) {
-                CloudLog.exception("BaseUIReactModule.reboot", e)
-            }
-
-    }
-    
-
-    @ReactMethod
     fun reboot() {
         try {
             Runtime.getRuntime().exec(arrayOf("/system/bin/su", "-c", "service call power 16 i32 0 i32 0 i32 1"))
@@ -270,13 +249,13 @@ class ChffrPlusModule(val ctx: ReactApplicationContext) :
     }
 
     @ReactMethod
-        fun deletePrebuilt() {
-            try {
-                Runtime.getRuntime().exec(arrayOf("/system/bin/su", "-c", "rm /data/openpilot/prebuilt"))
-            } catch (e: IOException) {
-                CloudLog.exception("BaseUIReactModule.shutdown", e)
-            }
+    fun deletePrebuilt() {
+        try {
+            Runtime.getRuntime().exec(arrayOf("/system/bin/su", "-c", "rm /data/openpilot/prebuilt"))
+        } catch (e: IOException) {
+            CloudLog.exception("BaseUIReactModule.shutdown", e)
         }
+    }
 
 
 
