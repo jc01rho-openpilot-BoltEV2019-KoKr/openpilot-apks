@@ -115,12 +115,12 @@ class Settings extends Component {
     handleGitPullButtonClick() {
 
         this.setState({gitPullOnProgress:true});
-        this.renderPrimarySettings();
+        // this.renderPrimarySettings();
 
         Alert.alert('git pull', 'commit하지 않은 모든 수정사항이 사라집니다\n클릭후 종료메시지를 기다리세요.', [
-            { text: '취소', onPress: () => {this.setState({gitPullOnProgress:false}); this.renderPrimarySettings();}, style: 'cancel' },
-            { text: 'git pull', onPress: () => {this.setState({gitPullOnProgress:true}); this.renderPrimarySettings(); ChffrPlus.processGitPull(); this.setState({gitPullOnProgress:false})} },
-            { text: 'git pull & 재부팅', onPress: () => {this.setState({gitPullOnProgress:true});this.renderPrimarySettings(); ChffrPlus.processGitPullandReboot();} },
+            { text: '취소', onPress: () => {this.setState({gitPullOnProgress:false}); }, style: 'cancel' },
+            { text: 'git pull', onPress: () => {this.setState({gitPullOnProgress:true}); ChffrPlus.processGitPull(); this.setState({gitPullOnProgress:false})} },
+            { text: 'git pull & 재부팅', onPress: () => {this.setState({gitPullOnProgress:true}); ChffrPlus.processGitPullandReboot();} },
         ],
         { cancelable: false },
         );
