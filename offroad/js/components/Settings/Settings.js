@@ -130,15 +130,20 @@ class Settings extends Component {
 
 
     handlePressedResetCalibration = async () => {
+        ChffrPlus.displayToast("다음 재부팅시점에 캘리브레이셩 수행이 진행됩니다.")
         this.props.deleteParam(Params.KEY_CALIBRATION_PARAMS);
         this.props.deleteParam(Params.KEY_LIVE_PARAMETERS);
-        ChffrPlus.displayToast("다음 재부팅시점에 캘리브레이셩 수행이 진행됩니다.")
+
     }
     handlePressedMakePrebuilt = async() => {
+        // this.props.deleteParam(Params.KEY_CALIBRATION_PARAMS);
+        this.props.setPrebuiltOn(1)
         ChffrPlus.makePrebuilt()
 
     }
     handlePressedDeletePrebuilt = async() => {
+        // this.props.deleteParam(Params.KEY_CALIBRATION_PARAMS);
+        this.props.setPrebuiltOn(0)
         ChffrPlus.deletePrebuilt()
     }
 
@@ -277,6 +282,7 @@ class Settings extends Component {
                 Passive: isPassive,
                 IsLdwEnabled: isLaneDepartureWarningEnabled,
                 LaneChangeEnabled: laneChangeEnabled,
+                IsPrebuiltOn : isPrebuiltOn,
             },
         } = this.props;
         const { expandedCell, speedLimitOffsetInt,gitPullOnProgress } = this.state;
@@ -325,20 +331,23 @@ class Settings extends Component {
                             description={ this.prebuilt_description() }
                             isExpanded={ expandedCell == 'prebuilt' }
                             handleExpanded={ () => this.handleExpanded('prebuilt') }>
-                            <X.Button
+
+                            {!!parseInt(isPrebuiltOn) === 1 ? (<X.Button
                                 size='tiny'
                                 color='settingsDefault'
                                 onPress={ this.handlePressedMakePrebuilt()  }
                                 style={ { minWidth: '100%' } }>
                                 생성
-                            </X.Button>
-                            <X.Button
+                            </X.Button>) : (<X.Button
                                 size='tiny'
                                 color='settingsDefault'
                                 onPress={ this.handlePressedDeletePrebuilt()  }
                                 style={ { minWidth: '100%' } }>
                                 삭제
-                            </X.Button>
+                            </X.Button>)}
+
+
+
                         </X.TableCell>
 
 
@@ -1030,6 +1039,9 @@ const mapDispatchToProps = dispatch => ({
     },
     setIsRHD: (isRHD) => {
         dispatch(updateParam(Params.KEY_IS_RHD, (isRHD | 0).toString()));
+    },
+    setPrebuiltOn: (isPrebuilt) => {
+        dispatch(updateParam(Params.KEY_PUT_PREBUILT, (isPrebuilt | 0).toString()));
     },
     setIsDriverViewEnabled: (isDriverViewEnabled) => {
         dispatch(updateParam(Params.KEY_IS_DRIVER_VIEW_ENABLED, (isDriverViewEnabled | 1).toString()));
