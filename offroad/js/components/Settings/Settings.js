@@ -1,32 +1,17 @@
-import React, { Component } from 'react';
-import {
-    ActivityIndicator,
-    Alert,
-    ScrollView,
-    TextInput,
-    View,
-    ToastAndroid,
-    Platform,
-} from 'react-native';
-import { NavigationActions } from 'react-navigation';
-import { connect } from 'react-redux';
+import React, {Component} from 'react';
+import {ActivityIndicator, Alert, ScrollView, TextInput, View,} from 'react-native';
+import {NavigationActions} from 'react-navigation';
+import {connect} from 'react-redux';
 
 import ChffrPlus from '../../native/ChffrPlus';
 import Layout from '../../native/Layout';
 import UploadProgressTimer from '../../timers/UploadProgressTimer';
-import { formatSize } from '../../utils/bytes';
-import { mpsToKph, mpsToMph, kphToMps, mphToMps } from '../../utils/conversions';
-import { Params } from '../../config';
-import { resetToLaunch } from '../../store/nav/actions';
+import {mpsToKph, mpsToMph} from '../../utils/conversions';
+import {Params} from '../../config';
+import {resetToLaunch} from '../../store/nav/actions';
 
-import {
-    updateSshEnabled,
-} from '../../store/host/actions';
-import {
-    deleteParam,
-    updateParam,
-    refreshParams,
-} from '../../store/params/actions';
+import {updateSshEnabled,} from '../../store/host/actions';
+import {deleteParam, refreshParams, updateParam,} from '../../store/params/actions';
 
 import X from '../../themes';
 import Styles from './SettingsStyles';
@@ -147,8 +132,12 @@ class Settings extends Component {
     handlePressedResetCalibration = async () => {
         this.props.deleteParam(Params.KEY_CALIBRATION_PARAMS);
         this.props.deleteParam(Params.KEY_LIVE_PARAMETERS);
+        ChffrPlus.displayToast("다음 재부팅시점에 캘리브레이셩 수행이 진행됩니다.")
     }
     handlePressedMakePrebuilt = async() => {
+
+    }
+    handlePressedDeletePrebuilt = async() => {
 
     }
 
@@ -331,9 +320,10 @@ class Settings extends Component {
                             type='custom'
                             title='prebuilt 설정'
 
-                            description={ this.prebuilt_description(calibrationParams) }
+
+                            description={ this.prebuilt_description() }
                             isExpanded={ expandedCell == 'prebuilt' }
-                            handleExpanded={ () => this.handleExpanded('prrbuilt_ready') }>
+                            handleExpanded={ () => this.handleExpanded('prebuilt') }>
                             <X.Button
                                 size='tiny'
                                 color='settingsDefault'
@@ -344,7 +334,7 @@ class Settings extends Component {
                             <X.Button
                                 size='tiny'
                                 color='settingsDefault'
-                                onPress={ this.handlePressedMakePrebuilt()  }
+                                onPress={ this.handlePressedDeletePrebuilt()  }
                                 style={ { minWidth: '100%' } }>
                                 prebuilt 삭제
                             </X.Button>
@@ -524,8 +514,7 @@ class Settings extends Component {
     }
 
     prebuilt_description() {
-        var text = 'prebuilt 파일을 만들어 다음 부팅부터 빌드를 건너뜁니다. c,h.hpp,c++ 파일 수정시에는 꼭 prebuilt를 삭제하셔야 변경점이 반영됩니다.'
-        return text
+        return 'prebuilt 파일을 만들어 다음 부팅부터 빌드를 건너뜁니다. c,h.hpp,c++ 파일 수정시에는 꼭 prebuilt를 삭제하셔야 변경점이 반영됩니다.'
 
     }
 

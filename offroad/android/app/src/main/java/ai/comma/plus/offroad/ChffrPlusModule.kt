@@ -271,6 +271,12 @@ class ChffrPlusModule(val ctx: ReactApplicationContext) :
     }
 
     @ReactMethod
+    fun displayToast(contents : String ) {
+         Toast.makeText(ctx, String, Toast.LENGTH_SHORT).show();
+    }
+
+
+    @ReactMethod
     fun processGitPull() {
         try {
 
