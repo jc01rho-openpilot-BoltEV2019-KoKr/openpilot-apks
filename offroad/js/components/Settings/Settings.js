@@ -285,6 +285,12 @@ class Settings extends Component {
                 IsPrebuiltOn : isPrebuiltOn,
             },
         } = this.props;
+
+
+        ChffrPlus.displayToast(IsPrebuiltOn)
+
+
+
         const { expandedCell, speedLimitOffsetInt,gitPullOnProgress } = this.state;
 
         return (
