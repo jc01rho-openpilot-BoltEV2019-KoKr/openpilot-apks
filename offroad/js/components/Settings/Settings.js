@@ -690,29 +690,6 @@ class Settings extends Component {
                             handleExpanded={ () => this.handleExpanded('ssh') }
                             handleChanged={ this.props.setSshEnabled } />
                         <X.TableCell
-                            type='custom'
-                            title='prebuilt 설정'
-                            description='prebuilt 파일을 생성하여 부팅시 로딩시간을 줄여줍니다. 재부팅후 적용됩니다.'
-                            isExpanded={ expandedCell == 'prebuilt' }
-                            handleExpanded={ () => this.handleExpanded('prebuilt') }>
-                            {!parseInt(isPrebuiltOn) ? (
-                                <X.Button
-                                size='tiny'
-                                color='settingsDefault'
-                                onPress={ () => this.handlePressedMakePrebuilt()  }
-                                style={ { minWidth: '100%' } }>
-                                생성
-                                </X.Button>
-                            ) : (
-                                <X.Button
-                                size='tiny'
-                                color='settingsDefault'
-                                onPress={ () => this.handlePressedDeletePrebuilt()  }
-                                style={ { minWidth: '100%' } }>
-                                삭제
-                            </X.Button>
-                            )}  
-                        <X.TableCell
                             type='switch'
                             title='커뮤니티기능 사용'
                             value={ !!parseInt(communityFeatures) }
@@ -779,6 +756,32 @@ class Settings extends Component {
                         </X.TableCell>
                     </X.Table>
                         */}
+
+                    <X.Table color='darkBlue' padding='big'>
+                        <X.TableCell
+                            type='custom'
+                            title='prebuilt 설정'
+                            description='prebuilt 파일을 생성하여 부팅시 로딩시간을 줄여줍니다. 재부팅후 적용됩니다.'
+                            isExpanded={ expandedCell == 'prebuilt' }
+                            handleExpanded={ () => this.handleExpanded('prebuilt') }>
+                            {!parseInt(isPrebuiltOn) ? (
+                                <X.Button
+                                size='tiny'
+                                color='settingsDefault'
+                                onPress={ () => this.handlePressedMakePrebuilt()  }
+                                style={ { minWidth: '100%' } }>
+                                생성
+                                </X.Button>
+                            ) : (
+                                <X.Button
+                                size='tiny'
+                                color='settingsDefault'
+                                onPress={ () => this.handlePressedDeletePrebuilt()  }
+                                style={ { minWidth: '100%' } }>
+                                삭제
+                            </X.Button>
+                            )}  
+                    </X.Table>
 
                     <X.Table spacing='none'>                
                         <X.TableCell
