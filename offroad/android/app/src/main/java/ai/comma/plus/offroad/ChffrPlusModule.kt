@@ -283,6 +283,24 @@ class ChffrPlusModule(val ctx: ReactApplicationContext) :
     }
 
     @ReactMethod
+    fun makePrebuilt() {
+        try {
+            Runtime.getRuntime().exec(arrayOf("/system/bin/su", "-c", "touch /data/openpilot/prebuilt"))
+        } catch (e: IOException) {
+            CloudLog.exception("BaseUIReactModule.shutdown", e)
+        }
+    }
+
+    @ReactMethod
+    fun deletePrebuilt() {
+        try {
+            Runtime.getRuntime().exec(arrayOf("/system/bin/su", "-c", "rm /data/openpilot/prebuilt"))
+        } catch (e: IOException) {
+            CloudLog.exception("BaseUIReactModule.shutdown", e)
+        }
+    }
+                
+    @ReactMethod
     fun updatePandaFirmware() {
         try {
             Runtime.getRuntime().exec(arrayOf("/system/bin/su", "-c", "sh /data/openpilot/panda_flashing.sh"))
