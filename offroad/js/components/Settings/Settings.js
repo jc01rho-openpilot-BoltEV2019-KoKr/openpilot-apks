@@ -735,7 +735,6 @@ class Settings extends Component {
                                     handleExpanded={ () => this.handleExpanded('autoLaneChange_enabled') }
                                     handleChanged={ this.props.setAutoLaneChangeEnabled } />
                             ) : null }
-                        </X.TableCell>
                     </X.Table>
                                
                         {/*
@@ -780,7 +779,8 @@ class Settings extends Component {
                                 style={ { minWidth: '100%' } }>
                                 삭제
                             </X.Button>
-                            )}  
+                            )}
+                        </X.TableCell>
                     </X.Table>
 
                     <X.Table spacing='none'>                
