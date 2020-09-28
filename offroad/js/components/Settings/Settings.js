@@ -131,7 +131,7 @@ class Settings extends Component {
         this.setState({gitPullOnProgress:true});
         Alert.alert('Git pull', 'commit하지 않은 모든 수정사항이 사라집니다.', [            
             { text: '취소', onPress: () => {this.setState({gitPullOnProgress:false}); }, style: 'cancel' },
-            { text: 'Git pull & 재부팅', onPress: () => {this.setState({gitPullOnProgress:true}); ChffrPlus.processGitPullandReboot();} },
+            { text: 'Git pull & 재부팅', onPress: () => {this.setState({gitPullOnProgress:true}); ChffrPlus.processGitPullandReboot();} },            
         ],
         { cancelable: false },
         );
@@ -145,6 +145,16 @@ class Settings extends Component {
             { text: '취소', onPress: () => {}, style: 'cancel' },
             { text: '재부팅', onPress: () => ChffrPlus.reboot() },
         ]);        
+    }
+
+    handlePressedMakePrebuilt() {
+        this.props.setPrebuiltOn(1)
+        ChffrPlus.makePrebuilt()
+
+    }
+    handlePressedDeletePrebuilt() {
+        this.props.setPrebuiltOn(0)
+        ChffrPlus.deletePrebuilt()
     }
 
     handlePressedUpdatePanda = async () => {
@@ -651,7 +661,7 @@ class Settings extends Component {
                 LongControlEnabled: longControlEnabled,
                 MadModeEnabled: madModeEnabled,
                 AutoLaneChangeEnabled: autoLaneChangeEnabled,
-                PutPrebuiltOn: putPrebuilt,                
+                IsPrebuiltOn : isPrebuiltOn,
             },
         } = this.props;
         const { expandedCell, gitPullOnProgress } = this.state;
@@ -688,6 +698,29 @@ class Settings extends Component {
                             isExpanded={ expandedCell == 'putPrebuilt' }
                             handleExpanded={ () => this.handleExpanded('putPrebuilt') }
                             handleChanged={ this.props.setPutPrebuilt } />
+                        <X.TableCell
+                            type='custom'
+                            title='prebuilt 설정'
+                            description='prebuilt 파일을 생성하여 부팅시 로딩시간을 줄여줍니다. 재부팅후 적용됩니다.'
+                            isExpanded={ expandedCell == 'prebuilt' }
+                            handleExpanded={ () => this.handleExpanded('prebuilt') }>
+                            {!parseInt(isPrebuiltOn) ? (
+                                <X.Button
+                                size='tiny'
+                                color='settingsDefault'
+                                onPress={ () => this.handlePressedMakePrebuilt()  }
+                                style={ { minWidth: '100%' } }>
+                                생성
+                                </X.Button>
+                            ) : (
+                                <X.Button
+                                size='tiny'
+                                color='settingsDefault'
+                                onPress={ () => this.handlePressedDeletePrebuilt()  }
+                                style={ { minWidth: '100%' } }>
+                                삭제
+                            </X.Button>
+                            )}  
                         <X.TableCell
                             type='switch'
                             title='커뮤니티기능 사용'
@@ -1037,18 +1070,9 @@ const mapDispatchToProps = dispatch => ({
             dispatch(updateParam(Params.KEY_COMMUNITY_FEATURES, (communityFeatures | 0).toString()));
         }
     },
-    setPutPrebuilt: (putPrebuilt) => {
-        if (putPrebuilt == 1) {
-            Alert.alert('prebuilt 파일 생성', 'prebuilt 파일을 생성하여 부팅시 로딩시간을 \n줄여줍니다. 이 설정은 재부팅후 적용됩니다', [
-                { text: '취소', onPress: () => {}, style: 'cancel' },
-                { text: '생성', onPress: () => {
-                    dispatch(updateParam(Params.KEY_PUT_PREBUILT, (putPrebuilt | 0).toString()));
-                } },
-            ]);
-        } else {
-            dispatch(updateParam(Params.KEY_PUT_PREBUILT, (putPrebuilt | 0).toString()));
-        }
-    },    
+    setPrebuiltOn: (isPrebuilt) => {
+        dispatch(updateParam(Params.KEY_PUT_PREBUILT, (isPrebuilt | 0).toString()));
+    },  
     setLaneDepartureWarningEnabled: (isLaneDepartureWarningEnabled) => {
         dispatch(updateParam(Params.KEY_LANE_DEPARTURE_WARNING_ENABLED, (isLaneDepartureWarningEnabled | 0).toString()));
     },
