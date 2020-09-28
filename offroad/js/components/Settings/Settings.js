@@ -767,7 +767,9 @@ class Settings extends Component {
                                     handleExpanded={ () => this.handleExpanded('autoLaneChange_enabled') }
                                     handleChanged={ this.props.setAutoLaneChangeEnabled } />
                             ) : null }
-                                
+                        </X.TableCell>
+                    </X.Table>
+                               
                         {/*
                         <X.TableCell
                             iconSource={ Icons.developer }
@@ -784,8 +786,8 @@ class Settings extends Component {
                                 { expandedCell === 'ssh_keys' ? '취소' : '편집' }
                             </X.Button>
                         </X.TableCell>
-                        */}
                     </X.Table>
+                        */}
 
                     <X.Table spacing='none'>                
                         <X.TableCell
