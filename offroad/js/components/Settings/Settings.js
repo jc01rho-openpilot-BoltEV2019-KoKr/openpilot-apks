@@ -1,13 +1,5 @@
 import React, { Component } from 'react';
-import {
-    ActivityIndicator,
-    Alert,
-    ScrollView,
-    TextInput,
-    View,
-    ToastAndroid,
-    Platform,    
-} from 'react-native';
+import { ActivityIndicator, Alert, ScrollView, TextInput, View } from 'react-native';
 import { NavigationActions } from 'react-navigation';
 import { connect } from 'react-redux';
 
