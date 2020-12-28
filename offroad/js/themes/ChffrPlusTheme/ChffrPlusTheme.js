@@ -18,7 +18,7 @@ export let ChffrPlusTheme = {
             jumbo: 28,
         },
         weights: {
-            light: 'OpenSans-Light',
+            light: 'OpenSans-Regular',
             regular: 'OpenSans-Regular',
             semibold: 'OpenSans-Semibold',
             bold: 'OpenSans-Bold',

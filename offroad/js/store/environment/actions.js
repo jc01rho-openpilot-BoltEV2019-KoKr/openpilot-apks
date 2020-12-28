@@ -1,5 +1,6 @@
 import moment from 'moment';
-
+import 'moment/locale/ko';
+moment.locale('ko');
 import { ENV, DARKSKY_API_KEY } from '../../config';
 
 export const ACTION_UPDATE_DATE = 'ACTION_UPDATE_DATE';

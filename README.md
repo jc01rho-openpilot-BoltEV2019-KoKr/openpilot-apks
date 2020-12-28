@@ -3,7 +3,7 @@
 - git pull button added.
 - Korean text contributed by crwusiz(@crwusiz) (#1fc2b0bf1), thx for contribution.
 
-- 한글 폰트 설치가 필요합니다. 아래는 대충 한글폰트 설치하는 가이드입니다.
+- 한글 폰트 설치가 필요하지 않을수도 있습니다.  만약 필요하다면 아래의 폰트설치 가이드를 참조하세요.
 ```
 cd /data
 mv openpilot openpilot.bak
