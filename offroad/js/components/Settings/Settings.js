@@ -544,7 +544,12 @@ class Settings extends Component {
       if ((params == null) || (params == undefined)) {
         var calib_json = null
       } else {
-        var calib_json = JSON.parse(params);
+          try {
+              var calib_json = JSON.parse(params);
+          } catch (err) {
+              text = text.concat("/data/params/d/CalibrationParams 내용이 이상해서 장치의 각도를 읽어올 수 없습니다. 해당파일 삭제를 검토하세요.")
+          }
+
       }
       if ((calib_json != null) && (calib_json.hasOwnProperty('calib_radians'))) {
         var calibArr = (calib_json.calib_radians).toString().split(',');
