@@ -24,7 +24,7 @@ export const Params = {
     KEY_RELEASE_NOTES: 'ReleaseNotes',
     KEY_IS_UPDATE_AVAILABLE: 'UpdateAvailable',
     KEY_OPENPILOT_ENABLED: 'OpenpilotEnabledToggle',
-    KEY_OFFROAD_CHARGE_DISABLFFED: 'Offroad_ChargeDisabled',
+    KEY_OFFROAD_CHARGE_DISABLED: 'Offroad_ChargeDisabled',
     KEY_OFFROAD_TEMPERATURE_TOO_HIGH: 'Offroad_TemperatureTooHigh',
     KEY_OFFROAD_CONNECTIVITY_NEEDED_PROMPT: 'Offroad_ConnectivityNeededPrompt',
     KEY_OFFROAD_CONNECTIVITY_NEEDED: 'Offroad_ConnectivityNeeded',
