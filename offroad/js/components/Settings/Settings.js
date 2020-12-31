@@ -541,11 +541,13 @@ class Settings extends Component {
 
     calib_description(params){
       var text = '오픈파일럿은 장치를 4°이내 (왼쪽 또는 오른쪽)에 장착하고 5°이내 (위 또는 아래)에 장착해야 합니다. 오픈파일럿이 계속 보정 중이므로 재설정이 필요한 경우는 처음 셋팅 이외에는 거의 없습니다.';
+      var calib_json = null
+
       if ((params == null) || (params == undefined)) {
-        var calib_json = null
+
       } else {
           try {
-              var calib_json = JSON.parse(params);
+              calib_json = JSON.parse(params);
           } catch (err) {
               text = text.concat("/data/params/d/CalibrationParams 내용이 이상해서 장치의 각도를 읽어올 수 없습니다. 해당파일 삭제를 검토하세요.")
           }
