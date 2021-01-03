@@ -545,30 +545,38 @@ class Settings extends Component {
 
       if ((params == null) || (params == undefined)) {
 
+          calib_json = null
       } else {
           try {
               calib_json = JSON.parse(params);
           } catch (err) {
+              calib_json = null
               text = text.concat("/data/params/d/CalibrationParams 내용이 이상해서 장치의 각도를 읽어올 수 없습니다. 해당파일 삭제를 검토하세요.")
           }
 
       }
-      if ((calib_json != null) && (calib_json.hasOwnProperty('calib_radians'))) {
-        var calibArr = (calib_json.calib_radians).toString().split(',');
-        var pi = Math.PI;
-        var pitch = parseFloat(calibArr[1]) * (180/pi)
-        var yaw = parseFloat(calibArr[2]) * (180/pi)
-        if (pitch > 0) {
-          var pitch_str = Math.abs(pitch).toFixed(1).concat('° 위')
-        } else {
-          var pitch_str = Math.abs(pitch).toFixed(1).concat('° 아래')
+      if ((calib_json != null) ) {
+
+        if ( (calib_json.hasOwnProperty('calib_radians'))) {
+            var calibArr = (calib_json.calib_radians).toString().split(',');
+            var pi = Math.PI;
+            var pitch = parseFloat(calibArr[1]) * (180/pi)
+            var yaw = parseFloat(calibArr[2]) * (180/pi)
+            if (pitch > 0) {
+                var pitch_str = Math.abs(pitch).toFixed(1).concat('° 위')
+            } else {
+                var pitch_str = Math.abs(pitch).toFixed(1).concat('° 아래')
+            }
+            if (yaw > 0) {
+                var yaw_str = Math.abs(yaw).toFixed(1).concat('° 오른쪽')
+            } else {
+                var yaw_str = Math.abs(yaw).toFixed(1).concat('° 왼쪽')
+            }
+            text = text.concat('\n\n현재 장치가 위치한곳은 ', pitch_str, ' 그리고 ', yaw_str, ' 입니다. ')
+        }  else {
+            text = text.concat("calib_radians 속성이 json에 없어 현재 장치가 위치한 각도를 읽어 올 수 없습니다.")
         }
-        if (yaw > 0) {
-          var yaw_str = Math.abs(yaw).toFixed(1).concat('° 오른쪽')
-        } else {
-          var yaw_str = Math.abs(yaw).toFixed(1).concat('° 왼쪽')
-        }
-        text = text.concat('\n\n현재 장치가 위치한곳은 ', pitch_str, ' 그리고 ', yaw_str, ' 입니다. ')
+
       }
       return text;
     }
